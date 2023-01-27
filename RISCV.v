@@ -34,10 +34,13 @@ assign IDEXop   = IDEXIR[6:0];    // the opcode
 assign EXMEMop  = EXMEMIR[6:0];   // the opcode
 assign MEMWBop  = MEMWBIR[6:0];   // the opcode
 assign MEMWBrd  = MEMWBIR[11:7];  // rd field
+
 // Inputs to the ALU come directly from the ID/EX pipeline registers
 assign Ain = IDEXA;
 assign Bin = IDEXB;
+
 ////////////// END Assignments ////////////////////////
+
 
 integer i; // used to initialize registers
 initial begin
