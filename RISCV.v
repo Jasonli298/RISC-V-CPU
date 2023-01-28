@@ -1,3 +1,5 @@
+// Pipelined version with no branch instructions or hazard detection
+
 module RISCVCPU(clk);
 
 parameter LW = 7'b000_0011;
