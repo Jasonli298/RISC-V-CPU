@@ -2,10 +2,10 @@
 
 module RISCVCPU(clk);
 
-localparam LW = 7'b000_0011;
-localparam SW = 7'b010_0011;
-localparam BEQ = 7'b110_0011;
-localparam NOP = 32'h0000_0013;
+localparam LW    = 7'b000_0011;
+localparam SW    = 7'b010_0011;
+localparam BEQ   = 7'b110_0011;
+localparam NOP   = 32'h0000_0013;
 localparam ALUop = 7'b001_0011;
 
 ////////////////////// INPUTS /////////////////////////
@@ -15,7 +15,7 @@ input clk;
 
 ////////////// REGISTERS AND WIRES ////////////////////
 reg [31:0] PC;
-reg [0:31] Regs;
+reg [31:0] Regs [0:31];
 reg [31:0] IDEXA, IDEXB;
 reg [31:0] EXMEMB, EXMEMALUOut;
 reg [31:0] MEMWBValue;
@@ -35,13 +35,13 @@ wire stall;
 
 
 ///////////// Assignments define fields from the pipeline registers
-assign IFIDrs1 = IFIDIR[19:15];  // rs1 field
-assign IFIDrs2 = IFIDIR[24:20];  // rs2 field
-assign IDEXop  = IDEXIR[6:0];    // the opcode
-assign EXMEMop = EXMEMIR[6:0];   // the opcode
-assign EXMEMrd = EXMEMIR[11:7];
-assign MEMWBop = MEMWBIR[6:0];   // the opcode
-assign MEMWBrd = MEMWBIR[11:7];  // rd field
+assign IFIDrs1 = IFIDIR[19:15]; // rs1 field
+assign IFIDrs2 = IFIDIR[24:20]; // rs2 field
+assign IDEXop  = IDEXIR[6:0];   // the opcode
+assign EXMEMop = EXMEMIR[6:0];  // the opcode
+assign EXMEMrd = EXMEMIR[11:7]; // the read address
+assign MEMWBop = MEMWBIR[6:0];  // the opcode
+assign MEMWBrd = MEMWBIR[11:7]; // rd field
 
 // Bypass to iunput A from the MEM stage for an ALU operation
 assign bypassAfromMEM = (IDEXrs1 == EXMEMrd) && (IDEXrs1 != 0) && (EXMEMop == ALUop);
@@ -66,6 +66,8 @@ initial begin
     EXMEMIR = NOP;
     MEMWBIR = NOP; // put NOPs in pipeline registers
     for (i = 0;i <= 31;i = i+1) Regs[i] = i; // initialize registers--just so they aren't x'cares
+	$readmemb("IMemory.txt", IMemory);
+	$readmemb("DMemory.txt", DMemory);
 end
 
 
