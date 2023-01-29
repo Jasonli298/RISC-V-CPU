@@ -29,6 +29,8 @@ reg        ALUSrcA; // 0: 1st ALU operand is the PC  1: first ALU operand is fro
 reg [1:0]  ALUSrcB; // 00: 2nd ALU input is register B
                     // 01: 2nd ALU input is the constant 4
 					// 10: 2nd ALU input is the immediate generated from the IR
+				    // 01: 2nd ALU input is the constant 4
+				    // 10: 2nd ALU input is the immediate generated from the IR
 
 reg        IRWrite; // the output of the memory it written to the IR
 reg        PCWrite; // PC is written; the soure is controlled by PCSource
@@ -40,8 +42,8 @@ reg [1:0]  ALUop; // 00: ALU add
 
 /////////////////// IRNORE FOR NOW, not doing branch instructions yet
 reg [1:0]  PCSource; // 00: output of the ALU (PC+4) is sent to PC for writing
-					// 01: the contents of ALUout(the branch target address) are sent to PC for writing
-					// 10: the jump target(IR[25:0]<<2 and concatenated with PC+4[31:28] is sent to PC for writing)
+					 // 01: the contents of ALUout(the branch target address) are sent to PC for writing
+					 // 10: the jump target(IR[25:0]<<2 and concatenated with PC+4[31:28] is sent to PC for writing)
 ////////////////// initialize to 00 for now
 ////////////////// END IGNORE //////////////////////
 

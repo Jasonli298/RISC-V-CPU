@@ -56,7 +56,7 @@ end
 
 
 ///////////////////////////////////////////// PROCESSING ////////////////////////////////////////////////
-always @(posedge clk ) begin
+always @(posedge clk) begin
     // Fetch 1st instruction and increment PC
     IFIDIR <= IMemory[PC >> 2];
     PC <= PC + 4;
@@ -66,7 +66,6 @@ always @(posedge clk ) begin
     IDEXB <= Regs[IFIDrs2]; // registers
 
     IDEXIR <= IFIDIR; // Pass along IR -- can happen anywhere since only affects next stage
-
 
     ///////////////////////////// EX Stage /////////////////////////
     // 3rd instruction doing address calculation for ALU op
