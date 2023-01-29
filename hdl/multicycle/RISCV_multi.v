@@ -22,9 +22,9 @@ reg        IorD; // mux determines whether PC or ALUout provides address to memo
 reg        RegWrite; // The general-purpose register selected by the Write register number is
 					 // written with the value of the Write data input. 
 
-reg        MemRead;
-reg        MemWrite;
-reg        MemtoReg;
+reg        MemRead; // Content at location of Address input is put on mem output
+reg        MemWrite; // content at location of address input is replaces by the value of write data input
+reg        MemtoReg; // value fed to the register file write data input comes from 0:ALUout / 1:the MDR
 reg        ALUSrcA; // 0: 1st ALU operand is the PC  1: first ALU operand is from register A
 reg [1:0]  ALUSrcB; // 00: 2nd ALU input is register B
                     // 01: 2nd ALU input is the constant 4
