@@ -13,18 +13,22 @@ input clk;
 reg [31:0] PC; // program counter
 reg [0:31] Regs; // register file
 reg [31:0] IR; // instruction register
+reg [31:0] MDR; // memory data register
 reg [31:0] A, B; // two ALU inputs
 reg [31:0] Memory[0:1023];
 
 // Active high unless specified otherwise
-reg        IorD; // determines whether PC or ALUout provides address to memory unit
+reg        IorD; // mux determines whether PC or ALUout provides address to memory unit
 reg        RegWrite; // The general-purpose register selected by the Write register number is
 					 // written with the value of the Write data input. 
 
+reg        MemRead;
+reg        MemWrite;
+reg        MemtoReg;
 reg        ALUSrcA; // 0: 1st ALU operand is the PC  1: first ALU operand is from register A
 reg [1:0]  ALUSrcB; // 00: 2nd ALU input is register B
-				   // 01: 2nd ALU input is the constant 4
-				   // 10: 2nd ALU input is the immediate generated from the IR
+                    // 01: 2nd ALU input is the constant 4
+					// 10: 2nd ALU input is the immediate generated from the IR
 
 reg        IRWrite; // the output of the memory it written to the IR
 reg        PCWrite; // PC is written; the soure is controlled by PCSource
