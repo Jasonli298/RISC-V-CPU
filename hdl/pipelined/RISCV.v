@@ -76,7 +76,7 @@ always @(posedge clk) begin
     // 3rd instruction doing address calculation for ALU op
     if (IDEXop == LW) begin
         EXMEMALUOut <= IDEXA + {{53[IDEXIR[31]]}, IDEXIR[30:20]};
-    end else if (IDEXop == SW)
+    end else if (IDEXop == SW) begin
         EXMEMALUOut <= IDEXA + {{53[IDEXIR[31]]}, IDEXIR[30:25], IDEXIR[11:7]};
     end else if (IDEXop == ALUop) begin
         case (IDEXIR[31:25]) // for different R-type instructions
