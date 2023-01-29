@@ -2,11 +2,11 @@
 
 module RISCVCPU(clk);
 
-parameter LW = 7'b000_0011;
-parameter SW = 7'b010_0011;
-parameter BEQ = 7'b110_0011;
-parameter NOP = 32'h0000_0013;
-parameter ALUop = 7'b001_0011;
+localparam LW = 7'b000_0011;
+localparam SW = 7'b010_0011;
+localparam BEQ = 7'b110_0011;
+localparam NOP = 32'h0000_0013;
+localparam ALUop = 7'b001_0011;
 
 ////////////////////// INPUTS /////////////////////////
 input clk;
@@ -36,10 +36,13 @@ assign IDEXop   = IDEXIR[6:0];    // the opcode
 assign EXMEMop  = EXMEMIR[6:0];   // the opcode
 assign MEMWBop  = MEMWBIR[6:0];   // the opcode
 assign MEMWBrd  = MEMWBIR[11:7];  // rd field
+
 // Inputs to the ALU come directly from the ID/EX pipeline registers
 assign Ain = IDEXA;
 assign Bin = IDEXB;
+
 ////////////// END Assignments ////////////////////////
+
 
 integer i; // used to initialize registers
 initial begin
