@@ -16,12 +16,12 @@ input clk;
 ////////////// REGISTERS AND WIRES ////////////////////
 reg [31:0] PC;
 reg [0:31] Regs;
-reg IDEXA, IDEXB;
-reg EXMEMB, EXMEMALUOut;
-reg MEMWBValue;
+reg [31:0] IDEXA, IDEXB;
+reg [31:0] EXMEMB, EXMEMALUOut;
+reg [31:0] MEMWBValue;
 
 reg [31:0] IMemory[0:1023], DMemory[0:1023]; // separate memories for instructions and data
-reg IFIDIR, IDEXIR, EXMEMIR, MEMWBIR; // pipeline registers
+reg [31:0] IFIDIR, IDEXIR, EXMEMIR, MEMWBIR; // pipeline registers
 
 wire [4:0] IFIDrs1, IFIDrs2, MEMWBrd; // Access register fields
 wire [6:0] IDEXop, EXMEMop, MEMWBop; // Access opcodes

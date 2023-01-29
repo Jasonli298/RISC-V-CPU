@@ -9,15 +9,14 @@ localparam ALUop = 7'b001_0011;
 
 input clk;
 
-/////////////// Registers //////////////////
+/////////////// Internal Registers //////////////////
 reg [31:0] PC; // program counter
-reg [0:31] regs; // register file
-/////////////// END Registers /////////////
-
-////////////////// INTERNAL SIGNALS ////////////////////
+reg [0:31] Regs; // register file
+reg [31:0] IR; // instruction register
+reg [31:0] A, B; // two ALU inputs
+reg [31:0] Memory[0:1023];
 
 // Active high unless specified otherwise
-
 reg        IorD; // determines whether PC or ALUout provides address to memory unit
 reg        RegWrite; // The general-purpose register selected by the Write register number is
 					 // written with the value of the Write data input. 
@@ -32,8 +31,8 @@ reg        PCWrite; // PC is written; the soure is controlled by PCSource
 reg        PCWriteCond; // PC is written is the zero output from the ALU is also active
 
 reg [1:0]  ALUop; // 00: ALU add
-				 // 01: ALU subtract
-				 // 10: funct field of instruction determines ALU op
+				  // 01: ALU subtract
+				  // 10: funct field of instruction determines ALU op
 
 /////////////////// IRNORE FOR NOW, not doing branch instructions yet
 reg [1:0]  PCSource; // 00: output of the ALU (PC+4) is sent to PC for writing
@@ -42,4 +41,29 @@ reg [1:0]  PCSource; // 00: output of the ALU (PC+4) is sent to PC for writing
 ////////////////// initialize to 00 for now
 ////////////////// END IGNORE //////////////////////
 
+wire [31:0] Ain, Bin;
+wire [4:0]  IFIDrs1, IFIDrs2; // access rs1 and rs2 field
+wire [4:0]  rd; // access rd field of instruction
+wire [6:0]  op; // access opcode
+////////////////////// END Internal registers ////////////////////////
+
+// define fields from the instruction register
+assign IFIDrs1 = IR[19:15];
+assign IFIDrs2 = IR[24:20];
+assign op      = IR[6:0];
+assign rd      = IR[11:7];
+
+// Inputs to the ALU come direcrtly from instruction register
+assign Ain = A;
+assign Bin = B;
+
+integer i;
+initial begin
+	PC = 0;
+	IR = NOP;
+    for (i = 0; i <= 31; i = i + 1) Regs[i] = i; // initialize register file to avoid don't cares
+end
+
+always @(posedge clk) begin
+	IR <= Memory
 endmodule
