@@ -72,7 +72,7 @@ end
 
 
 ///////////////////////////////////////////// PROCESSING ////////////////////////////////////////////////
-always @(posedge clk ) begin
+always @(posedge clk) begin
 	if (~stall) begin
     // Fetch 1st instruction and increment PC
         IFIDIR <= IMemory[PC >> 2];
