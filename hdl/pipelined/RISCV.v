@@ -55,8 +55,8 @@ initial begin
     EXMEMIR = NOP;
     MEMWBIR = NOP; // put NOPs in pipeline registers
     for (i = 0;i <= 31;i = i+1) Regs[i] = i; // initialize registers--just so they aren't x'cares
-	$readmemb("IMemory.txt", IMemory);
-	$readmemb("DMemory.txt", DMemory);
+	$readmemb("IMemory.txt", IMemory); // read text file into instruction memory array
+	$readmemb("DMemory.txt", DMemory); // read text file into data memory array
 end
 
 
