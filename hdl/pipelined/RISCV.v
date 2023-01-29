@@ -8,6 +8,8 @@ localparam BEQ = 7'b110_0011;
 localparam NOP = 32'h0000_0013;
 localparam ALUop = 7'b001_0011;
 
+parameter INSTRUCTION_WIDTH = 32;
+parameter MEMORY_SIZE = 1024;
 ////////////////////// INPUTS /////////////////////////
 input clk;
 ///////////////////// END OF INPUTS ///////////////////
@@ -15,12 +17,13 @@ input clk;
 
 ////////////// REGISTERS AND WIRES ////////////////////
 reg [31:0] PC;
-reg [0:31] Regs;
+reg [31:0] Regs [0:31];
 reg IDEXA, IDEXB;
 reg EXMEMB, EXMEMALUOut;
 reg MEMWBValue;
 
-reg [31:0] IMemory[0:1023], DMemory[0:1023]; // separate memories for instructions and data
+reg [31:0] IMemory [0:1023], DMemory[0:1023];
+
 reg [31:0] IFIDIR, IDEXIR, EXMEMIR, MEMWBIR; // pipeline registers
 
 wire [4:0] IFIDrs1, IFIDrs2, MEMWBrd; // Access register fields
@@ -52,6 +55,8 @@ initial begin
     EXMEMIR = NOP;
     MEMWBIR = NOP; // put NOPs in pipeline registers
     for (i = 0;i <= 31;i = i+1) Regs[i] = i; // initialize registers--just so they aren't x'cares
+	$readmemb("IMemory.txt", IMemory);
+	$readmemb("DMemory.txt", DMemory);
 end
 
 
