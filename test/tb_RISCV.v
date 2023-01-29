@@ -6,7 +6,7 @@ module tb_RISCV;
 wire clk;
 integer i;
 
-/*****/ // rename to whichever version of Build
+/**********/ // rename to whichever version of Build
 RISCV_multi UUT(.clk(clk));
 
 initial begin
