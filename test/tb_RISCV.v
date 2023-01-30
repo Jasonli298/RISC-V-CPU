@@ -4,7 +4,7 @@
 module tb_RISCV;
 
 reg clk;
-integer i;
+integer i,j;
 
 // Input Memory
 reg signed [31:0] IMemory [0:1023];
@@ -25,7 +25,10 @@ initial begin
 	end
 	join
 
-	$display("Generated Reseult")
+	$display("Generated Reseult");
+	for (j = 0; j < 32; j = j + 1) begin
+		$display(UUT.Regs[j]);
+	end
 	for (i = 0; i < 1024; i = i + 1) begin
 		$display(DMemory[i]);
 	end
@@ -37,5 +40,8 @@ end
 always begin
 	clk = #10 ~clk;
 end
+
+endmodule
+
 
 endmodule
