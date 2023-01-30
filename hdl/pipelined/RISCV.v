@@ -102,10 +102,10 @@ always @(posedge clk) begin
                 */
                 default:
             endcase
-			EXMEMIR <= IDEXIR; // Pass along the IR
-        	EXMEMB <= IDEXB; // & B register
-		end
-	end
+			      EXMEMIR <= IDEXIR; // Pass along the IR
+        	  EXMEMB <= IDEXB; // & B register
+		    end
+	end // end if (~stall) begin
 	else EXMEMIR <= NOP;
 	/////////////////////////// END EX Stage /////////////////////////
 
