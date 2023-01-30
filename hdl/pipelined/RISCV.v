@@ -104,7 +104,8 @@ always @(posedge clk) begin
             endcase
 			EXMEMIR <= IDEXIR; // Pass along the IR
         	EXMEMB <= IDEXB; // & B register
-	end
+        end
+	end // end if (~stall) begin
 	else EXMEMIR <= NOP;
 	/////////////////////////// END EX Stage /////////////////////////
 
