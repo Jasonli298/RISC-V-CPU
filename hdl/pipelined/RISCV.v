@@ -6,7 +6,7 @@ localparam LW    = 7'b000_0011;
 localparam SW    = 7'b010_0011;
 localparam BEQ   = 7'b110_0011;
 localparam NOP   = 32'h0000_0013;
-localparam ALUop = 7'b001_0011;
+localparam ALUop = 7'b011_0011;
 
 ////////////////////// INPUTS /////////////////////////
 input clk;
@@ -92,7 +92,8 @@ always @(posedge clk) begin
             EXMEMALUOut <= IDEXA + {{53[IDEXIR[31]]}, IDEXIR[30:25], IDEXIR[11:7]};
         end else if (IDEXop == ALUop) begin
             case (IDEXIR[31:25]) // for different R-type instructions
-                0: EXMEMALUOut <= Ain + Bin; // add operation
+                7'b0000000: EXMEMALUOut <= Ain + Bin; // add operation
+				7'b0100000: EXMEMALUout <= Ain - Bin;
 
                 /*
                 *
