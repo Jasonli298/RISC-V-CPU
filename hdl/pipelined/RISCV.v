@@ -6,7 +6,7 @@ localparam LW    = 7'b000_0011;
 localparam SW    = 7'b010_0011;
 localparam BEQ   = 7'b110_0011;
 localparam NOP   = 32'h0000_0013;
-localparam ALUop = 7'b001_0011;
+localparam ALUop = 7'b011_0011;
 
 ////////////////////// INPUTS /////////////////////////
 input clk;
@@ -17,7 +17,7 @@ input clk;
 reg [31:0] PC;
 reg [31:0] Regs [0:31];
 reg [31:0] IDEXA, IDEXB;
-reg [31:0] EXMEMB, EXMEMALUOut;
+reg [31:0] EXMEMB, EXMEMALUout;
 reg [31:0] MEMWBValue;
 
 reg [31:0] IMemory[0:1023], DMemory[0:1023]; // separate memories for instructions and data
@@ -37,6 +37,8 @@ wire stall;
 ///////////// Assignments define fields from the pipeline registers
 assign IFIDrs1 = IFIDIR[19:15]; // rs1 field
 assign IFIDrs2 = IFIDIR[24:20]; // rs2 field
+assign IDEXrs1  = IDEXIR[19:15];
+assign IDEXrs2  = IDEXIR[24:20];
 assign IDEXop  = IDEXIR[6:0];   // the opcode
 assign EXMEMop = EXMEMIR[6:0];  // the opcode
 assign EXMEMrd = EXMEMIR[11:7]; // the read address
@@ -87,12 +89,13 @@ always @(posedge clk) begin
         ///////////////////////////// EX Stage /////////////////////////
         // 3rd instruction doing address calculation for ALU op
         if (IDEXop == LW) begin
-            EXMEMALUOut <= IDEXA + {{53[IDEXIR[31]]}, IDEXIR[30:20]};
+            EXMEMALUout <= IDEXA + IDEXIR[31:20];
         end else if (IDEXop == SW) begin
-            EXMEMALUOut <= IDEXA + {{53[IDEXIR[31]]}, IDEXIR[30:25], IDEXIR[11:7]};
+            EXMEMALUout <= IDEXA + {IDEXIR[31:25], IDEXIR[11:7]};
         end else if (IDEXop == ALUop) begin
             case (IDEXIR[31:25]) // for different R-type instructions
-                0: EXMEMALUOut <= Ain + Bin; // add operation
+                7'b0000000: EXMEMALUout <= Ain + Bin; // add operation
+				7'b0100000: EXMEMALUout <= Ain - Bin;
 
                 /*
                 *
@@ -100,7 +103,7 @@ always @(posedge clk) begin
                 *
                 *
                 */
-                default:
+                default: EXMEMALUout <= 32'b0;
             endcase
 			EXMEMIR <= IDEXIR; // Pass along the IR
         	EXMEMB <= IDEXB; // & B register
@@ -110,9 +113,9 @@ always @(posedge clk) begin
 	/////////////////////////// END EX Stage /////////////////////////
 
 	////////////////////////////// MEM Stage ///////////////////////////////
-	if      (EXMEMop == ALUop) MEMWBValue              <= EXMEMALUOut;
-	else if (EXMEMop == LW)    MEMWBValue              <= DMemory[EXMEMALUOut>>2];
-	else if (EXMEMop == SW)    DMemory[EXMEMALUOut>>2] <= EXMEMB;
+	if      (EXMEMop == ALUop) MEMWBValue              <= EXMEMALUout;
+	else if (EXMEMop == LW)    MEMWBValue              <= DMemory[EXMEMALUout];
+	else if (EXMEMop == SW)    DMemory[EXMEMALUout>>2] <= EXMEMB;
 	///////////////////////////// END MEM Stage //////////////////////////////
 
 	MEMWBIR <= EXMEMIR; // Pass along IR
@@ -120,7 +123,7 @@ always @(posedge clk) begin
 	////////////////////////////// WB Stage /////////////////////////////////
 	// update registers if load/ALU op and destination not 0
 	if (((MEMWBop == LW) || (MEMWBop == ALUop)) && (MEMWBrd != 0)) begin
-		Regs[MEMWBrd] <= MEMWBvalue;
+		Regs[MEMWBrd] <= MEMWBValue;
 	end
     /////////////////////////////// END WB Stage /////////////////////////////
 end
