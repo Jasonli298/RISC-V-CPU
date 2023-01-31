@@ -1,0 +1,59 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Users/liste/Desktop/EEC181/Lab2/simulation
+vRISCVCPU
+Z0 !s110 1675125313
+!i10b 1
+!s100 c5[53eGQ<O0e^ce>QB?M20
+Z1 !s11b Dg1SIo80bB@j0V0VzS_@n1
+Ia_4AdZ4iDon35lUHb;mU=3
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+Z3 dC:/Users/liste/Desktop/EEC181/RISC-V-CPU/simulation
+w1675125100
+8C:\Users\liste\Desktop\EEC181\RISC-V-CPU\hdl\pipelined\RISCV.v
+FC:\Users\liste\Desktop\EEC181\RISC-V-CPU\hdl\pipelined\RISCV.v
+!i122 49
+L0 3 130
+Z4 OV;L;2020.1;71
+r1
+!s85 0
+31
+Z5 !s108 1675125313.000000
+!s107 C:\Users\liste\Desktop\EEC181\RISC-V-CPU\hdl\pipelined\RISCV.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:\Users\liste\Desktop\EEC181\RISC-V-CPU\hdl\pipelined\RISCV.v|
+!i113 1
+Z6 o-work work
+Z7 tCvgOpt 0
+n@r@i@s@c@v@c@p@u
+vtb_RISCV
+R0
+!i10b 1
+!s100 nJ7eV@R=P_ghlbfRZmR7[3
+R1
+IA?Pb3KWFOQH_PK2bmD:d:0
+R2
+R3
+w1675124979
+8C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v
+FC:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v
+!i122 48
+L0 4 38
+R4
+r1
+!s85 0
+31
+R5
+!s107 C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v|
+!i113 1
+R6
+R7
+ntb_@r@i@s@c@v
