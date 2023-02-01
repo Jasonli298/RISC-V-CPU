@@ -15,7 +15,7 @@ input clk;
 
 ////////////// REGISTERS AND WIRES ////////////////////
 reg [31:0] PC;
-reg [31:0] Regs [0:31];
+reg [0:31] Regs;
 reg [31:0] IDEXA, IDEXB;
 reg [31:0] EXMEMB, EXMEMALUout;
 reg [31:0] MEMWBValue;
