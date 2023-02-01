@@ -114,7 +114,7 @@ always @(posedge clk) begin
 
 	////////////////////////////// MEM Stage ///////////////////////////////
 	if      (EXMEMop == ALUop) MEMWBValue              <= EXMEMALUout;
-	else if (EXMEMop == LW)    MEMWBValue              <= DMemory[EXMEMALUout];
+	else if (EXMEMop == LW)    MEMWBValue              <= DMemory[EXMEMALUout >> 2];
 	else if (EXMEMop == SW)    DMemory[EXMEMALUout>>2] <= EXMEMB;
 	///////////////////////////// END MEM Stage //////////////////////////////
 
