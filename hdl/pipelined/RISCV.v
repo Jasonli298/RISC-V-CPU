@@ -90,6 +90,9 @@ always @(posedge clk) begin
         // 3rd instruction doing address calculation for ALU op
         if (IDEXop == LW) begin
             EXMEMALUout <= IDEXA + IDEXIR[31:20];
+			$display("LW Branch Taken");
+			$display("%b, %b", IDEXA, IDEXIR);
+			$display("EXMEMALUout=%d", EXMEMALUout);
         end else if (IDEXop == SW) begin
             EXMEMALUout <= IDEXA + {IDEXIR[31:25], IDEXIR[11:7]};
         end else if (IDEXop == ALUop) begin
@@ -105,16 +108,16 @@ always @(posedge clk) begin
                 */
                 default: EXMEMALUout <= 32'b0;
             endcase
-			EXMEMIR <= IDEXIR; // Pass along the IR
-        	EXMEMB <= IDEXB; // & B register
 		end
+		EXMEMIR <= IDEXIR; // Pass along the IR
+        EXMEMB <= IDEXB; // & B register
 	end // end if (~stall) begin
 	else EXMEMIR <= NOP;
 	/////////////////////////// END EX Stage /////////////////////////
 
 	////////////////////////////// MEM Stage ///////////////////////////////
 	if      (EXMEMop == ALUop) MEMWBValue              <= EXMEMALUout;
-	else if (EXMEMop == LW)    MEMWBValue              <= DMemory[EXMEMALUout];
+	else if (EXMEMop == LW)    MEMWBValue              <= DMemory[EXMEMALUout << 2];
 	else if (EXMEMop == SW)    DMemory[EXMEMALUout>>2] <= EXMEMB;
 	///////////////////////////// END MEM Stage //////////////////////////////
 
