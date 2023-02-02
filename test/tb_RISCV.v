@@ -22,13 +22,11 @@ initial begin
 	repeat (100) begin
 		@(posedge clk);
 	end
-	for (i = 0; i < 32; i = i + 1) begin
-		regs.[i] = UUT.Regs[i];
-	end
-	$display("%d", UUT.DMemory[0]);
+
+//	$display("%d", UUT.DMemory[0]);
 	$display("Generated Reseult");
 	for (j = 0; j < 32; j = j + 1) begin
-		$display("Regx%d %b %d", j, UUT.Regs[j], UUT.Regs[j]);
+		$display("Reg%d %h", j, UUT.Regs[j]);
 	end
 //	for (i = 0; i < 1024; i = i + 1) begin
 //		$display(DMemory[i]);

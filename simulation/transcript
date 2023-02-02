@@ -5770,3 +5770,788 @@ run -all
 # ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(34)
 #    Time: 550 ns  Iteration: 1  Instance: /tb_RISCV
 # Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 34
+# Compile of tb_RISCV.v failed with 1 errors.
+# Compile of RISCV.v was successful.
+# 2 compiles, 1 failed with 1 error.
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+#         31
+# Generated Reseult
+# Regx          0 0 0
+# Regx          1 1 1
+# Regx          2 0 0
+# Regx          3 1 1
+# Regx          4 0 0
+# Regx          5 1 1
+# Regx          6 0 0
+# Regx          7 1 1
+# Regx          8 1 1
+# Regx          9 1 1
+# Regx         10 0 0
+# Regx         11 1 1
+# Regx         12 0 0
+# Regx         13 1 1
+# Regx         14 0 0
+# Regx         15 1 1
+# Regx         16 0 0
+# Regx         17 1 1
+# Regx         18 0 0
+# Regx         19 1 1
+# Regx         20 0 0
+# Regx         21 1 1
+# Regx         22 0 0
+# Regx         23 1 1
+# Regx         24 0 0
+# Regx         25 1 1
+# Regx         26 0 0
+# Regx         27 1 1
+# Regx         28 0 0
+# Regx         29 1 1
+# Regx         30 0 0
+# Regx         31 1 1
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+#         31
+# Generated Reseult
+# Regx          0 0
+# Regx          1 1
+# Regx          2 0
+# Regx          3 1
+# Regx          4 0
+# Regx          5 1
+# Regx          6 0
+# Regx          7 1
+# Regx          8 1
+# Regx          9 1
+# Regx         10 0
+# Regx         11 1
+# Regx         12 0
+# Regx         13 1
+# Regx         14 0
+# Regx         15 1
+# Regx         16 0
+# Regx         17 1
+# Regx         18 0
+# Regx         19 1
+# Regx         20 0
+# Regx         21 1
+# Regx         22 0
+# Regx         23 1
+# Regx         24 0
+# Regx         25 1
+# Regx         26 0
+# Regx         27 1
+# Regx         28 0
+# Regx         29 1
+# Regx         30 0
+# Regx         31 1
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+#         31
+# Generated Reseult
+# Regx          0 0
+# Regx          1 1
+# Regx          2 0
+# Regx          3 1
+# Regx          4 0
+# Regx          5 1
+# Regx          6 0
+# Regx          7 1
+# Regx          8 1
+# Regx          9 1
+# Regx         10 0
+# Regx         11 1
+# Regx         12 0
+# Regx         13 1
+# Regx         14 0
+# Regx         15 1
+# Regx         16 0
+# Regx         17 1
+# Regx         18 0
+# Regx         19 1
+# Regx         20 0
+# Regx         21 1
+# Regx         22 0
+# Regx         23 1
+# Regx         24 0
+# Regx         25 1
+# Regx         26 0
+# Regx         27 1
+# Regx         28 0
+# Regx         29 1
+# Regx         30 0
+# Regx         31 1
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# Generated Reseult
+# Regx          0 0
+# Regx          1 1
+# Regx          2 0
+# Regx          3 1
+# Regx          4 0
+# Regx          5 1
+# Regx          6 0
+# Regx          7 1
+# Regx          8 1
+# Regx          9 1
+# Regx         10 0
+# Regx         11 1
+# Regx         12 0
+# Regx         13 1
+# Regx         14 0
+# Regx         15 1
+# Regx         16 0
+# Regx         17 1
+# Regx         18 0
+# Regx         19 1
+# Regx         20 0
+# Regx         21 1
+# Regx         22 0
+# Regx         23 1
+# Regx         24 0
+# Regx         25 1
+# Regx         26 0
+# Regx         27 1
+# Regx         28 0
+# Regx         29 1
+# Regx         30 0
+# Regx         31 1
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# Generated Reseult
+# Reg          0 0
+# Reg          1 1
+# Reg          2 0
+# Reg          3 1
+# Reg          4 0
+# Reg          5 1
+# Reg          6 0
+# Reg          7 1
+# Reg          8 1
+# Reg          9 1
+# Reg         10 0
+# Reg         11 1
+# Reg         12 0
+# Reg         13 1
+# Reg         14 0
+# Reg         15 1
+# Reg         16 0
+# Reg         17 1
+# Reg         18 0
+# Reg         19 1
+# Reg         20 0
+# Reg         21 1
+# Reg         22 0
+# Reg         23 1
+# Reg         24 0
+# Reg         25 1
+# Reg         26 0
+# Reg         27 1
+# Reg         28 0
+# Reg         29 1
+# Reg         30 0
+# Reg         31 1
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# Generated Reseult
+# Reg          0 0
+# Reg          1 1
+# Reg          2 0
+# Reg          3 1
+# Reg          4 0
+# Reg          5 1
+# Reg          6 0
+# Reg          7 1
+# Reg          8 1
+# Reg          9 1
+# Reg         10 0
+# Reg         11 1
+# Reg         12 0
+# Reg         13 1
+# Reg         14 0
+# Reg         15 1
+# Reg         16 0
+# Reg         17 1
+# Reg         18 0
+# Reg         19 1
+# Reg         20 0
+# Reg         21 1
+# Reg         22 0
+# Reg         23 1
+# Reg         24 0
+# Reg         25 1
+# Reg         26 0
+# Reg         27 1
+# Reg         28 0
+# Reg         29 1
+# Reg         30 0
+# Reg         31 1
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -al
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5          5
+# Reg          6          6
+# Reg          7          7
+# Reg          8         19
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5          5
+# Reg          6          6
+# Reg          7          7
+# Reg          8         19
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5          5
+# Reg          6          6
+# Reg          7          7
+# Reg          8          0
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5          7
+# Reg          6          6
+# Reg          7          7
+# Reg          8         19
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# LW Branch Taken
+# EXMEMALUout=         x
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5          7
+# Reg          6          6
+# Reg          7          7
+# Reg          8         19
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# LW Branch Taken
+# 00000000000000000000000000000000, 00000000000000000010001010000011
+# EXMEMALUout=         x
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5          7
+# Reg          6          6
+# Reg          7          7
+# Reg          8         19
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# LW Branch Taken
+# 00000000000000000000000000000000, 00000000000000000010001010000011
+# EXMEMALUout=         x
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5          7
+# Reg          6          6
+# Reg          7          7
+# Reg          8         19
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# LW Branch Taken
+# 00000000000000000000000000000000, 00000000000000000010001010000011
+# EXMEMALUout=         x
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5          7
+# Reg          6          6
+# Reg          7          7
+# Reg          8         19
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# LW Branch Taken
+# 00000000000000000000000000000000, 00000000000000000010001100000011
+# EXMEMALUout=         x
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5          7
+# Reg          6         31
+# Reg          7          7
+# Reg          8         19
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+# Load canceled
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -al
+# LW Branch Taken
+# 00000000000000000000000000000000, 00000000000000000010001100000011
+# EXMEMALUout=         x
+# Generated Reseult
+# Reg          0          0
+# Reg          1          1
+# Reg          2          2
+# Reg          3          3
+# Reg          4          4
+# Reg          5 4294967295
+# Reg          6         31
+# Reg          7          7
+# Reg          8         19
+# Reg          9          9
+# Reg         10         10
+# Reg         11         11
+# Reg         12         12
+# Reg         13         13
+# Reg         14         14
+# Reg         15         15
+# Reg         16         16
+# Reg         17         17
+# Reg         18         18
+# Reg         19         19
+# Reg         20         20
+# Reg         21         21
+# Reg         22         22
+# Reg         23         23
+# Reg         24         24
+# Reg         25         25
+# Reg         26         26
+# Reg         27         27
+# Reg         28         28
+# Reg         29         29
+# Reg         30         30
+# Reg         31         31
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
+# Compile of tb_RISCV.v was successful.
+# Compile of RISCV.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+restart -f
+run -all
+# LW Branch Taken
+# 00000000000000000000000000000000, 00000000000000000010001100000011
+# EXMEMALUout=         x
+# Generated Reseult
+# Reg          0 00000000
+# Reg          1 00000001
+# Reg          2 00000002
+# Reg          3 00000003
+# Reg          4 00000004
+# Reg          5 ffffffff
+# Reg          6 0000001f
+# Reg          7 00000007
+# Reg          8 00000013
+# Reg          9 00000009
+# Reg         10 0000000a
+# Reg         11 0000000b
+# Reg         12 0000000c
+# Reg         13 0000000d
+# Reg         14 0000000e
+# Reg         15 0000000f
+# Reg         16 00000010
+# Reg         17 00000011
+# Reg         18 00000012
+# Reg         19 00000013
+# Reg         20 00000014
+# Reg         21 00000015
+# Reg         22 00000016
+# Reg         23 00000017
+# Reg         24 00000018
+# Reg         25 00000019
+# Reg         26 0000001a
+# Reg         27 0000001b
+# Reg         28 0000001c
+# Reg         29 0000001d
+# Reg         30 0000001e
+# Reg         31 0000001f
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(35)
+#    Time: 1990 ns  Iteration: 1  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 35
