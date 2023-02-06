@@ -90,9 +90,9 @@ always @(posedge clk) begin
         // 3rd instruction doing address calculation for ALU op
         if (IDEXop == LW) begin
             EXMEMALUout <= IDEXA + IDEXIR[31:20];
-			$display("LW Branch Taken");
-			$display("%b, %b", IDEXA, IDEXIR);
-			$display("EXMEMALUout=%d", EXMEMALUout);
+			// $display("LW Branch Taken");
+			// $display("%b, %b", IDEXA, IDEXIR);
+			// $display("EXMEMALUout=%d", EXMEMALUout);
         end else if (IDEXop == SW) begin
             EXMEMALUout <= IDEXA + {IDEXIR[31:25], IDEXIR[11:7]};
         end else if (IDEXop == ALUop) begin
