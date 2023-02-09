@@ -83,6 +83,7 @@ always @(posedge clk) begin
         // 2nd instruction in pipeline fetches registers
         IDEXA <= Regs[IFIDrs1]; // Get the two
         IDEXB <= Regs[IFIDrs2]; // registers
+		// $display("IDEXA = %b, IDEXB = %b", IDEXA, IDEXB);
 
         IDEXIR <= IFIDIR; // Pass along IR -- can happen anywhere since only affects next stage
 
