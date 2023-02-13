@@ -18,7 +18,7 @@ RISCVCPU UUT(.clk(clk), .done(done), .clock_count(clock_count));
 
 initial begin
 	$readmemb("matrix_memory.txt", matrix);
-	$readmemb("vector_mamory.txt", vector);
+	$readmemb("vector_memory.txt", vector);
 	/*
 	* The 1st and 2nd location of matrix_memory.txt is reserved for the number of rows and columns of the matrix
 	* The 1st location represents the # of rows in the matrix
