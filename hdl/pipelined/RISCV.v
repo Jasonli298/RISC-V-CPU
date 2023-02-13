@@ -1,16 +1,19 @@
 // Pipelined version with no branch instructions or hazard detection
 
-module RISCVCPU(clk);
+module RISCVCPU(clk, done, clock_count);
 
 localparam LW    = 7'b000_0011;
 localparam SW    = 7'b010_0011;
 localparam BEQ   = 7'b110_0011;
 localparam NOP   = 32'h0000_0013;
 localparam ALUop = 7'b011_0011;
+localparam EOF   = 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
 
-////////////////////// INPUTS /////////////////////////
+////////////////////// I/O /////////////////////////
 input clk;
-///////////////////// END OF INPUTS ///////////////////
+output reg done;
+output reg [31:0] clock_count;
+///////////////////// END I/O ///////////////////
 
 
 ////////////// REGISTERS AND WIRES ////////////////////
@@ -75,10 +78,15 @@ end
 
 ///////////////////////////////////////////// PROCESSING ////////////////////////////////////////////////
 always @(posedge clk) begin
+	clock_count <= clock_count + 1;
+	done <= 1'b1;
 	if (~stall) begin
     // Fetch 1st instruction and increment PC
         IFIDIR <= IMemory[PC >> 2];
         PC <= PC + 4;
+		if (IFIDIR == EOF) begin
+			done <= 1'b1;
+		end
 
         // 2nd instruction in pipeline fetches registers
         IDEXA <= Regs[IFIDrs1]; // Get the two
