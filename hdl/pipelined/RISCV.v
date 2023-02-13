@@ -29,6 +29,9 @@ reg [31:0] IFIDIR, IDEXIR, EXMEMIR, MEMWBIR; // pipeline registers
 wire [4:0] IFIDrs1, IFIDrs2, MEMWBrd; // Access register fields
 wire [6:0] IDEXop, EXMEMop, MEMWBop; // Access opcodes
 wire [31:0] Ain, Bin; // ALU inputs
+
+reg WB_done; // asserted every time WB is done, to detect completion of program
+
 // Bypass signals
 wire bypassAfromMEM, bypassAfromALUinWB,
 	 bypassBfromMEM, bypassBfromALUinWB,
@@ -79,14 +82,15 @@ end
 ///////////////////////////////////////////// PROCESSING ////////////////////////////////////////////////
 always @(posedge clk) begin
 	clock_count <= clock_count + 1;
-	done <= 1'b1;
+	done <= 1'b0;
 	if (~stall) begin
     // Fetch 1st instruction and increment PC
         IFIDIR <= IMemory[PC >> 2];
         PC <= PC + 4;
-		if (IFIDIR == EOF) begin
+		if ((IFIDIR == EOF) && WB_done) begin
 			done <= 1'b1;
 		end
+		WB_done <= 1'b0;
 
         // 2nd instruction in pipeline fetches registers
         IDEXA <= Regs[IFIDrs1]; // Get the two
@@ -135,6 +139,7 @@ always @(posedge clk) begin
 	// update registers if load/ALU op and destination not 0
 	if (((MEMWBop == LW) || (MEMWBop == ALUop)) && (MEMWBrd != 0)) begin
 		Regs[MEMWBrd] <= MEMWBValue;
+		WB_done <= 1'b1;
 	end
     /////////////////////////////// END WB Stage /////////////////////////////
 end
