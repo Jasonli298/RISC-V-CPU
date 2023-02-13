@@ -64,7 +64,7 @@ initial begin
 //	$display("%d", UUT.DMemory[0]);
 	$display("Generated Reseult");
 	for (j = 0; j < 32; j = j + 1) begin
-		$display("Reg%d %h", j, UUT.Regs[j]);
+		$display("Reg%d %d", j, UUT.Regs[j]);
 	end
 //	for (i = 0; i < 1024; i = i + 1) begin
 //		$display(DMemory[i]);
