@@ -23,7 +23,7 @@ reg [31:0] IDEXA, IDEXB;
 reg [31:0] EXMEMB, EXMEMALUout;
 reg [31:0] MEMWBValue;
 
-reg [31:0] IMemory[0:1023], DMemory[0:1023]; // separate memories for instructions and data
+reg [31:0] IMemory[0:1023], matrix_memory[0:1023], vector_memory[0:1023]; // separate memories for instructions and data
 reg [31:0] IFIDIR, IDEXIR, EXMEMIR, MEMWBIR; // pipeline registers
 
 wire [4:0] IFIDrs1, IFIDrs2, MEMWBrd; // Access register fields
@@ -75,7 +75,9 @@ initial begin
     MEMWBIR = NOP; // put NOPs in pipeline registers
     for (i = 0;i <= 31;i = i+1) Regs[i] = i; // initialize registers--just so they aren't x'cares
 	$readmemb("IMemory.txt", IMemory);
-	$readmemb("DMemory.txt", DMemory);
+	$readmemb("matrix_memory.txt", matrix_memory);
+	$readmemb("vector_memory.txt", vector_memory);
+
 end
 
 
