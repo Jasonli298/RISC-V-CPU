@@ -9,19 +9,13 @@ module RISCVCPU (clock);
 
     //         ra = 1;
 
-    parameter R_I = 7'b0110011;
-                I_I = 7'b0010011;
-                S_I = 7'b0100011;
-                B_I = 7'b1100011;
-                U_I = 7'b0110111;
-                J_I = 7'b1101111;
-
-
-
-
-
-
-            
+    localparam R_I = 7'b0110011;
+    localparam I_I = 7'b0010011;
+    localparam S_I = 7'b0100011;
+    localparam B_I = 7'b1100011;
+    localparam U_I = 7'b0110111;
+    localparam J_I = 7'b1101111;
+      
     input clock; //the clock is an external input
     // The architecturally visible registers and scratch registers for implementation
     reg [31:0] PC, Regs[0:31], ALUOut, MDR, rs1, rs2, imm;
@@ -59,14 +53,39 @@ module RISCVCPU (clock);
 
             3: begin // third step: Load-store execution, ALU execution, Branch completion
                 case(opcode)
-
-                    R_I:begin
+                    R_I: begin // R-type
+                        case (IR[31:25]) // Check funct7
+                            7'b0000000: begin
+                                case (IR[14:12]) // Check funct3
+                                    3'b000: ALUOut <= rs1 + rs2;                 // add
+                                    3'b001: ALUOut <= rs1 << rs2;                // sll
+                                    3'b010: ALUOut <= (rs1 < rs2) ? 1'b1 : 1'b0; // slt (Set Less Than)
+                                    3'b100: ALUOut <= rs1 ^ rs2;                 // xor
+                                    3'b101: ALUOut <= rs1 >> rs2;                // srl
+                                    3'b110: ALUOut <= rs1 || rs2;                // or
+                                    3'b111: ALUOut <= rs1 && rs2;                // and
+                                    default: ; 
+                                endcase
+                            end
+                            7'b0100000: begin
+                                case (IR[14:12]) // Check funct3
+                                    3'b000: ALUOut <= rs1 - rs2;                 // sub
+                                    default: ;
+                                endcase
+                            end
+                            default: ;
+                        endcase // endcase (IR[31:25])
                     end
-
-
-
-
-                endcase
+                    I_I: begin // TO DO: learn how to check if the most significant 7 bits are part of imm or funct7
+                        case (IR[14:12])
+                            3'b000: ALUOut <= rs1 + IR[31:20];  // addi
+                            3'b010: ALUOut <= rs1 << IR[31:20]; // slli
+                            3'b100: ALUOut <= rs1 ^ IR[31:20];  // xori
+                            3'b110: ALUOut <= rs1 | IR[31:20];  // ori
+                            3'b111: ALUOut <= rs1 & IR[31:20];  // andi
+                        endcase
+                    end
+                endcase // endcase (opcode)
 
                 // if ((opcode == LW) || (opcode == SW)) begin
                 //     ALUOut <= rs1 + ImmGen; // compute effective address
