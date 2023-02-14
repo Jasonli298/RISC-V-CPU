@@ -1,6 +1,6 @@
 // Pipelined version with no branch instructions or hazard detection
-
 module RISCVCPU(clk, done, clock_count);
+
 
 localparam LW    = 7'b000_0011;
 localparam SW    = 7'b010_0011;
