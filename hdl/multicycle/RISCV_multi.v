@@ -87,7 +87,7 @@ always @(posedge clock) begin
                         end
                         default: ;
                     endcase // endcase (IR[31:25])
-                end
+                end // R_I: begin
                 I_I: begin // TO DO: learn how to check if the most significant 7 bits are part of imm or funct7
                     case (IR[14:12])
                         3'b000: ALUOut <= rs1 + IR[31:20];  // addi
@@ -96,7 +96,7 @@ always @(posedge clock) begin
                         3'b110: ALUOut <= rs1 | IR[31:20];  // ori
                         3'b111: ALUOut <= rs1 & IR[31:20];  // andi
                     endcase
-                end
+                end // I_I: begin
             endcase // endcase (opcode)
 
             // if ((opcode == LW) || (opcode == SW)) begin
