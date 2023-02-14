@@ -37,6 +37,7 @@ initial begin
 	begin
 		@(posedge done);
 		disable wait_or_timeout;
+	end
 	join
 
 	// Print input matrix and vector
@@ -76,6 +77,8 @@ end
 
 always begin
 	clk = #10 ~clk;
+end
+
 end
 
 endmodule
