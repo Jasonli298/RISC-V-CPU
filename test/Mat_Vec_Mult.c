@@ -6,7 +6,7 @@
 int N; // the number of columns in the matrix and the number of rows in the vector
 int R; // the number of rows in the matrix
 
-void MatVecMult(int matrix[R][N], const int vector[N], int res[N])
+void MatVecMult(int matrix[3][4], const int vector[4], int res[4])
 {
 	int i, j; // i=rows, j=columns
 	for (i = 0; i < R; i++)
