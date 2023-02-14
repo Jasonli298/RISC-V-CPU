@@ -15,12 +15,6 @@ module RISCVCPU (clock);
                 B_I = 7'b1100011;
                 U_I = 7'b0110111;
                 J_I = 7'b1101111;
-
-
-
-
-
-
             
     input clock; //the clock is an external input
     // The architecturally visible registers and scratch registers for implementation
