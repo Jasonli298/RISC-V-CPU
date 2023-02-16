@@ -31,6 +31,7 @@ reg [31:0] IR;
 reg [2:0] state; // processor state
 wire [6:0] opcode; // use to get opcode easily
 wire [31:0] ImmGen; // used to generate immediate
+wire [31:0] PCOffset; // The offset of PC when executing jump instructions
 ////////////////// END Internal registers and wires ///////////////////////////////
 
 assign opcode = IR[6:0]; // opcode is lower 7 bits
