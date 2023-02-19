@@ -34,8 +34,8 @@ module RISCVCPU
     wire [6:0] opcode; // use to get opcode easily
     wire [31:0] ImmGen; // used to generate immediate
     assign opcode = IR[6:0]; // opcode is lower 7 bits
-    assign ImmGen = (opcode == LW) ? {IR[31], IR[30:20]} : {IR[31], IR[30:25], IR[11:7]};
-    // assign ImmGen = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
+    // assign ImmGen = (opcode == LW) ? {IR[31], IR[30:20]} : {IR[31], IR[30:25], IR[11:7]};
+    assign ImmGen = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
     assign PCOffset = {IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
     // set the PC to 0 and start the control in state 1
     integer i;
