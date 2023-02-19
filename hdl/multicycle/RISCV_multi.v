@@ -35,8 +35,8 @@ wire [31:0] PCOffset; // The offset of PC when executing jump instructions
 ////////////////// END Internal registers and wires ///////////////////////////////
 
 assign opcode = IR[6:0]; // opcode is lower 7 bits
-assign ImmGen = (opcode == LW) ? {{53{IR[31]}}, IR[30:20]} : {{53{IR[31]}}, IR[30:25], IR[11:7]};
-assign PCOffset = {{52{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
+assign ImmGen = (opcode == LW) ? {IR[31], IR[30:20]} : {IR[31], IR[30:25], IR[11:7]};
+assign PCOffset = {IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
 
 // set the PC to 0 and start the control in state 1
 integer i;

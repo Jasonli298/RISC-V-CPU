@@ -1,5 +1,8 @@
 // Pipelined version with no branch instructions or hazard detection
-module RISCVCPU(clk, done, clock_count);
+module RISCVCPU
+#(parameter ROWS = 10,
+  parameter COLS = 10)
+(clk, done, clock_count);
 
 
 localparam LW    = 7'b000_0011;

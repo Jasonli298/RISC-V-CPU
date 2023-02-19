@@ -14,7 +14,7 @@ reg signed [31:0] Vector [0:1023];
 reg signed [31:0] result [0:1023];
 
 /**********/ // rename to whichever version of Build
-RISCVCPU UUT(.clk(clk), .done(done), .clock_count(clock_count));
+RISCVCPU UUT(3, 4)(.clk(clk), .done(done), .clock_count(clock_count));
 
 initial begin
 	$readmemb("matrix_memory.txt", matrix);
@@ -61,11 +61,15 @@ initial begin
 			res[i] = matrix[i + j * rows] * vector[j];
 	end
 
+	$display("\n expected result");
+	for (i = 0; i < rows; i = i + 1) begin
+		$display(res[i]);
+	end
 
 //	$display("%d", UUT.DMemory[0]);
 	$display("Generated Reseult");
-	for (j = 0; j < 32; j = j + 1) begin
-		$display("Reg%d %d", j, UUT.Regs[j]);
+	for (i = 0; j < rows; i = i + 1) begin
+		$display(UUT.OutRAM[i]);
 	end
 //	for (i = 0; i < 1024; i = i + 1) begin
 //		$display(DMemory[i]);
