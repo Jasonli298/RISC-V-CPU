@@ -148,7 +148,7 @@ always @(posedge clock) begin
                 // $display("testing: Regs[IR[11:7]]= %d\n",Regs[IR[11:7]] );
             end
             else if (opcode == LW) begin // load instruction
-                MDR <= Memory[ALUOut >> 2]; // read the memory
+                MDR <= DMemory[ALUOut >> 2]; // read the memory
                 state <= 5; // next state
             end
             else if (opcode == SW) begin // store instruction

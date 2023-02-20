@@ -10,50 +10,50 @@ z2
 cModel Technology
 dC:/Users/liste/Desktop/EEC181/Lab2/simulation
 vRISCVCPU
-Z0 !s110 1675906442
+!s110 1675906442
 !i10b 1
 !s100 hL<2LH1h]nLilZV>9iBVz1
-Z1 !s11b Dg1SIo80bB@j0V0VzS_@n1
+Z0 !s11b Dg1SIo80bB@j0V0VzS_@n1
 IWW9:MX7>N`Hc58k;^>LRa1
-Z2 VDg1SIo80bB@j0V0VzS_@n1
-Z3 dC:/Users/liste/Desktop/EEC181/RISC-V-CPU/simulation
+Z1 VDg1SIo80bB@j0V0VzS_@n1
+Z2 dC:/Users/liste/Desktop/EEC181/RISC-V-CPU/simulation
 w1675906434
 8C:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/pipelined/RISCV.v
 FC:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/pipelined/RISCV.v
 !i122 94
 L0 3 134
-Z4 OV;L;2020.1;71
+Z3 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z5 !s108 1675906442.000000
+!s108 1675906442.000000
 !s107 C:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/pipelined/RISCV.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/pipelined/RISCV.v|
 !i113 1
-Z6 o-work work
-Z7 tCvgOpt 0
+Z4 o-work work
+Z5 tCvgOpt 0
 n@r@i@s@c@v@c@p@u
 vtb_RISCV
-R0
+!s110 1676844893
 !i10b 1
-!s100 YXV^GgDYz:0ZUmbATYi891
+!s100 EgK7RG7_89IdP`7Ak[;j=3
+R0
+IVZPCPeOID`8mW6:DfXERA0
 R1
-IAC4G]4BWS[oR3<BDKdQJC0
 R2
-R3
-w1675302790
-8C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v
-FC:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v
-!i122 93
+w1676782123
+8C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v
+FC:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v
+!i122 95
 L0 4 40
-R4
+R3
 r1
 !s85 0
 31
-R5
-!s107 C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v|
-!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v|
+!s108 1676844893.000000
+!s107 C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v|
 !i113 1
-R6
-R7
+R4
+R5
 ntb_@r@i@s@c@v
