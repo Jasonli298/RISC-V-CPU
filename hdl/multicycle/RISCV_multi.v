@@ -206,7 +206,7 @@ module RISCVCPU
                                     default: ; 
                                 endcase
                             end
-
+                            
                             7'b0100000: begin
                                 case (IR[14:12]) // Check funct3
                                     // sub
