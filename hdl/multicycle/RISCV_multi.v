@@ -30,6 +30,7 @@ module RISCVCPU
     // The architecturally visible registers and scratch registers for implementation
     reg [31:0] PC, Regs[0:31], ALUOut, MDR, rs1, rs2;
     reg [31:0] Memory [0:1023], IR;
+    reg [7:0] D_Memory [0:4095];
     reg [2:0] state; // processor state
     wire [6:0] opcode; // use to get opcode easily
     wire [31:0] ImmGen; // used to generate immediate
@@ -42,15 +43,16 @@ module RISCVCPU
     initial begin
         for (i = 0; i <= 31; i = i + 1) Regs[i] = i;
         $readmemb("IMemory.txt", Memory);
-        $readmemb("Matrix.txt", Matrix);
-        $readmemb("Vector.txt", Vector)
+        $readmemb("DMemory.txt", D_Memory);
+        // $readmemb("Matrix.txt", Matrix);
+        // $readmemb("Vector.txt", Vector);
         PC = 0; 
         state = 1;
         clock_count = 0;
     end
 
     // The state machine--triggered on a rising clock
-    always @(posedge clock) begin
+    always @(posedge clk) begin
         clock_count <= clock_count + 1;
         case (state) //action depends on the state
             IF: begin // first step: fetch the instruction, increment PC, go to next state
@@ -69,7 +71,8 @@ module RISCVCPU
                     done <= 1'b1;
                 end
             end
-
+			
+			/////////////////////////////////////////////// EX Stage ////////////////////////////////////////////
             EX: begin // third step: Load-store execution, ALU execution, Branch completion
                 case(opcode)
                     R_I: begin // R-type
@@ -86,75 +89,86 @@ module RISCVCPU
                                     /*
                                     3'b000: begin // add
                                         ALUOut <= rs1 + rs2;                 
-                                        state <= 4;
+                                        state <= MEM;
                                     end
-                                    3'b001: begin // sll
-                                        ALUOut <= rs1 << rs2;
-                                        state <= 4;
-                                    end
-                                    3'b010: begin // slt (Set Less Than)
-                                        ALUOut <= (rs1 < rs2) ? 1'b1 : 1'b0;
-                                        state <= 4;
-                                    end
-                                    3'b100: begin // xor
-                                        ALUOut <= rs1 ^ rs2;
-                                        state <= 4;
-                                    end
-                                    3'b101: begin // srl
-                                        ALUOut <= rs1 >> rs2;
-                                        state <= 4;
-                                    end
-                                    3'b110: begin // or
-                                        ALUOut <= rs1 || rs2;
-                                        state <= 4;
-                                    end
-                                    3'b111: begin // and
-                                        ALUOut <= rs1 && rs2;
-                                        state <= 4;
-                                    end*/
-                                    default: ; 
                                 endcase
                                 state <= MEM;
                             end
                             7'b0100000: begin
                                 case (IR[14:12]) // Check funct3
-                                    3'b000: begin // sub
-                                        ALUOut <= rs1 - rs2;                 
+                                    3'b000: begin
+										//***sub***
+                                        ALUOut <= rs1 - rs2;    
+                                        state <= MEM;
+                                        $display("ALUOut= %d\n",rs1 - rs2);
+                                    end
+                                endcase
+                            end
+
+                            7'b0000001: begin
+                                //***mul***
+                                case (IR[14:12]) // Check funct3
+                                    3'b000: begin
+                                        ALUOut <= rs1 * rs2;                 
                                         state <= MEM;
                                     end
                                     default: ;
                                 endcase
                             end
-                            default: ;
-                        endcase // endcase (IR[31:25]) check funct7
+                            /*
+                            3'b000: begin // add
+                                ALUOut <= rs1 + rs2;                 
+                                state <= 4;
+                            end
+                            3'b001: begin // sll
+                                ALUOut <= rs1 << rs2;
+                                state <= 4;
+                            end
+                            3'b010: begin // slt (Set Less Than)
+                                ALUOut <= (rs1 < rs2) ? 1'b1 : 1'b0;
+                                state <= 4;
+                            end
+                            3'b100: begin // xor
+                                ALUOut <= rs1 ^ rs2;
+                                state <= 4;
+                            end
+                            3'b101: begin // srl
+                                ALUOut <= rs1 >> rs2;
+                                state <= 4;
+                            end
+                            3'b110: begin // or
+                                ALUOut <= rs1 || rs2;
+                                state <= 4;
+                            end
+                            3'b111: begin // and
+                                ALUOut <= rs1 && rs2;
+                                state <= 4;
+                            end*/
+                        endcase // case(funct7)
                     end
 
                     Imm_I: begin
                         case (IR[14:12])  // Check funct3
-                            3'b000: begin // addi
-                                ALUOut <= rs1 + IR[31:20]; 
-                                state <= MEM;
-                            end
-                            3'b001: begin // slli
-                                ALUOut <= rs1 << IR[24:20]; // The leftmost 7 bits are funct7. Imm is only 5 bits.
-                                state <= MEM;
-                            end
-                            // 3'b010: ALUOut <= rs1 << IR[31:20]; // slli
-                            // 3'b100: ALUOut <= rs1 ^ IR[31:20];  // xori
-                            // 3'b110: ALUOut <= rs1 | IR[31:20];  // ori
-                            // 3'b111: ALUOut <= rs1 & IR[31:20];  // andi
+                            3'b000: ALUOut <= rs1 + IR[31:20]; 
+                            3'b001: ALUOut <= rs1 << IR[24:20]; // The leftmost 7 bits are funct7. Imm is only 5 bits.
                         endcase
+						state <= MEM;
                     end
 
 
                     S_I: begin
                         case(IR[14:12])  // Check funct3
-                            //***lw***
-                            3'b010: begin
-                                ALUOut <= rs1 + ImmGen; // compute effective address
-                                state <= MEM;
-                            end
+                            //***sw***
+                            3'b010: ALUOut <= rs1 + ImmGen; // compute effective address
                         endcase
+						state <= MEM;
+                    end
+
+                    U_I: begin
+                        //***lui***
+                        //IR[31:12] == imm
+                        ALUOut <= {IR[31:12], 12'b0};
+                        state <= MEM;
                     end
 
                     I_I: begin
@@ -168,9 +182,22 @@ module RISCVCPU
                         endcase
                     end
 
+                    B_I: begin
+                        case(IR[14:12])  // Check funct3
+                            //***blt***
+                            3'b100: begin
+                                if(rs1 < rs2) begin
+                                    PC <= PC + PCOffset;
+                                end
+                                state <= IF;
+                            end
+                        endcase
+                    end
                 endcase // endcase (opcode)
             end
+			////////////////////////////////////////////// END EX ///////////////////////////////////////////////////////
 
+			////////////////////////////////////////////// MEM Stage ///////////////////////////////////////////////////
             MEM: begin
                 case(opcode)
                     R_I: begin // R-type
@@ -186,7 +213,7 @@ module RISCVCPU
                                     default: ; 
                                 endcase
                             end
-
+                            
                             7'b0100000: begin
                                 case (IR[14:12]) // Check funct3
                                     // sub
@@ -197,10 +224,20 @@ module RISCVCPU
                                     default: ;
                                 endcase
                             end
+
+                            7'b0000001: begin
+                                //***mul***
+                                case (IR[14:12]) // Check funct3
+                                    3'b000: begin
+                                        Regs[IR[11:7]] <= ALUOut;              
+                                        state <= IF;
+                                    end
+                                    default: ;
+                                endcase
+                            end
                             default: ;
                         endcase // endcase (IR[31:25])
-                    end
-
+                    end // R_i
 
                     Imm_I: begin // TO DO: learn how to check if the most significant 7 bits are part of imm or funct7
                         case (IR[14:12]) // Check funct3
@@ -210,33 +247,40 @@ module RISCVCPU
                                 state <= IF;
                             end
                         endcase
-                    end
-
-
+                    end // Imm_I
 
                     S_I: begin
                         case(IR[14:12])  // Check funct3
                             //***sw***
                             3'b010: begin
-                                Memory[ALUOut >> 2] <= rs2; // write the memory
+								{D_Memory[ALUOut>>2], D_Memory[(ALUOut>>2)+1], D_Memory[(ALUOut>>2)+2], D_Memory[(ALUOut>>2)+3]} <= rs2;
+
                                 state <= IF; // return to state 1
                             end
                         endcase
-                    end
+                    end // S_I
 
+                    U_I: begin
+                        //***lui***
+                        //IR[31:12] = imm
+                        MDR <= ALUOut;
+                        state <= WB;
+                    end // U_I
 
                     I_I: begin
                         case(IR[14:12]) // check func3
                             // ***lw***
                             3'b010: begin
-                                MDR <= Memory[ALUOut >> 2]; // read the memory
+                                // $display("ALUOut= %d\n", ALUOut >> 2);
+                                MDR <= {D_Memory[ALUOut>>2], D_Memory[(ALUOut>>2)+1], D_Memory[(ALUOut>>2)+2], D_Memory[ALUOut>>2+3]}; // read the memory
                                 state <= WB; // next state
                             end
                         endcase
-                    end
+                    end // I_I
+                endcase // MEM: case(opcode)
 
-                endcase
-            end
+            end // MEM
+			/////////////////////////////////////////////// END MEM //////////////////////////////////////////////////////////
 
             WB: begin // LW is the only instruction still in execution
                 Regs[IR[11:7]] <= MDR; // write the MDR to the register
