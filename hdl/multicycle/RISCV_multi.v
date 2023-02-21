@@ -79,15 +79,8 @@ module RISCVCPU
                         case (IR[31:25]) // Check funct7
                             7'b0000000: begin
                                 case (IR[14:12]) // Check funct3
-                                    3'b000: ALUOut <= rs1 + rs2;                 // add
-                                    3'b001: ALUOut <= rs1 << rs2;                // sll
-                                    3'b010: ALUOut <= (rs1 < rs2) ? 1'b1 : 1'b0; // slt (Set Less Than)
-                                    3'b100: ALUOut <= rs1 ^ rs2;                 // xor
-                                    3'b101: ALUOut <= rs1 >> rs2;                // srl
-                                    3'b110: ALUOut <= rs1 || rs2;                // or
-                                    3'b111: ALUOut <= rs1 && rs2;                // and
-                                    /*
-                                    3'b000: begin // add
+                                    // ***add***
+                                    3'b000: begin
                                         ALUOut <= rs1 + rs2;                 
                                         state <= MEM;
                                     end
@@ -95,6 +88,7 @@ module RISCVCPU
                                 state <= MEM;
                             end
                             7'b0100000: begin
+                                //***sub***
                                 case (IR[14:12]) // Check funct3
                                     3'b000: begin
 										//***sub***
