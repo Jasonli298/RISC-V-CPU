@@ -8,7 +8,7 @@ integer i,j;
 reg [31:0] regs [0:31];
 
 /**********/ // rename to whichever version of Build
-RISCVCPU UUT(.clock(clk));
+RISCVCPU UUT #(3, 4)(.clock(clk), .done(done), .clock_count(clock_count));
 
 initial begin
 	clk = 1'b0;

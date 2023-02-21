@@ -3,13 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int N; // the number of columns in the matrix and the number of rows in the vector
-int R; // the number of rows in the matrix
+#define M 3
+#define N 4
 
-void MatVecMult(int matrix[3][4], const int vector[4], int res[4])
+int main()
 {
+	int matrix[M][N];
+	int vector[N];
+	int res[N];
+
 	int i, j; // i=rows, j=columns
-	for (i = 0; i < R; i++)
+	for (i = 0; i < M; i++)
 	{
 		res[i] = 0;
 		for (j = 0; j < N; j++)
@@ -17,23 +21,4 @@ void MatVecMult(int matrix[3][4], const int vector[4], int res[4])
 			res[i] += matrix[i][j] * vector[j];
 		}
 	}
-}
-
-int main()
-{
-	R = 3;
-	N = 4;
-	int Matrix[3][4] = {{1, 2, 3, 4},
-						{-2, 6, 7, 0},
-						{4, 3, 2, 1}};
-
-	int Vector[4] = {1, 0, 2, 1};
-	int Res[4];
-
-	MatVecMult(Matrix, Vector, Res);
-	for (int i = 0; i < R; i++)
-	{
-		printf("%i\n", Res[i]);
-	}
-	return 0;
 }
