@@ -71,7 +71,8 @@ module RISCVCPU
                     done <= 1'b1;
                 end
             end
-
+			
+			/////////////////////////////////////////////// EX Stage ////////////////////////////////////////////
             EX: begin // third step: Load-store execution, ALU execution, Branch completion
                 case(opcode)
                     R_I: begin // R-type
@@ -89,6 +90,7 @@ module RISCVCPU
                                 //***sub***
                                 case (IR[14:12]) // Check funct3
                                     3'b000: begin
+										//***sub***
                                         ALUOut <= rs1 - rs2;    
                                         state <= MEM;
                                         $display("ALUOut= %d\n",rs1 - rs2);
@@ -135,35 +137,24 @@ module RISCVCPU
                                 ALUOut <= rs1 && rs2;
                                 state <= 4;
                             end*/
-                        endcase
+                        endcase // case(funct7)
                     end
 
                     Imm_I: begin
                         case (IR[14:12])  // Check funct3
-                            3'b000: begin // addi
-                                ALUOut <= rs1 + IR[31:20]; 
-                                state <= MEM;
-                            end
-                            3'b001: begin // slli
-                                ALUOut <= rs1 << IR[24:20]; // The leftmost 7 bits are funct7. Imm is only 5 bits.
-                                state <= MEM;
-                            end
-                            // 3'b010: ALUOut <= rs1 << IR[31:20]; // slli
-                            // 3'b100: ALUOut <= rs1 ^ IR[31:20];  // xori
-                            // 3'b110: ALUOut <= rs1 | IR[31:20];  // ori
-                            // 3'b111: ALUOut <= rs1 & IR[31:20];  // andi
+                            3'b000: ALUOut <= rs1 + IR[31:20]; 
+                            3'b001: ALUOut <= rs1 << IR[24:20]; // The leftmost 7 bits are funct7. Imm is only 5 bits.
                         endcase
+						state <= MEM;
                     end
 
 
                     S_I: begin
                         case(IR[14:12])  // Check funct3
                             //***sw***
-                            3'b010: begin
-                                ALUOut <= rs1 + ImmGen; // compute effective address
-                                state <= MEM;
-                            end
+                            3'b010: ALUOut <= rs1 + ImmGen; // compute effective address
                         endcase
+						state <= MEM;
                     end
 
                     U_I: begin
@@ -197,7 +188,9 @@ module RISCVCPU
                     end
                 endcase // endcase (opcode)
             end
+			////////////////////////////////////////////// END EX ///////////////////////////////////////////////////////
 
+			////////////////////////////////////////////// MEM Stage ///////////////////////////////////////////////////
             MEM: begin
                 case(opcode)
                     R_I: begin // R-type
@@ -237,8 +230,7 @@ module RISCVCPU
                             end
                             default: ;
                         endcase // endcase (IR[31:25])
-                    end
-
+                    end // R_i
 
                     Imm_I: begin // TO DO: learn how to check if the most significant 7 bits are part of imm or funct7
                         case (IR[14:12]) // Check funct3
@@ -248,9 +240,7 @@ module RISCVCPU
                                 state <= IF;
                             end
                         endcase
-                    end
-
-
+                    end // Imm_T
 
                     S_I: begin
                         case(IR[14:12])  // Check funct3
@@ -264,16 +254,14 @@ module RISCVCPU
                                 state <= IF; // return to state 1
                             end
                         endcase
-                    end
-
+                    end // S_I
 
                     U_I: begin
                         //***lui***
                         //IR[31:12] = imm
                         MDR <= ALUOut;
                         state <= WB;
-                    end
-
+                    end // U_I
 
                     I_I: begin
                         case(IR[14:12]) // check func3
@@ -284,15 +272,16 @@ module RISCVCPU
                                 state <= WB; // next state
                             end
                         endcase
-                    end
-                endcase
+                    end // I_I
+                endcase // MEM: case(opcode)
 
-            end
+            end // MEM
+			/////////////////////////////////////////////// END MEM //////////////////////////////////////////////////////////
 
             WB: begin // LW is the only instruction still in execution
                 Regs[IR[11:7]] <= MDR; // write the MDR to the register
                 state <= IF;
-                end // complete an LW instruction
+            end // complete an LW instruction
         endcase
     end
 endmodule
