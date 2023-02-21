@@ -240,16 +240,13 @@ module RISCVCPU
                                 state <= IF;
                             end
                         endcase
-                    end // Imm_T
+                    end // Imm_I
 
                     S_I: begin
                         case(IR[14:12])  // Check funct3
                             //***sw***
                             3'b010: begin
-                                D_Memory[ALUOut>>2] <= rs2[31:24]; // write the memory
-								D_Memory[(ALUOut>>2)+1] <= rs2[23:16];
-								D_Memory[(ALUOut>>2)+2] <= rs2[15:8];
-								D_Memory[(ALUOut>>2)+3] <= rs2[7:0];
+								{D_Memory[ALUOut>>2], D_Memory[(ALUOut>>2)+1], D_Memory[(ALUOut>>2)+2], D_Memory[(ALUOut>>2)+3]} <= rs2;
 
                                 state <= IF; // return to state 1
                             end
