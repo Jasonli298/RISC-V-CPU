@@ -42,7 +42,6 @@ main:
 
   # Outer loop: iterate over rows of matrix
   li t6, 0   # t6 = row index
-  addi t4, zero, 0
 outer_loop:
   # Inner loop: iterate over columns of matrix and vector
   # li t7, 0   # t7 = column index
