@@ -79,7 +79,7 @@ inner_loop:
 
   # Increment row index and reset vector memory address
   addi x6, x6, 1
-  addi x3, zero, 48 // x3 -= 4 * N, loop back to first element in vector
+  mul x3, x1, x12 // x3 -= 4 * N, loop back to first element in vector
 
   # Check if outer loop is finished
   blt x6, x1, outer_loop
