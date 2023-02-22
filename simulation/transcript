@@ -2428,3 +2428,5 @@ run -all
 # ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v(41)
 #    Time: 9990 ns  Iteration: 1  Instance: /tb_RISCV
 # Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v line 41
+# End time: 21:05:23 on Feb 21,2023, Elapsed time: 5:54:40
+# Errors: 0, Warnings: 1
