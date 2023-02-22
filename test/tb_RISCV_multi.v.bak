@@ -21,19 +21,16 @@ initial begin
 //		disable wait_or_timeout;
 //	end
 //	join
-	repeat (500) begin
+	repeat (100) begin
 		@(posedge clk);
 	end
 
-	
+//	$display("%d", UUT.DMemory[0]);
 	$display("Generated Reseult");
 	for (j = 0; j < 32; j = j + 1) begin
-		$display("Reg%d %d %h %b", j, UUT.Regs[j], UUT.Regs[j], UUT.Regs[j]);
+		$display("Reg%d %b %h", j, UUT.Regs[j], UUT.Regs[j]);
 	end
 
-	for (i = 0; i <= 8; i = i + 4) begin
-		$display("OUTRAM[%d]= %d", i, {UUT.OUTRAM[i],UUT.OUTRAM[i+1],UUT.OUTRAM[i+2],UUT.OUTRAM[i+3]});
-	end
 //	for (i = 0; i < 1024; i = i + 1) begin
 //		$display(DMemory[i]);
 //	end
