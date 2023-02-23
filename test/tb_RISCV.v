@@ -9,7 +9,7 @@ localparam COLS = 4;
 reg clk;
 wire done;
 wire [31:0] clock_count;
-reg signed [31:0] ROWS, COLS;
+
 reg comparison;
 integer i, j, k;
 reg [31:0] regs [0:31];
@@ -18,7 +18,7 @@ reg signed [31:0] Vector [0:COLS];
 reg signed [31:0] result [0:ROWS];
 
 /**********/ // rename to whichever version of Build
-RISCVCPU UUT #(3, 4)(.clk(clk), .done(done), .clock_count(clock_count));
+RISCVCPU #(ROWs, COLS) UUT(.clk(clk), .done(done), .clock_count(clock_count));
 
 initial begin
 	$readmemb("matrix_memory.txt", matrix);
