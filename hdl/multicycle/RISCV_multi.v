@@ -36,9 +36,9 @@ module RISCVCPU
     wire [6:0] opcode; // use to get opcode easily
     wire [31:0] ImmGen; // used to generate immediate
     assign opcode = IR[6:0]; // opcode is lower 7 bits
+	wire signed [31:0] PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
     // assign ImmGen = (opcode == LW) ? {IR[31], IR[30:20]} : {IR[31], IR[30:25], IR[11:7]};
     assign ImmGen = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
-    assign PCOffset = {IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
     // set the PC to 0 and start the control in state 1
     integer i;
     initial begin
@@ -48,7 +48,7 @@ module RISCVCPU
         // $readmemb("Matrix.txt", Matrix);
         // $readmemb("Vector.txt", Vector);
         PC = 0; 
-        state = 1;
+        state = IF;
         clock_count = 0;
     end
 
@@ -60,6 +60,7 @@ module RISCVCPU
                 IR <= Memory[PC >> 2];
 				$display("PC=%d", PC); 
                 PC <= PC + 4;
+				PCOffset = {IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 state <= ID; // next state
             end
 
@@ -182,8 +183,7 @@ module RISCVCPU
                             //***blt***
                             3'b100: begin
                                 if(rs1 < rs2) begin
-									$display("PCOffset=%d", PCOffset);
-                                    PC <= (PC < 70) ? PC - 32 : PC - 60;
+									PC <= PC + PCOffset;
                                 end
                                 state <= IF;
                             end
