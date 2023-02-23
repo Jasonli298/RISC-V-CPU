@@ -40,7 +40,7 @@ main:
   # lui t3, %hi(vector)
   # addi x5, x5, %lo(vector)
   # la x5, result   # t4 = address of result
-  addi x5, x5, 0x0 // starting address of result
+  add x5, x3, x12 // starting address of result
   # lui t4, %hi(result)
   # addi t4, t4, %lo(result)
   # lw t3, 0(x3)  # x7 = first element of vector
