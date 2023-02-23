@@ -75,7 +75,7 @@ inner_loop:
   # Store result and reset accumulator register
   sw x11, 0(x5)
   addi x5, x5, 4 // increment result address by 4
-  addi x11, x11, 0 // reset the accumulator
+  addi x11, x0, 0 // reset the accumulator
 
   # Increment row index and reset vector memory address
   addi x6, x6, 1
