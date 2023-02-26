@@ -41,8 +41,6 @@ module RISCVCPU
     reg [2:0] state; // processor state
     wire [6:0] opcode; // use to get opcode easily
     wire [31:0] ImmGen; // used to generate immediate
-    wire signed [31:0] PCOffset;
-    assign PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
     assign opcode = IR[6:0]; // opcode is lower 7 bits
 	wire signed [31:0] PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
     // assign ImmGen = (opcode == LW) ? {IR[31], IR[30:20]} : {IR[31], IR[30:25], IR[11:7]};
