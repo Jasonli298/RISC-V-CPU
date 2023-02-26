@@ -3,6 +3,7 @@
 module RISCVCPU 
     #(parameter rows=3,
       parameter cols=4,
+	  parameter cols2=1,
 	  parameter REG_WIDTH=32)
     (CLOCK_50,
      done,
