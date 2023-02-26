@@ -29,7 +29,7 @@ initial begin
   
 	$readmemb("DMemory.txt", data);
 	for (i = 0; i < M*N; i = i + 1) begin
-		matrix[i] = {data[4*i], data[4*i+1], data[4*1+2], data[4*i+3]};
+		matrix[i] = {data[4*i], data[4*i+1], data[4*i+2], data[4*i+3]};
 	end
 	for (i = 0; i < N; i = i + 1) begin
 		vector[i] = {data[4*i+M*N*4], data[4*i+M*N*4+1], data[4*i+M*N*4+2], data[4*i+M*N*4+3]};
