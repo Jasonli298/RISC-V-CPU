@@ -1,9 +1,12 @@
+`timescale 1ns/10ps
+
 module RISCVCPU 
-    #(parameter rows,
-      parameter cols)
-    (clk,
+    #(parameter rows=3,
+      parameter cols=4)
+    (CLOCK_50,
      done,
-     clock_count);
+     clock_count,
+	 instr_cnt);
     
     // Parameters for opcodes
     localparam R_I = 7'b011_0011,
@@ -22,16 +25,17 @@ module RISCVCPU
                MEM = 4,
                WB = 5;
 
-    localparam EOF = 32'h1111_1111; // Defined EOF flag as all ones
+    localparam EOF = 32'hFFFF_FFFF; // Defined EOF flag as all ones
 
-    input clk; // system clock
+	input CLOCK_50;
+    wire clk = CLOCK_50; // system clock
     output reg done; // signals the end of a program
     output reg [15:0] clock_count; // total number of clock cycles to run a program
+	output reg [15:0] instr_cnt;
     // The architecturally visible registers and scratch registers for implementation
     reg [31:0] PC, Regs[0:31], ALUOut, MDR, rs1, rs2;
-    reg [31:0] Memory [0:1023], IR;
-    reg [7:0] D_Memory [0:(rows*cols*4+cols*4)-1];
-	reg [7:0] OUTRAM [0:rows*4-1];
+    reg [31:0] I_Memory [0:1023], IR;
+    reg signed [7:0] D_Memory [0:(rows*cols*4+cols*4+rows*4)-1];
     reg [2:0] state; // processor state
     wire [6:0] opcode; // use to get opcode easily
     wire [31:0] ImmGen; // used to generate immediate
@@ -43,13 +47,14 @@ module RISCVCPU
     integer i;
     initial begin
         for (i = 0; i <= 31; i = i + 1) Regs[i] = 32'b0;
-        $readmemb("IMemory.txt", Memory);
+        $readmemb("IMemory.txt", I_Memory);
         $readmemb("DMemory.txt", D_Memory);
         // $readmemb("Matrix.txt", Matrix);
         // $readmemb("Vector.txt", Vector);
         PC = 0; 
         state = IF;
         clock_count = 0;
+		instr_cnt = 0;
     end
 
     // The state machine--triggered on a rising clock
@@ -57,10 +62,8 @@ module RISCVCPU
         clock_count <= clock_count + 1;
         case (state) //action depends on the state
             IF: begin // first step: fetch the instruction, increment PC, go to next state
-                IR <= Memory[PC >> 2];
-				$display("PC=%d", PC); 
+                IR <= I_Memory[PC >> 2];
                 PC <= PC + 4;
-				PCOffset = {IR[31], IR[7], IR[30:25], IR[11:8], 1'b0};
                 state <= ID; // next state
             end
 
@@ -69,6 +72,7 @@ module RISCVCPU
                     rs1 <= Regs[IR[19:15]];
                     rs2 <= Regs[IR[24:20]];
                     ALUOut <= PC + PCOffset; // compute PC-relative branch target
+					done <= 1'b0;
                     state <= EX;
                 end else begin
                     done <= 1'b1;
@@ -77,6 +81,7 @@ module RISCVCPU
 			
 			/////////////////////////////////////////////// EX Stage ////////////////////////////////////////////
             EX: begin // third step: Load-store execution, ALU execution, Branch completion
+				instr_cnt = instr_cnt + 1;
                 case(opcode)
                     R_I: begin // R-type
                         case (IR[31:25]) // Check funct7
@@ -111,42 +116,13 @@ module RISCVCPU
                                     default: ;
                                 endcase
                             end
-                            /*
-                            3'b000: begin // add
-                                ALUOut <= rs1 + rs2;                 
-                                state <= 4;
-                            end
-                            3'b001: begin // sll
-                                ALUOut <= rs1 << rs2;
-                                state <= 4;
-                            end
-                            3'b010: begin // slt (Set Less Than)
-                                ALUOut <= (rs1 < rs2) ? 1'b1 : 1'b0;
-                                state <= 4;
-                            end
-                            3'b100: begin // xor
-                                ALUOut <= rs1 ^ rs2;
-                                state <= 4;
-                            end
-                            3'b101: begin // srl
-                                ALUOut <= rs1 >> rs2;
-                                state <= 4;
-                            end
-                            3'b110: begin // or
-                                ALUOut <= rs1 || rs2;
-                                state <= 4;
-                            end
-                            3'b111: begin // and
-                                ALUOut <= rs1 && rs2;
-                                state <= 4;
-                            end*/
+
                         endcase // case(funct7)
                     end
 
                     Imm_I: begin
                         case (IR[14:12])  // Check funct3
                             3'b000: ALUOut <= rs1 + IR[31:20]; 
-                            3'b001: ALUOut <= rs1 << IR[24:20]; // The leftmost 7 bits are funct7. Imm is only 5 bits.
                         endcase
 						state <= MEM;
                     end
@@ -183,7 +159,7 @@ module RISCVCPU
                             //***blt***
                             3'b100: begin
                                 if(rs1 < rs2) begin
-									PC <= PC + PCOffset;
+									PC <= ALUOut;
                                 end
                                 state <= IF;
                             end
@@ -249,7 +225,7 @@ module RISCVCPU
                         case(IR[14:12])  // Check funct3
                             //***sw***
                             3'b010: begin
-								{OUTRAM[ALUOut], OUTRAM[ALUOut+1], OUTRAM[ALUOut+2], OUTRAM[ALUOut+3]} <= rs2;
+								{D_Memory[ALUOut], D_Memory[ALUOut+1], D_Memory[ALUOut+2], D_Memory[ALUOut+3]} <= rs2;
                                 state <= IF; // return to state 1
                             end
                         endcase
@@ -258,8 +234,8 @@ module RISCVCPU
                     U_I: begin
                         //***lui***
                         //IR[31:12] = imm
-                        MDR <= ALUOut;
-                        state <= WB;
+                        // MDR <= ALUOut;
+                        // state <= WB;
                     end // U_I
 
                     I_I: begin
