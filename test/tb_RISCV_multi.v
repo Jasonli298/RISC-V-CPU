@@ -21,7 +21,7 @@ reg signed [31:0] vector [0:N-1];
 reg signed [31:0] res [0:M*4-1];
 
 /**********/ // rename to whichever version of Build
-RISCVCPU #(3, 4)UUT(.CLOCK_50(clk), .done(done), .clock_count(clock_count), .instr_cnt(instr_cnt));
+RISCVCPU #(3, 4, 32)UUT(.CLOCK_50(clk), .done(done), .clock_count(clock_count), .instr_cnt(instr_cnt));
 
 initial begin
 	clk = 1'b0;
