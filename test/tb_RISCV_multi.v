@@ -12,6 +12,7 @@ real ClockCount, InstrCount;
 reg [31:0] regs [0:31];
 wire done; // signals the end of a program
 wire [15:0] clock_count; // total number of clock cycles to run a program
+
 wire [15:0] instr_cnt;
 reg comparison;
 reg signed [31:0] word;
@@ -25,7 +26,7 @@ RISCVCPU #(3, 4, 32)UUT(.CLOCK_50(clk), .done(done), .clock_count(clock_count), 
 
 initial begin
 	clk = 1'b0;
-
+  
 	$readmemb("DMemory.txt", data);
 	for (i = 0; i < M*N; i = i + 1) begin
 		matrix[i] = {data[4*i], data[4*i+1], data[4*1+2], data[4*i+3]};
@@ -98,6 +99,5 @@ end
 always begin
 	clk = #10 ~clk;
 end
-
 
 endmodule

@@ -35,12 +35,14 @@ module RISCVCPU
 	output reg [15:0] instr_cnt;
     // The architecturally visible registers and scratch registers for implementation
     reg [31:0] PC, ALUOut, MDR, rs1, rs2;
-	reg [REG_WIDTH-1:0] Regs[0:31];
+	  reg [REG_WIDTH-1:0] Regs[0:31];
     reg [31:0] I_Memory [0:1023], IR;
     reg signed [7:0] D_Memory [0:(rows*cols*4+cols*4+rows*4)-1];
     reg [2:0] state; // processor state
     wire [6:0] opcode; // use to get opcode easily
     wire [31:0] ImmGen; // used to generate immediate
+    wire signed [31:0] PCOffset;
+    assign PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
     assign opcode = IR[6:0]; // opcode is lower 7 bits
 	wire signed [31:0] PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
     // assign ImmGen = (opcode == LW) ? {IR[31], IR[30:20]} : {IR[31], IR[30:25], IR[11:7]};
@@ -118,7 +120,6 @@ module RISCVCPU
                                     default: ;
                                 endcase
                             end
-
                         endcase // case(funct7)
                     end
 
@@ -126,16 +127,15 @@ module RISCVCPU
                         case (IR[14:12])  // Check funct3
                             3'b000: ALUOut <= rs1 + IR[31:20]; 
                         endcase
-						state <= MEM;
+						            state <= MEM;
                     end
-
 
                     S_I: begin
                         case(IR[14:12])  // Check funct3
                             //***sw***
                             3'b010: ALUOut <= rs1 + ImmGen; // compute effective address
                         endcase
-						state <= MEM;
+						            state <= MEM;
                     end
 
                     U_I: begin
@@ -161,7 +161,7 @@ module RISCVCPU
                             //***blt***
                             3'b100: begin
                                 if(rs1 < rs2) begin
-									PC <= ALUOut;
+									                  PC <= ALUOut;
                                 end
                                 state <= IF;
                             end
@@ -241,7 +241,7 @@ module RISCVCPU
                     end // U_I
 
                     I_I: begin
-                        case(IR[14:12]) // check func3
+                        case(IR[14:12]) // check funct3
                             // ***lw***
                             3'b010: begin
                                 // $display("ALUOut= %d\n", ALUOut >> 2);
