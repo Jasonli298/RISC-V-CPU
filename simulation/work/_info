@@ -10,23 +10,23 @@ z2
 cModel Technology
 dC:/Users/liste/Desktop/EEC181/Lab2/simulation
 vRISCVCPU
-Z0 !s110 1677375527
+Z0 !s110 1677377565
 !i10b 1
-!s100 ;EIMzbZ@_KEQYW1]U_g;;3
+!s100 Tg;FOb2bJmIKBV>HHo[T42
 Z1 !s11b Dg1SIo80bB@j0V0VzS_@n1
-IWAd;cz3X0BQ4Y_n?kT]iz3
+I9Z`D23DmbIjBX_iRco@8n0
 Z2 VDg1SIo80bB@j0V0VzS_@n1
 Z3 dC:/Users/liste/Desktop/EEC181/RISC-V-CPU/simulation
-w1677375412
+w1677377521
 8C:\Users\liste\Desktop\EEC181\RISC-V-CPU\hdl\multicycle\RISCV_multi.v
 FC:\Users\liste\Desktop\EEC181\RISC-V-CPU\hdl\multicycle\RISCV_multi.v
-!i122 276
-L0 3 262
+!i122 281
+L0 3 260
 Z4 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z5 !s108 1677375527.000000
+Z5 !s108 1677377565.000000
 !s107 C:\Users\liste\Desktop\EEC181\RISC-V-CPU\hdl\multicycle\RISCV_multi.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:\Users\liste\Desktop\EEC181\RISC-V-CPU\hdl\multicycle\RISCV_multi.v|
 !i113 1
@@ -36,15 +36,15 @@ n@r@i@s@c@v@c@p@u
 vtb_RISCV
 R0
 !i10b 1
-!s100 Vindof=OWE67N_LT?dSm;0
+!s100 LO:N5Mk6XMN=HXYdGc5E>3
 R1
-IGCS6lnal52[8?Bc@UP]`G0
+IHNhT42F6aN:KgTd4;FbI00
 R2
 R3
-w1677375505
+w1677377559
 8C:\Users\liste\Desktop\EEC181\RISC-V-CPU\test\tb_RISCV_multi.v
 FC:\Users\liste\Desktop\EEC181\RISC-V-CPU\test\tb_RISCV_multi.v
-!i122 275
+!i122 280
 L0 4 100
 R4
 r1
