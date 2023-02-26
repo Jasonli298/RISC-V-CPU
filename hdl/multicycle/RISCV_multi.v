@@ -1,9 +1,13 @@
+`timescale 1ns/10ps
+
 module RISCVCPU 
-    #(parameter rows,
-      parameter cols)
-    (clk,
+    #(parameter rows=3,
+      parameter cols=4,
+	  parameter REG_WIDTH=32)
+    (CLOCK_50,
      done,
-     clock_count);
+     clock_count,
+	 instr_cnt);
     
     // Parameters for opcodes
     localparam R_I = 7'b011_0011,
@@ -22,15 +26,17 @@ module RISCVCPU
                MEM = 4,
                WB = 5;
 
-    localparam EOF = 32'h1111_1111; // Defined EOF flag as all ones
+    localparam EOF = 32'hFFFF_FFFF; // Defined EOF flag as all ones
 
-    input clk; // system clock
+	input CLOCK_50;
+    wire clk = CLOCK_50; // system clock
     output reg done; // signals the end of a program
     output reg [15:0] clock_count; // total number of clock cycles to run a program
+	output reg [15:0] instr_cnt;
     // The architecturally visible registers and scratch registers for implementation
-    reg [31:0] PC, Regs[0:31], MDR, rs1, rs2;
-    reg signed [31:0] ALUOut;
-    reg [31:0] Memory [0:1023], IR;
+    reg [31:0] PC, ALUOut, MDR, rs1, rs2;
+	  reg [REG_WIDTH-1:0] Regs[0:31];
+    reg [31:0] I_Memory [0:1023], IR;
     reg signed [7:0] D_Memory [0:(rows*cols*4+cols*4+rows*4)-1];
     reg [2:0] state; // processor state
     wire [6:0] opcode; // use to get opcode easily
@@ -38,19 +44,21 @@ module RISCVCPU
     wire signed [31:0] PCOffset;
     assign PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
     assign opcode = IR[6:0]; // opcode is lower 7 bits
+	wire signed [31:0] PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
     // assign ImmGen = (opcode == LW) ? {IR[31], IR[30:20]} : {IR[31], IR[30:25], IR[11:7]};
     assign ImmGen = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
     // set the PC to 0 and start the control in state 1
     integer i;
     initial begin
         for (i = 0; i <= 31; i = i + 1) Regs[i] = 32'b0;
-        $readmemb("IMemory.txt", Memory);
+        $readmemb("IMemory.txt", I_Memory);
         $readmemb("DMemory.txt", D_Memory);
         // $readmemb("Matrix.txt", Matrix);
         // $readmemb("Vector.txt", Vector);
         PC = 0; 
-        state = 1;
+        state = IF;
         clock_count = 0;
+		instr_cnt = 0;
     end
 
     // The state machine--triggered on a rising clock
@@ -58,7 +66,7 @@ module RISCVCPU
         clock_count <= clock_count + 1;
         case (state) //action depends on the state
             IF: begin // first step: fetch the instruction, increment PC, go to next state
-                IR <= Memory[PC >> 2];
+                IR <= I_Memory[PC >> 2];
                 PC <= PC + 4;
                 state <= ID; // next state
             end
@@ -68,6 +76,7 @@ module RISCVCPU
                     rs1 <= Regs[IR[19:15]];
                     rs2 <= Regs[IR[24:20]];
                     ALUOut <= PC + PCOffset; // compute PC-relative branch target
+					done <= 1'b0;
                     state <= EX;
                 end else begin
                     done <= 1'b1;
@@ -76,6 +85,7 @@ module RISCVCPU
 			
 			/////////////////////////////////////////////// EX Stage ////////////////////////////////////////////
             EX: begin // third step: Load-store execution, ALU execution, Branch completion
+				instr_cnt = instr_cnt + 1;
                 case(opcode)
                     R_I: begin // R-type
                         case (IR[31:25]) // Check funct7
@@ -116,9 +126,8 @@ module RISCVCPU
                     Imm_I: begin
                         case (IR[14:12])  // Check funct3
                             3'b000: ALUOut <= rs1 + IR[31:20]; 
-                            3'b001: ALUOut <= rs1 << IR[24:20]; // The leftmost 7 bits are funct7. Imm is only 5 bits.
                         endcase
-						state <= MEM;
+						            state <= MEM;
                     end
 
                     S_I: begin
@@ -126,7 +135,7 @@ module RISCVCPU
                             //***sw***
                             3'b010: ALUOut <= rs1 + ImmGen; // compute effective address
                         endcase
-						state <= MEM;
+						            state <= MEM;
                     end
 
                     U_I: begin
@@ -152,9 +161,7 @@ module RISCVCPU
                             //***blt***
                             3'b100: begin
                                 if(rs1 < rs2) begin
-									$display("PCoffset= %d %b  PC= %d", PCOffset, PCOffset, PC);
-                                    PC <= PC + PCOffset;
-                                    // PC <= (PC <= 70) ? PC - 32 : PC - 68;
+									                  PC <= ALUOut;
                                 end
                                 state <= IF;
                             end
@@ -229,8 +236,8 @@ module RISCVCPU
                     U_I: begin
                         //***lui***
                         //IR[31:12] = imm
-                        MDR <= ALUOut;
-                        state <= WB;
+                        // MDR <= ALUOut;
+                        // state <= WB;
                     end // U_I
 
                     I_I: begin
