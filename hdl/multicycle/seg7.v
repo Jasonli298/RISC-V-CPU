@@ -1,7 +1,7 @@
 module seg7(
-	input  [3:0] in,
-	input        en,
-	output [7:0] out
+	input      [3:0] in,
+	input            en,
+	output reg [7:0] out
 );
 
 always @(en) begin
