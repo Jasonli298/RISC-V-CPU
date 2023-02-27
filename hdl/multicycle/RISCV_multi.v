@@ -1,9 +1,9 @@
 `timescale 1ns/10ps
 
 module RISCVCPU 
-    #(parameter rows=3,
-      parameter cols=4,
-	  parameter cols2=1,
+    #(parameter M=3,
+      parameter N=4,
+	  parameter N2=1,
 	  parameter REG_WIDTH=32)
     (CLOCK_50,
      done,
@@ -36,9 +36,9 @@ module RISCVCPU
 	output reg [15:0] instr_cnt;
     // The architecturally visible registers and scratch registers for implementation
     reg [31:0] PC, ALUOut, MDR, rs1, rs2;
-	  reg [REG_WIDTH-1:0] Regs[0:31];
+	reg [REG_WIDTH-1:0] Regs[0:31];
     reg [31:0] I_Memory [0:1023], IR;
-    reg signed [7:0] D_Memory [0:(rows*cols*4+cols*cols2*4+rows*cols2*4)-1];
+    reg signed [7:0] D_Memory [0:(M*N*4+N*N2*4+M*N2*4)-1];
     reg [2:0] state; // processor state
     wire [6:0] opcode; // use to get opcode easily
     wire [31:0] ImmGen; // used to generate immediate
@@ -258,6 +258,6 @@ module RISCVCPU
                 Regs[IR[11:7]] <= MDR; // write the MDR to the register
                 state <= IF;
             end // complete an LW instruction
-        endcase
+        endcase // case(state)
     end
 endmodule
