@@ -2,4 +2,3 @@ simulation/work/
 simulation/**
 !simulation/DMemory.txt
 !simulation/IMemory.txt
-simulation/transcript
