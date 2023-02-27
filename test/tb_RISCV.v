@@ -106,7 +106,7 @@ initial begin
 	// 	end
 	// end
 	if (comparison == 1'b0) begin
-		$display("\nsuccess :)");
+		$display("\nsuccess AYYYYYYYY");
 	end
 
 	ClockCount = clock_count;
