@@ -3,8 +3,8 @@
 
 module tb_RISCV;
 
-localparam M=3;
-localparam N=3;
+localparam M=2;
+localparam N=4;
 localparam N2=2;
 
 reg clk;
@@ -23,7 +23,7 @@ reg signed [31:0] matrix2 [0:N*N2-1];
 reg signed [31:0] res [0:M*N2-1];
 
 /**********/ // rename to whichever version of Build
-RISCVCPU #(3, 3, 2, 32)UUT(.CLOCK_50(clk), .done(done), .clock_count(clock_count), .instr_cnt(instr_cnt));
+RISCVCPU #(2, 4, 2, 32)UUT(.CLOCK_50(clk), .done(done), .clock_count(clock_count), .instr_cnt(instr_cnt));
 
 initial begin
 	clk = 1'b0;
