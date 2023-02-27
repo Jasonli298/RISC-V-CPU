@@ -10,7 +10,7 @@ z2
 cModel Technology
 dC:/Users/liste/Desktop/EEC181/Lab2/simulation
 vRISCVCPU
-Z0 !s110 1677471560
+Z0 !s110 1677473614
 !i10b 1
 !s100 =^_:jf`S5A0UAA4^F6eNL1
 Z1 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -20,13 +20,13 @@ Z3 dC:/Users/liste/Desktop/EEC181/RISC-V-CPU/simulation
 w1677471520
 8C:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/multicycle/RISCV_multi.v
 FC:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/multicycle/RISCV_multi.v
-!i122 323
+!i122 325
 L0 3 261
 Z4 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z5 !s108 1677471560.000000
+Z5 !s108 1677473614.000000
 !s107 C:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/multicycle/RISCV_multi.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/multicycle/RISCV_multi.v|
 !i113 1
@@ -44,7 +44,7 @@ R3
 w1677471545
 8C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v
 FC:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v
-!i122 324
+!i122 326
 L0 4 125
 R4
 r1
