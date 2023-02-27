@@ -38,7 +38,7 @@ module RISCVCPU
     reg [31:0] PC, ALUOut, MDR, rs1, rs2;
 	  reg [REG_WIDTH-1:0] Regs[0:31];
     reg [31:0] I_Memory [0:1023], IR;
-    reg signed [7:0] D_Memory [0:(rows*cols*4+cols*4+rows*4)-1];
+    reg signed [7:0] D_Memory [0:(rows*cols*4+cols*cols2*4+rows*cols2*4)-1];
     reg [2:0] state; // processor state
     wire [6:0] opcode; // use to get opcode easily
     wire [31:0] ImmGen; // used to generate immediate

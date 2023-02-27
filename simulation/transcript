@@ -4449,3 +4449,539 @@ run -all
 # ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v(95)
 #    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
 # Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v line 95
+# Compile of tb_RISCV_multi.v was successful with warnings.
+# Compile of RISCV_multi.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# Matrix:
+#           1           2           3           4 
+#           5           6           7           8 
+#           9          10          11          12 
+# Vector:
+#          -1
+#          -1
+#          -1
+#        -256
+# Expected Result:
+#       -1030
+#       -2066
+#       -3102
+# Generated Reseult
+# D_Memory[0x00000040]=       -1030
+# D_Memory[0x00000044]=       -2066
+# D_Memory[0x00000048]=       -3102
+# 
+# success :)
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v(95)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v line 95
+# Compile of tb_RISCV_multi.v was successful with warnings.
+# Compile of RISCV_multi.v was successful.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# Matrix:
+#           1           2           3           4 
+#           5           6           7           8 
+#           9          10          11          12 
+# Vector:
+#          -1
+#          -1
+#          -1
+#        -256
+# Expected Result:
+#       -1030
+#       -2066
+#       -3102
+# Generated Reseult
+# D_Memory[0x00000040]=       -1030
+# D_Memory[0x00000044]=       -2066
+# D_Memory[0x00000048]=       -3102
+# 
+# success :)
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v(95)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV_multi.v line 95
+# Break key hit
+quit -sim
+# End time: 17:17:39 on Feb 26,2023, Elapsed time: 93:49:28
+# Errors: 0, Warnings: 1
+# Compile of tb_RISCV_multi.v was successful with warnings.
+# Compile of RISCV_multi.v was successful.
+# 2 compiles, 0 failed with no errors.
+# Compile of tb_RISCV_multi.v was successful with warnings.
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v failed with 1 errors.
+# 3 compiles, 1 failed with 1 error.
+# Compile of tb_RISCV_multi.v was successful with warnings.
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 3 compiles, 0 failed with no errors.
+vsim -gui work.RISCVCPU
+# vsim -gui work.RISCVCPU 
+# Start time: 17:19:40 on Feb 26,2023
+# Loading work.RISCVCPU
+run -all
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+vsim -gui work.tb_RISCV
+# End time: 17:20:21 on Feb 26,2023, Elapsed time: 0:00:41
+# Errors: 0, Warnings: 7
+# vsim -gui work.tb_RISCV 
+# Start time: 17:20:21 on Feb 26,2023
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          73          24  
+#         115          42  
+# Generated Reseult
+# D_Memory[0x00000030]=          -1
+# D_Memory[0x00000034]=          -1
+# D_Memory[0x00000038]=          -1
+# Mismatch at indices [          0]
+# Mismatch at indices [          1]
+# Mismatch at indices [          2]
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(102)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 102
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+vsim -gui work.tb_RISCV
+# End time: 17:26:40 on Feb 26,2023, Elapsed time: 0:06:19
+# Errors: 0, Warnings: 3
+# vsim -gui work.tb_RISCV 
+# Start time: 17:26:40 on Feb 26,2023
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+# D_Memory[0x00000030]=          -1
+# D_Memory[0x00000034]=          -1
+# D_Memory[0x00000038]=          -1
+# Mismatch at indices [          0]
+# Mismatch at indices [          1]
+# Mismatch at indices [          2]
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(102)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 102
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+#           x           x  
+#           x           x  
+#           x           x  
+#           x           x  
+#           x           x  
+#           x           x  
+# Mismatch at indices [          0,          0]
+# Mismatch at indices [          1,          0]
+# Mismatch at indices [          0,          1]
+# Mismatch at indices [          1,          1]
+# Mismatch at indices [          0,          2]
+# Mismatch at indices [          1,          2]
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+#           x           x  
+#           x           x  
+#           x           x  
+# Mismatch at indices [          0,          0]
+# Mismatch at indices [          1,          0]
+# Mismatch at indices [          0,          1]
+# Mismatch at indices [          1,          1]
+# Mismatch at indices [          0,          2]
+# Mismatch at indices [          1,          2]
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+#           x           x  
+#           x           x  
+#           x           x  
+# Mismatch at indices [          0,          0]
+# Mismatch at indices [          1,          0]
+# Mismatch at indices [          0,          1]
+# Mismatch at indices [          1,          1]
+# Mismatch at indices [          0,          2]
+# Mismatch at indices [          1,          2]
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+#           x           x  
+#           x           x  
+#           x           x  
+# Mismatch at indices [          0,          0]
+# Mismatch at indices [          1,          0]
+# Mismatch at indices [          0,          1]
+# Mismatch at indices [          1,          1]
+# Mismatch at indices [          0,          2]
+# Mismatch at indices [          1,          2]
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+#           x           x  
+#           x           x  
+#           x           x  
+# Mismatch at indices [          0,          0]
+# Mismatch at indices [          1,          0]
+# Mismatch at indices [          0,          1]
+# Mismatch at indices [          1,          1]
+# Mismatch at indices [          0,          2]
+# Mismatch at indices [          1,          2]
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 62 of file "DMemory.txt". (Current address [61], address range [0:60])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+#           x           x  
+#           x           x  
+#           x           x  
+# Mismatch at indices [          0,          0]
+# Mismatch at indices [          1,          0]
+# Mismatch at indices [          0,          1]
+# Mismatch at indices [          1,          1]
+# Mismatch at indices [          0,          2]
+# Mismatch at indices [          1,          2]
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/multicycle/RISCV_multi.v(54)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV/UUT
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+#           x           x  
+#           x           x  
+#           x           x  
+# 
+# success :)
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# Matrix1:
+#           1           2           3           4 
+#           5           6           7           8 
+#           9          10          11          12 
+# Matrix2:
+#          -1 
+#          -1 
+#          -1 
+#        -256 
+# Expected Result:
+#       -1030  
+#       -2066  
+#       -3102  
+# Generated Reseult
+#       -1030  
+#       -2066  
+#       -3102  
+# 
+# success :)
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/hdl/multicycle/RISCV_multi.v(54)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV/UUT
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+#           x           x  
+#           x           x  
+#           x           x  
+# 
+# success :)
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118
+# Compile of RISCV_multi.v was successful.
+# Compile of tb_RISCV.v was successful with warnings.
+# 2 compiles, 0 failed with no errors.
+restart -f
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# Loading work.tb_RISCV
+# Loading work.RISCVCPU
+run -all
+# ** Warning: (vsim-PLI-3407) Too many data words read on line 61 of file "DMemory.txt". (Current address [60], address range [0:59])    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(31)
+#    Time: 0 ps  Iteration: 0  Instance: /tb_RISCV
+# Matrix1:
+#           1           2           3 
+#           4           5           6 
+#           7           8           9 
+# Matrix2:
+#          10          11 
+#          12          -1 
+#          -1          -1 
+# Expected Result:
+#          31           6  
+#          94          33  
+#         157          60  
+# Generated Reseult
+#           x           x  
+#           x           x  
+#           x           x  
+# Mismatch at indices [          0,          0]
+# Mismatch at indices [          1,          0]
+# Mismatch at indices [          0,          1]
+# Mismatch at indices [          1,          1]
+# Mismatch at indices [          0,          2]
+# Mismatch at indices [          1,          2]
+# total clock cycles:   535
+# total # of instructions executed:   131
+# CPI=4.083969
+# ** Note: $stop    : C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v(118)
+#    Time: 10690 ns  Iteration: 3  Instance: /tb_RISCV
+# Break in Module tb_RISCV at C:/Users/liste/Desktop/EEC181/RISC-V-CPU/test/tb_RISCV.v line 118

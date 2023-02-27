@@ -4,11 +4,11 @@
 module tb_RISCV;
 
 localparam M=3;
-localparam N=4;
-localparam N2=3;
+localparam N=3;
+localparam N2=2;
 
 reg clk;
-integer i,j;
+integer i,j,k;
 real ClockCount, InstrCount;
 reg [31:0] regs [0:31];
 wire done; // signals the end of a program
@@ -20,10 +20,10 @@ reg signed [31:0] word;
 reg signed [7:0] data[0:M*N*4+N*N2*4-1];
 reg signed [31:0] matrix1 [0:M*N-1];
 reg signed [31:0] matrix2 [0:N*N2-1];
-reg signed [31:0] res [0:M*N2*4-1];
+reg signed [31:0] res [0:M*N2-1];
 
 /**********/ // rename to whichever version of Build
-RISCVCPU #(3, 4, 1, 32)UUT(.CLOCK_50(clk), .done(done), .clock_count(clock_count), .instr_cnt(instr_cnt));
+RISCVCPU #(3, 3, 2, 32)UUT(.CLOCK_50(clk), .done(done), .clock_count(clock_count), .instr_cnt(instr_cnt));
 
 initial begin
 	clk = 1'b0;
@@ -38,7 +38,7 @@ initial begin
 
 	fork : wait_or_timeout
 	begin
-		repeat (1000) @(posedge clk);
+		repeat (2000) @(posedge clk);
 		disable wait_or_timeout;
 	end
 	begin
@@ -65,27 +65,46 @@ initial begin
 
 	$display("Expected Result:");
 	for (i = 0; i < M; i = i + 1) begin
-		res[i] = 0;
-		for (j = 0; j < N; j = j + 1) begin
-			res[i] = res[i] + matrix[i*N+j] * vector[j];
+		for (j = 0; j < N2; j = j + 1) begin
+			res[i*N2+j] = 0;
+			for (k = 0; k < N; k = k + 1) begin
+				res[i*N2+j] = res[i*N2+j] + matrix1[i*N+k] * matrix2[k*N2+j];
+			end
+			$write("%d ", res[i*N2+j]);
 		end
-		$display("%d", res[i]);
+		$display();
 	end
 
 	$display("Generated Reseult");
-	for (i = M*N*4+N*4; i <= (M*N*4+N*4+(M-1)*4); i = i + 4) begin
-		word = {UUT.D_Memory[i],UUT.D_Memory[i+1],UUT.D_Memory[i+2],UUT.D_Memory[i+3]};
-		$display("D_Memory[0x%h]= %d", i, word);
+	for (i = M*N*4+N*N2*4; i <= M*N*4+N*N2*4+(M*N2-1)*4; i = i + 4*N2) begin
+		for (j = 0; j < N2; j = j + 1) begin
+			word = {UUT.D_Memory[i*N2+j], UUT.D_Memory[i*N2+j+1], UUT.D_Memory[i*N2+j+2], UUT.D_Memory[i*N2+j+3]};
+			$write("%d ", word);
+		end
+		$display();
 	end
+	// for (i = M*N*4+N*4; i <= (M*N*4+N*4+(M-1)*4); i = i + 4) begin
+	// 	word = {UUT.D_Memory[i],UUT.D_Memory[i+1],UUT.D_Memory[i+2],UUT.D_Memory[i+3]};
+	// 	$display("D_Memory[0x%h]= %d", i, word);
+	// end
 
 	comparison = 1'b0;
 	for (i = 0; i < M; i = i + 1) begin
-		word = {UUT.D_Memory[i*4+M*N*4+N*4], UUT.D_Memory[i*4+M*N*4+N*4+1], UUT.D_Memory[i*4+M*N*4+N*4+2], UUT.D_Memory[4*i+M*N*4+N*4+3]};
-		if (res[i] != word) begin
-			$display("Mismatch at indices [%1.1d]", i);
-			comparison = 1'b1;
+		for (j = 0; j < N2; j = j + 1) begin
+			word = {UUT.D_Memory[i*4+M*N*4+N*N2*4+j], UUT.D_Memory[i*4+M*N*4+N*N2*4+j+1], UUT.D_Memory[i*4+M*N*4+N2*N*4+j+2], UUT.D_Memory[4*i+M*N*4+N*N2*4+j+3]};
+			if (res[N2*i+j] != word) begin
+				$display("Mismatch at indices [%1.1d,%1.1d]", j, i);
+				comparison = 1'b1;
+			end
 		end
 	end
+	// for (i = 0; i < M; i = i + 1) begin
+	// 	word = {UUT.D_Memory[i*4+M*N*4+N*4], UUT.D_Memory[i*4+M*N*4+N*4+1], UUT.D_Memory[i*4+M*N*4+N*4+2], UUT.D_Memory[4*i+M*N*4+N*4+3]};
+	// 	if (res[i] != word) begin
+	// 		$display("Mismatch at indices [%1.1d]", i);
+	// 		comparison = 1'b1;
+	// 	end
+	// end
 	if (comparison == 1'b0) begin
 		$display("\nsuccess :)");
 	end
