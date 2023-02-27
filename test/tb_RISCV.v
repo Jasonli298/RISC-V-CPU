@@ -5,8 +5,8 @@ module tb_RISCV;
 
 // The following localparams should be changed in sync with the parameters passed to the CPU
 // Change to relfect the sizes of the input matrices
-localparam  M  = 3;  // number of rows in matrix1
-localparam  N  = 4;  // number of columns in matrix1 and rows in matrix2
+localparam  M  = 3; // number of rows in matrix1
+localparam  N  = 4; // number of columns in matrix1 and rows in matrix2
 localparam  N2 = 1; // number of columns in matrix2
 
 reg     clk;
