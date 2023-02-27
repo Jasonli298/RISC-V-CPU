@@ -5,14 +5,14 @@ module tb_RISCV;
 
 // The following localparams should be changed in sync with the parameters passed to the CPU
 // Change to relfect the sizes of the input matrices
-localparam  M=3;  // number of rows in matrix1
-localparam  N=4;  // number of columns in maatrix1 and rows in matrix2
-localparam  N2=1; // number of columns in matrix2
+localparam  M  = 3; // number of rows in matrix1
+localparam  N  = 4; // number of columns in matrix1 and rows in matrix2
+localparam  N2 = 1; // number of columns in matrix2
 
-reg         clk;
-integer     i,j,k;
-real        ClockCount; // used to convert wire to floating number for division to get CPI
-real        InstrCount; // used to convert wire to floating number for division to get CPI
+reg     clk;
+integer i,j,k;
+real    ClockCount; // used to convert wire to floating number for division to get CPI
+real    InstrCount; // used to convert wire to floating number for division to get CPI
 
 wire        done;        // signals the end of a program
 wire [15:0] clock_count; // total number of clock cycles to run a program
@@ -90,7 +90,10 @@ initial begin
 	$display("Generated Reseult");
 	for (i = M*N*4+N*N2*4; i <= M*N*4+N*N2*4+(M*N2-1)*4; i = i + 4*N2) begin
 		for (j = 0; j < N2; j = j + 1) begin
-			word = {UUT.D_Memory[i*N2+j], UUT.D_Memory[i*N2+j+1], UUT.D_Memory[i*N2+j+2], UUT.D_Memory[i*N2+j+3]};
+			word = {UUT.D_Memory[i*N2 + j],
+					UUT.D_Memory[i*N2 + j+1],
+					UUT.D_Memory[i*N2 + j+2],
+					UUT.D_Memory[i*N2 + j+3]};
 			$write("%d ", word);
 		end
 		$display();
@@ -99,7 +102,11 @@ initial begin
 	comparison = 1'b0;
 	for (i = 0; i < M; i = i + 1) begin
 		for (j = 0; j < N2; j = j + 1) begin
-			word = {UUT.D_Memory[i*4+M*N*4+N*N2*4+j], UUT.D_Memory[i*4+M*N*4+N*N2*4+j+1], UUT.D_Memory[i*4+M*N*4+N2*N*4+j+2], UUT.D_Memory[4*i+M*N*4+N*N2*4+j+3]};
+			word = {UUT.D_Memory[i*4+M*N*4 + N*N2*4 + j],
+					UUT.D_Memory[i*4+M*N*4 + N*N2*4 + j+1],
+					UUT.D_Memory[i*4+M*N*4 + N*N2*4 + j+2],
+					UUT.D_Memory[i*4+M*N*4 + N*N2*4 + j+3]};
+			
 			if (res[N2*i+j] != word) begin
 				$display("Mismatch at indices [%1.1d,%1.1d]", i, j);
 				comparison = 1'b1;
