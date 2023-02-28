@@ -20,6 +20,7 @@ module RISCVCPU
                B_I   = 7'b110_0011,
                U_I   = 7'b011_0111,
                J_I   = 7'b110_1111,
+			   AUIPC = 7'b001_0111,
                LW    = 7'b000_0011; // also I type
 
     // Parameters for processor stages
@@ -164,13 +165,19 @@ module RISCVCPU
                         case(IR[14:12])  // Check funct3
                             //***blt***
                             3'b100: begin
-                                if(rs1 < rs2) begin
-									PC <= ALUOut;
-                                end
-                                state <= IF;
+                                if (rs1 < rs2) PC <= ALUOut;
                             end
+							//*****beq****
+							3'b000: begin
+								if (rs1 == rs2) PC <= ALUOut;
+							end
                         endcase
+						state <= IF;
                     end
+
+					AUIPC: begin
+						ALUOut <= PC + {IR[31:12], 12'b0};
+					end
                 endcase // endcase (opcode)
             end
 			////////////////////////////////////////////// END EX ///////////////////////////////////////////////////////
@@ -243,6 +250,11 @@ module RISCVCPU
                         // MDR <= ALUOut;
                         // state <= WB;
                     end // U_I
+
+					AUIPC: begin
+						MDR <= ALUOut;
+						state <= WB;
+					end
 
                     I_I: begin
                         case(IR[14:12]) // check funct3
