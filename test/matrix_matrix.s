@@ -66,12 +66,12 @@ inner_loop:
   addi x3, x3, 4
 
   # Check if inner loop is finished
-  blt x7, x2, inner_loop
+  blt x7, x2, inner_loop          // -32
   
   addi x15, x15, 1 // add y by 1        -----------------new
   
    # Check if inner loop is finished
-  blt x15, x1, inner_loop2             ------------------- new 
+  blt x15, x1, inner_loop2             ------------------- new // -48
   
   
 
