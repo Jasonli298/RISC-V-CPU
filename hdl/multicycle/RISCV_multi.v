@@ -1,9 +1,9 @@
 `timescale 1ns/10ps
 
 module RISCVCPU 
-    #(parameter M  = 3,
+    #(parameter M  = 2,
       parameter N  = 4,
-	  parameter N2 = 1,
+	  parameter N2 = 2,
 	  parameter REG_WIDTH = 32
 	  )
     (CLOCK_50,
@@ -71,6 +71,8 @@ module RISCVCPU
         clock_count <= clock_count + 1;
         case (state) //action depends on the state
             IF: begin // first step: fetch the instruction, increment PC, go to next state
+                // $display("PC= %d,   Reg 11= %d  Reg 9= %d, Reg 3= %d; %d, Reg 4= %d; %d  Reg 15= %d  Reg 13= %d rs1= %d   rs2= %d",PC,  Regs[11],  Regs[9],  (Regs[3] - 32)/4 + 1, Regs[3],  Regs[4]/4 + 1, Regs[4], Regs[15], Regs[13], IR[19:15], IR[24:20]);
+                $display("PC= %d,   Reg 11= %d ",PC,  Regs[11]);
                 IR <= I_Memory[PC >> 2];
                 PC <= PC + 4;
                 state <= ID; // next state
@@ -165,6 +167,7 @@ module RISCVCPU
                         case(IR[14:12])  // Check funct3
                             //***blt***
                             3'b100: begin
+                                // $display("Reg 11= %d  Reg 15= %d  Reg 13= %d rs1= %d   rs2= %d", Regs[11], Regs[15], Regs[13], IR[19:15], IR[24:20]);
                                 if (rs1 < rs2) PC <= ALUOut;
                             end
 							//*****beq****
