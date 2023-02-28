@@ -35,7 +35,8 @@ main:
  
   
   addi x14, zero, 4 // x14 = 4
-  mul x16, x13, x14              -------------------new
+  mul x16, x13, x14   // 2*4=8           -------------------new
+  mul x17, x16, x2  // N*N2*4 = x17
   
   mul x12, x2, x14 // x12 = 4 * N
   mul x14, x12, x13 // x14 = 4 *N *N2 -------------new
@@ -48,10 +49,11 @@ main:
   addi x6, x6, 0
 outer_loop:
   # Inner loop: iterate over columns of matrix and vector
+  addi x15, zero, 0   -----------------------new
 
 inner_loop2:          ------------------------new 
   addi x7, zero, 0
-  addi x15, zero, 0   -----------------------new
+
   
 inner_loop:
   # Load matrix element into t8
@@ -62,34 +64,44 @@ inner_loop:
   mul x9, x8, x10
 
   # Add result to accumulator register
-  add x11, x11, x9
+  add x11, x11, x9          68
 
   # Increment column index and memory address
-  addi x7, x7, 1 // add x by 1
-  addi x4, x4, 4
-  add x3, x3, x16     ------------------new
+  addi x7, x7, 1 // add x by 1                   72
+  addi x4, x4, 4                              76
+  add x3, x3, x16     ------------------new  80
 
   # Check if inner loop is finished
-  blt x7, x2, inner_loop          // -32
+  blt x7, x2, inner_loop          // -32   84
   
-  addi x15, x15, 1 // add y by 1        -----------------new
-  
-   # Check if inner loop is finished
-  blt x15, x13, inner_loop2             ------------------- new // -48
+  addi x15, x15, 1 // add y by 1        -----------------new  88
+
+  // matrix2
+  sub x3, x3, x17  //       92
+  addi x3, x3, 4   // 96
+
+  //matrix1
+  sub x4, x4, x12 // matrix1 index - length of matrix1  100
+
+
   
   
 
   # Store result and reset accumulator register
-  sw x11, 0(x5)
-  addi x5, x5, 4 // increment result address by 4
-  addi x11, x0, 0 // reset the accumulator
+  sw x11, 0(x5)                                     // 104
+  addi x5, x5, 4 // increment result address by 4   //108
+  addi x11, x0, 0 // reset the accumulator          //112
+
+     # Check if inner loop is finished
+  blt x15, x13, inner_loop2             ------------------- new // -68  116
 
   # Increment row index and reset vector memory address
-  addi x6, x6, 1
-  mul x3, x1, x12 // x3 -= 4 * N, loop back to first element in vector
+  addi x6, x6, 1                                     //120
+  mul x3, x1, x12 // x3 -= 4 * N, loop back to first element in vector 124
+  add x4, x4, x12 // reset index of matrix1                     128
 
   # Check if outer loop is finished
-  blt x6, x1, outer_loop                                // -72
+  blt x6, x1, outer_loop                                // -88    132
 
   # Halt the program
   j 0 // replace with dummy EOF instruction
