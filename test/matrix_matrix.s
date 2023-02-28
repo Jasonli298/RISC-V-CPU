@@ -85,7 +85,7 @@ inner_loop:
   mul x3, x1, x12 // x3 -= 4 * N, loop back to first element in vector
 
   # Check if outer loop is finished
-  blt x6, x1, outer_loop
+  blt x6, x1, outer_loop                                // -72
 
   # Halt the program
   j 0 // replace with dummy EOF instruction
