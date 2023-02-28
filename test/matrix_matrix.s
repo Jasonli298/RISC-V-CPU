@@ -45,9 +45,11 @@ main:
   addi x6, x6, 0
 outer_loop:
   # Inner loop: iterate over columns of matrix and vector
-  # li t7, 0   # t7 = column index
+
+inner_loop2:
   addi x7, zero, 0
-  # addi x6, x6, 1
+  addi x15, zero, 0
+  
 inner_loop:
   # Load matrix element into t8
   lw x8, 0(x4)
@@ -60,12 +62,19 @@ inner_loop:
   add x11, x11, x9
 
   # Increment column index and memory address
-  addi x7, x7, 1
+  addi x7, x7, 1 // add x by 1
   addi x4, x4, 4
   addi x3, x3, 4
 
   # Check if inner loop is finished
   blt x7, x2, inner_loop
+  
+  addi x15, x15, 1 // add y by 1
+  
+   # Check if inner loop is finished
+  blt x15, x1, inner_loop2
+  
+  
 
   # Store result and reset accumulator register
   sw x11, 0(x5)
