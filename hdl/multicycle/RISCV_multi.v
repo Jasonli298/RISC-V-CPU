@@ -51,7 +51,7 @@ module RISCVCPU
 	reg signed [7:0]           D_entry2;
 	reg signed [7:0]           D_entry3;
 
-	wire        [6:0]  opcode; // use to get opcode easily
+	wire        [6:0]  opcode;
     wire        [31:0] ImmGen; // used to generate immediate
 	wire        [31:0] PC_addr = PC >> 2;
 	wire        [31:0] I_Mem_Out;
@@ -105,7 +105,7 @@ module RISCVCPU
 		instr_cnt = 0;
     end
 
-    // The state machine--triggered on a rising clock
+    // The state machine triggered on a rising clock edge
     always @(posedge clk) begin
         clock_count <= clock_count + 1;
 		wr_en <= 1'b0;
@@ -144,19 +144,17 @@ module RISCVCPU
                                 endcase
                             end
                             7'b0100000: begin
-                                //***sub***
                                 case (IR[14:12]) // Check funct3
                                     3'b000: begin
-										//***sub***
+										// ***sub***
                                         ALUOut <= rs1 - rs2;    
                                         state <= MEM;
-                                        // $display("ALUOut= %d\n",rs1 - rs2);
                                     end
                                 endcase
                             end
 
                             7'b0000001: begin
-                                //***mul***
+                                // ***mul***
                                 case (IR[14:12]) // Check funct3
                                     3'b000: begin
                                         ALUOut <= rs1 * rs2;                 
@@ -170,14 +168,14 @@ module RISCVCPU
 
                     Imm_I: begin
                         case (IR[14:12])  // Check funct3
-                            3'b000: ALUOut <= rs1 + IR[31:20]; 
+							3'b000: ALUOut <= rs1 + IR[31:20]; // addi
                         endcase
 						state <= MEM;
                     end
 
                     S_I: begin
                         case(IR[14:12])  // Check funct3
-                            //***sw***
+                            // ***sw***
                             3'b010: ALUOut <= rs1 + ImmGen; // compute effective address
                         endcase
 						state <= MEM;
@@ -185,7 +183,7 @@ module RISCVCPU
                     end
 
                     U_I: begin
-                        //***lui***
+                        // ***lui***
                         //IR[31:12] == imm
                         ALUOut <= {IR[31:12], 12'b0};
                         state <= MEM;
@@ -193,7 +191,7 @@ module RISCVCPU
 
                     I_I: begin
                         case(IR[14:12]) // check funct3
-                            //***lw***
+                            // ***lw***
                             //LW rd，offset(rs1), x[rd] = sext ( M [x[rs1] + sext(offset) ] [31:0] )
                             3'b010: begin
                                 ALUOut <= rs1 + ImmGen; // compute effective address
@@ -204,11 +202,11 @@ module RISCVCPU
 
                     B_I: begin
                         case(IR[14:12])  // Check funct3
-                            //***blt***
+                            // ***blt***
                             3'b100: begin
                                 if (rs1 < rs2) PC <= ALUOut;
                             end
-							//*****beq****
+							// ***beq***
 							3'b000: begin
 								if (rs1 == rs2) PC <= ALUOut;
 							end
@@ -230,7 +228,7 @@ module RISCVCPU
                         case (IR[31:25]) // Check funct7
                             7'b0000000: begin
                                 case (IR[14:12]) // Check funct3
-                                    //***add***
+                                    // ***add***
                                     3'b000: begin
                                         Regs[IR[11:7]] <= ALUOut;
                                         state <= IF;
@@ -242,7 +240,7 @@ module RISCVCPU
                             
                             7'b0100000: begin
                                 case (IR[14:12]) // Check funct3
-                                    // sub
+                                    // ***sub***
                                     3'b000: begin
                                         Regs[IR[11:7]] <= ALUOut;
                                         state <= IF;
@@ -252,7 +250,7 @@ module RISCVCPU
                             end
 
                             7'b0000001: begin
-                                //***mul***
+                                // ***mul***
                                 case (IR[14:12]) // Check funct3
                                     3'b000: begin
                                         Regs[IR[11:7]] <= ALUOut;              
@@ -265,7 +263,7 @@ module RISCVCPU
                         endcase // endcase (IR[31:25])
                     end // R_i
 
-                    Imm_I: begin // TO DO: learn how to check if the most significant 7 bits are part of imm or funct7
+                    Imm_I: begin
                         case (IR[14:12]) // Check funct3
                             // ***addi***
                             3'b000: begin
@@ -277,7 +275,7 @@ module RISCVCPU
 
                     S_I: begin
                         case(IR[14:12])  // Check funct3
-                            //***sw***
+                            // ***sw***
                             3'b010: begin
 								{D_entry0, D_entry1, D_entry2, D_entry3} <= rs2;
                                 state <= IF; // return to state 1
