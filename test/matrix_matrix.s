@@ -75,7 +75,7 @@ inner_loop:
   addi x15, x15, 1 // add y by 1        -----------------new
   
    # Check if inner loop is finished
-  blt x15, x1, inner_loop2             ------------------- new // -48
+  blt x15, x13, inner_loop2             ------------------- new // -48
   
   
 
