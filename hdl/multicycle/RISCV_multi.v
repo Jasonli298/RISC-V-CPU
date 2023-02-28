@@ -1,9 +1,9 @@
 `timescale 1ns/10ps
 
 module RISCVCPU 
-    #(parameter M  = 3,
+    #(parameter M  = 2,
       parameter N  = 4,
-	  parameter N2 = 1,
+	  parameter N2 = 2,
 	  parameter REG_WIDTH = 32
 	  )
     (CLOCK_50,
@@ -42,57 +42,36 @@ module RISCVCPU
 
     // The architecturally visible registers and scratch registers for implementation
 	reg                        wr_en;
-    reg        [31:0]          PC, ALUOut, MDR, rs1, rs2;
+   reg        [31:0]          PC, ALUOut, MDR, rs1, rs2;
 	reg        [REG_WIDTH-1:0] Regs [0:31];
 	reg        [31:0]          IR;
-    reg        [2:0]           state; // processor state
-	reg signed [7:0]           D_entry0;
-	reg signed [7:0]           D_entry1;
-	reg signed [7:0]           D_entry2;
-	reg signed [7:0]           D_entry3;
+   reg        [2:0]           state; // processor state
+	reg signed [31:0]           D_entry;
 
 	wire        [6:0]  opcode; // use to get opcode easily
-    wire        [31:0] ImmGen; // used to generate immediate
+   wire        [31:0] ImmGen; // used to generate immediate
 	wire        [31:0] PC_addr = PC >> 2;
 	wire        [31:0] I_Mem_Out;
-	wire        [31:0] DMem_addr_w0 = ALUOut;
-	wire        [31:0] DMem_addr_w1 = ALUOut + 1;
-	wire        [31:0] DMem_addr_w2 = ALUOut + 2;
-	wire        [31:0] DMem_addr_w3 = ALUOut + 3;
-	wire signed [7:0]  D_out0, D_out1, D_out2, D_out3;
+	wire        [31:0] DMem_addr_w = ALUOut>>2;
+	wire signed [31:0] D_out;
 	wire signed [31:0] PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
 
-    assign             opcode   = IR[6:0]; // opcode is lower 7 bits
-    assign             ImmGen   = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
+
+   assign             opcode   = IR[6:0]; // opcode is lower 7 bits
+   assign             ImmGen   = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
 	
-	RAM #(32, 1024, "IMemory.txt") I_Memory(.wr_en(1'b0),
-											.index0(PC_addr),
-											.index1(),
-											.index2(),
-											.index3(),
-											.entry0(),
-											.entry1(),
-											.entry2(),
-											.entry3(),
-											.entry_out0(I_Mem_Out),
-											.entry_out1(),
-											.entry_out2(),
-											.entry_out3()
+	wire [31:0] shit1, shit2, shit3;
+	
+	RAM #(32, 35, "IMemory.txt") I_Memory(.wr_en(1'b0),
+											.index(PC_addr),
+											.entry(32'b0),
+											.entry_out(I_Mem_Out)
 											);
 
-	RAM #(8, M*N*4+N*N2*4+M*N2*4, "DMemory.txt") D_Memory(.wr_en(wr_en),
-														  .index0(DMem_addr_w0),
-														  .index1(DMem_addr_w1),
-														  .index2(DMem_addr_w2),
-														  .index3(DMem_addr_w3),
-														  .entry0(D_entry0),
-														  .entry1(D_entry1),
-														  .entry2(D_entry2),
-														  .entry3(D_entry3),
-														  .entry_out0(D_out0),
-														  .entry_out1(D_out1),
-														  .entry_out2(D_out2),
-														  .entry_out3(D_out3)
+	RAM #(32, M*N+N*N2+M*N2, "DMemory.txt") D_Memory(.wr_en(wr_en),
+														  .index(DMem_addr_w),
+														  .entry(D_entry),
+														  .entry_out(D_out)
 														  );
 
 	// set the PC to 0 and start the control in state 1
@@ -279,8 +258,8 @@ module RISCVCPU
                         case(IR[14:12])  // Check funct3
                             //***sw***
                             3'b010: begin
-								{D_entry0, D_entry1, D_entry2, D_entry3} <= rs2;
-                                state <= IF; // return to state 1
+										D_entry <= rs2;
+                              state <= IF; // return to state 1
                             end
                         endcase
                     end // S_I
@@ -301,7 +280,7 @@ module RISCVCPU
                         case(IR[14:12]) // check funct3
                             // ***lw***
                             3'b010: begin
-								MDR <= {D_out0, D_out1, D_out2, D_out3};
+								MDR <= D_out;
                                 state <= WB; // next state
                             end
                         endcase
@@ -318,3 +297,4 @@ module RISCVCPU
         endcase // case(state)
     end
 endmodule
+
