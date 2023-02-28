@@ -15,8 +15,10 @@ matrix:
 
 # Define the vector as a contiguous array of signed integers
 vector:
-  .word 1, 2, 3, 4
-  .word 5, 6, 7, 8
+  .word 1, 2,
+  .word 3, 4,
+  .word 5, 6,
+  .word 7, 8,
   
  result:
   .word 0, 0, 0
