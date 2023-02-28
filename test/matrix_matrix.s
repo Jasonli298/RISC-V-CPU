@@ -1,8 +1,9 @@
 # RISC-V assembly program for integer matrix-vector multiplication
 
 # Define the dimensions of the matrix and vector
-#define M 3
+#define M 2
 #define N 4
+#define N2 2
 
 .data
 
@@ -10,10 +11,11 @@
 matrix:
   .word 1, 2, 3, 4
   .word 5, 6, 7, 8
-  .word 9, 10, 11, 12
+
 
 # Define the vector as a contiguous array of signed integers
 vector:
+  .word 9, 10, 11, 12
   .word 1, 2, 3, 4
   
  result:
