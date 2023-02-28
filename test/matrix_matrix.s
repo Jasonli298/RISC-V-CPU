@@ -29,25 +29,14 @@ vector:
 .globl main
 main:
   # Initialize variables
-  # li x4, M   # x4 = M
   addi x1, zero, M
-  # li x3, N   # x3 = N
   addi x2, zero, N
   addi x14, zero, 4 // x14 = 4
   mul x12, x2, x14 // x12 = 4 * N
   mul x3, x1, x12 // starting address of vector
   # la x4, matrix   # x5 = address of matrix
   addi x4, x4, 0x0 // starting address of matrix
-  # lui x5, %hi(matrix)
-  # addi x5, x5, %lo(matrix)
-  # la x3, vector   # t3 = address of vector
-  # lui t3, %hi(vector)
-  # addi x5, x5, %lo(vector)
-  # la x5, result   # t4 = address of result
   add x5, x3, x12 // starting address of result
-  # lui t4, %hi(result)
-  # addi t4, t4, %lo(result)
-  # lw t3, 0(x3)  # x7 = first element of vector
 
   # Outer loop: iterate over rows of matrix
   # li x6, 0   # x6 = row index
