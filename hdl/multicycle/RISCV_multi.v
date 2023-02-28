@@ -41,25 +41,64 @@ module RISCVCPU
 	////////////////////////////////// END I/O ////////////////////////////////////////////////
 
     // The architecturally visible registers and scratch registers for implementation
-    reg [31:0]          PC, ALUOut, MDR, rs1, rs2;
-	reg [REG_WIDTH-1:0] Regs [0:31];
-    reg [31:0]          I_Memory [0:1023];
-	reg [31:0]          IR;
-    reg signed [7:0]    D_Memory [0:(M*N*4+N*N2*4+M*N2*4)-1];
-    reg [2:0]           state; // processor state
-    wire [6:0]          opcode; // use to get opcode easily
-    wire [31:0]         ImmGen; // used to generate immediate
+	reg                        wr_en;
+    reg        [31:0]          PC, ALUOut, MDR, rs1, rs2;
+	reg        [REG_WIDTH-1:0] Regs [0:31];
+	reg        [31:0]          IR;
+    reg        [2:0]           state; // processor state
+	reg signed [7:0]           D_entry0;
+	reg signed [7:0]           D_entry1;
+	reg signed [7:0]           D_entry2;
+	reg signed [7:0]           D_entry3;
 
+	wire        [6:0]  opcode; // use to get opcode easily
+    wire        [31:0] ImmGen; // used to generate immediate
+	wire        [31:0] PC_addr = PC >> 2;
+	wire        [31:0] I_Mem_Out;
+	wire        [31:0] DMem_addr_w0 = ALUOut;
+	wire        [31:0] DMem_addr_w1 = ALUOut + 1;
+	wire        [31:0] DMem_addr_w2 = ALUOut + 2;
+	wire        [31:0] DMem_addr_w3 = ALUOut + 3;
+	wire signed [7:0]  D_out0, D_out1, D_out2, D_out3;
 	wire signed [31:0] PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
+
     assign             opcode   = IR[6:0]; // opcode is lower 7 bits
     assign             ImmGen   = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
-    
+	
+	RAM #(32, 1024, "IMemory.txt") I_Memory(.wr_en(1'b0),
+											.index0(PC_addr),
+											.index1(),
+											.index2(),
+											.index3(),
+											.entry0(),
+											.entry1(),
+											.entry2(),
+											.entry3(),
+											.entry_out0(I_Mem_Out),
+											.entry_out1(),
+											.entry_out2(),
+											.entry_out3()
+											);
+
+	RAM #(8, M*N*4+N*N2*4+M*N2*4, "DMemory.txt") D_Memory(.wr_en(wr_en),
+														  .index0(DMem_addr_w0),
+														  .index1(DMem_addr_w1),
+														  .index2(DMem_addr_w2),
+														  .index3(DMem_addr_w3),
+														  .entry0(D_entry0),
+														  .entry1(D_entry1),
+														  .entry2(D_entry2),
+														  .entry3(D_entry3),
+														  .entry_out0(D_out0),
+														  .entry_out1(D_out1),
+														  .entry_out2(D_out2),
+														  .entry_out3(D_out3)
+														  );
+
 	// set the PC to 0 and start the control in state 1
     integer i;
     initial begin
         for (i = 0; i <= 31; i = i + 1) Regs[i] = 32'b0;
-        $readmemb("IMemory.txt", I_Memory);
-        $readmemb("DMemory.txt", D_Memory);
         PC = 0; 
         state = IF;
         clock_count = 0;
@@ -69,9 +108,10 @@ module RISCVCPU
     // The state machine--triggered on a rising clock
     always @(posedge clk) begin
         clock_count <= clock_count + 1;
+		wr_en <= 1'b0;
         case (state) //action depends on the state
             IF: begin // first step: fetch the instruction, increment PC, go to next state
-                IR <= I_Memory[PC >> 2];
+                IR <= I_Mem_Out;
                 PC <= PC + 4;
                 state <= ID; // next state
             end
@@ -141,6 +181,7 @@ module RISCVCPU
                             3'b010: ALUOut <= rs1 + ImmGen; // compute effective address
                         endcase
 						state <= MEM;
+						wr_en <= 1'b1;
                     end
 
                     U_I: begin
@@ -238,7 +279,7 @@ module RISCVCPU
                         case(IR[14:12])  // Check funct3
                             //***sw***
                             3'b010: begin
-								{D_Memory[ALUOut], D_Memory[ALUOut+1], D_Memory[ALUOut+2], D_Memory[ALUOut+3]} <= rs2;
+								{D_entry0, D_entry1, D_entry2, D_entry3} <= rs2;
                                 state <= IF; // return to state 1
                             end
                         endcase
@@ -260,8 +301,7 @@ module RISCVCPU
                         case(IR[14:12]) // check funct3
                             // ***lw***
                             3'b010: begin
-                                // $display("ALUOut= %d\n", ALUOut >> 2);
-                                MDR <= {D_Memory[ALUOut], D_Memory[ALUOut+1], D_Memory[ALUOut+2], D_Memory[ALUOut+3]}; // read the memory
+								MDR <= {D_out0, D_out1, D_out2, D_out3};
                                 state <= WB; // next state
                             end
                         endcase

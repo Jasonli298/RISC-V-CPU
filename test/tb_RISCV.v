@@ -43,6 +43,7 @@ initial begin
 		matrix2[i] = {data[4*i+M*N*4], data[4*i+M*N*4+1], data[4*i+M*N*4+2], data[4*i+M*N*4+3]};
 	end
 
+
 	fork : wait_or_timeout
 	begin
 		repeat (5000) @(posedge clk);
@@ -90,10 +91,10 @@ initial begin
 	$display("Generated Reseult");
 	for (i = M*N*4+N*N2*4; i <= M*N*4+N*N2*4+(M*N2-1)*4; i = i + 4*N2) begin
 		for (j = 0; j < N2; j = j + 1) begin
-			word = {UUT.D_Memory[i*N2 + j],
-					UUT.D_Memory[i*N2 + j+1],
-					UUT.D_Memory[i*N2 + j+2],
-					UUT.D_Memory[i*N2 + j+3]};
+			word = {UUT.D_Memory.mem[i*N2 + j],
+					UUT.D_Memory.mem[i*N2 + j+1],
+					UUT.D_Memory.mem[i*N2 + j+2],
+					UUT.D_Memory.mem[i*N2 + j+3]};
 			$write("%d ", word);
 		end
 		$display();
@@ -102,10 +103,10 @@ initial begin
 	comparison = 1'b0;
 	for (i = 0; i < M; i = i + 1) begin
 		for (j = 0; j < N2; j = j + 1) begin
-			word = {UUT.D_Memory[i*4+M*N*4 + N*N2*4 + j],
-					UUT.D_Memory[i*4+M*N*4 + N*N2*4 + j+1],
-					UUT.D_Memory[i*4+M*N*4 + N*N2*4 + j+2],
-					UUT.D_Memory[i*4+M*N*4 + N*N2*4 + j+3]};
+			word = {UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j],
+					UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+1],
+					UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+2],
+					UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+3]};
 			
 			if (res[N2*i+j] != word) begin
 				$display("Mismatch at indices [%1.1d,%1.1d]", i, j);
