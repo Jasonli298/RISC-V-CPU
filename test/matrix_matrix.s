@@ -31,12 +31,14 @@ main:
   # Initialize variables
   addi x1, zero, M
   addi x2, zero, N
+  // new
+  addi x13, zero, N2
   addi x14, zero, 4 // x14 = 4
   mul x12, x2, x14 // x12 = 4 * N
-  mul x3, x1, x12 // starting address of vector
-  # la x4, matrix   # x5 = address of matrix
-  addi x4, x4, 0x0 // starting address of matrix
-  add x5, x3, x12 // starting address of result
+  mul x14, x12, x13 // x14 = 4 *N *N2
+  mul x3, x1, x12 // starting address of matrix2 = M*N*4
+  addi x4, x4, 0x0 // starting address of matrix1 = 0
+  add x5, x3, x14 // starting address of result= M*N*4+N*N2*4
 
   # Outer loop: iterate over rows of matrix
   # li x6, 0   # x6 = row index
