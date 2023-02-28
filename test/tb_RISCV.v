@@ -5,9 +5,9 @@ module tb_RISCV;
 
 // The following localparams should be changed in sync with the parameters passed to the CPU
 // Change to relfect the sizes of the input matrices
-localparam  M  = 3; // number of rows in matrix1
+localparam  M  = 2; // number of rows in matrix1
 localparam  N  = 4; // number of columns in matrix1 and rows in matrix2
-localparam  N2 = 1; // number of columns in matrix2
+localparam  N2 = 2; // number of columns in matrix2
 
 reg     clk;
 integer i,j,k;
@@ -27,7 +27,7 @@ reg signed [31:0] matrix2 [0:N*N2-1];
 reg signed [31:0] res     [0:M*N2-1]; // array to store the result matrix calulated in TB for comparison
 
 /*******/ // Rename to whichever version of build
-RISCVCPU #(3, 4, 1, 32) UUT(.CLOCK_50(clk),             // 1st parameter is number of rows in matrix1
+RISCVCPU #(2, 4, 2, 32) UUT(.CLOCK_50(clk),             // 1st parameter is number of rows in matrix1
 							.done(done),                // 2nd parameter is number of columns in matrix1 and rows in matrix2
 							.clock_count(clock_count),  // 3rd parameter is number of columns in matrix2
 							.instr_cnt(instr_cnt));     // 4th parameter is size of the registers in register file of CPU
@@ -45,7 +45,9 @@ initial begin
 
 	fork : wait_or_timeout
 	begin
-		repeat (5000) @(posedge clk);
+		repeat (1000) @(posedge clk) begin
+			// $display("Reg 11= %d  Reg 15= %d  Reg 13= %d", UUT.Regs[11], UUT.Regs[15], UUT.Regs[13]);
+		end
 		disable wait_or_timeout;
 	end
 	begin
@@ -54,6 +56,7 @@ initial begin
 	end
 	join	
 	
+
 	// Uncomment the following 3 lines to display the contents in the register file in the CPU
 	// for (i = 0; i < 32; i = i + 1) begin
 	// 	$display("Reg%d: D:%d H:%h B:%b", i, UUT.Regs[i], UUT.Regs[i], UUT.Regs[i]);
