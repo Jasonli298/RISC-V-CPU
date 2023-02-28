@@ -32,7 +32,11 @@ main:
   addi x1, zero, M
   addi x2, zero, N
   addi x13, zero, N2 ----------------------new
+ 
+  
   addi x14, zero, 4 // x14 = 4
+  mul x16, x13, x14              -------------------new
+  
   mul x12, x2, x14 // x12 = 4 * N
   mul x14, x12, x13 // x14 = 4 *N *N2 -------------new
   mul x3, x1, x12 // starting address of matrix2 = M*N*4
@@ -63,7 +67,7 @@ inner_loop:
   # Increment column index and memory address
   addi x7, x7, 1 // add x by 1
   addi x4, x4, 4
-  addi x3, x3, 4
+  add x3, x3, x16     ------------------new
 
   # Check if inner loop is finished
   blt x7, x2, inner_loop          // -32
