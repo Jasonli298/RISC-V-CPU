@@ -1,8 +1,8 @@
 `timescale 1ns/10ps
 
-module RISCVCPU 
-    #(parameter M  = 2,
-      parameter N  = 4,
+module RISCV_multi 
+    #(parameter M  = 100,
+      parameter N  = 50,
 	  parameter N2 = 2,
 	  parameter REG_WIDTH = 32
 	  )
@@ -42,14 +42,14 @@ module RISCVCPU
 
     // The architecturally visible registers and scratch registers for implementation
 	reg                        wr_en;
-   reg        [31:0]          PC, ALUOut, MDR, rs1, rs2;
+    reg        [31:0]          PC, ALUOut, MDR, rs1, rs2;
 	reg        [REG_WIDTH-1:0] Regs [0:31];
 	reg        [31:0]          IR;
-   reg        [2:0]           state; // processor state
+    reg        [2:0]           state; // processor state
 	reg signed [31:0]           D_entry;
 
 	wire        [6:0]  opcode; // use to get opcode easily
-   wire        [31:0] ImmGen; // used to generate immediate
+    wire        [31:0] ImmGen; // used to generate immediate
 	wire        [31:0] PC_addr = PC >> 2;
 	wire        [31:0] I_Mem_Out;
 	wire        [31:0] DMem_addr_w = ALUOut>>2;
@@ -57,8 +57,8 @@ module RISCVCPU
 	wire signed [31:0] PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
 
 
-   assign             opcode   = IR[6:0]; // opcode is lower 7 bits
-   assign             ImmGen   = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
+    assign             opcode   = IR[6:0]; // opcode is lower 7 bits
+    assign             ImmGen   = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
 	
 	wire [31:0] shit1, shit2, shit3;
 	
