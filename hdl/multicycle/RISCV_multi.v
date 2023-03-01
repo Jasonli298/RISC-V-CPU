@@ -60,8 +60,6 @@ module RISCVCPU
     assign             opcode   = IR[6:0]; // opcode is lower 7 bits
     assign             ImmGen   = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
 	
-	wire [31:0] shit1, shit2, shit3;
-	
 	RAM #(32, 35, "IMemory.txt") I_Memory(.wr_en(1'b0),
 									      .index(PC_addr),
 										  .entry(32'b0),
