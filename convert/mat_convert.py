@@ -4,7 +4,7 @@ abs_path = os.path.dirname(__file__)
 rel_path = "convert"
 full_path = os.path.join(abs_path, rel_path)
 
-out =[]
+out = []
 
 def twos(decimal_num):
     if decimal_num < 0:
