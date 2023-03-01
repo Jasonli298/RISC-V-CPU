@@ -31,7 +31,7 @@ main:
   # Initialize variables
   addi x1, zero, M
   addi x2, zero, N
-  addi x13, zero, N2 ----------------------new
+  addi x13, zero, N2 //----------------------new
  
   
   addi x14, zero, 4 // x14 = 4
