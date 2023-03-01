@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module RISCV_multi 
+module RISCVCPU 
     #(parameter M  = 100,
       parameter N  = 50,
 	  parameter N2 = 2,
