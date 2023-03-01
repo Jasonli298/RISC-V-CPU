@@ -1,8 +1,8 @@
 `timescale 1ns/10ps
 
 module RISCVCPU 
-    #(parameter M  = 2,
-      parameter N  = 4,
+    #(parameter M  = 100,
+      parameter N  = 50,
 	  parameter N2 = 2,
 	  parameter REG_WIDTH = 32
 	  )
