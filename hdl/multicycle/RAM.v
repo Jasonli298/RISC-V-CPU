@@ -1,48 +1,37 @@
-module RAM
-	#(parameter ENTRY_WIDTH = 8,
-      parameter SIZE = 1024,
-      parameter FILE_NAME = ""
-	  )
-	(wr_en,
-	 index0,
-	 index1,
-	 index2,
-	 index3,
-	 entry0,
-	 entry1,
-	 entry2,
-	 entry3,
-	 entry_out0,
-	 entry_out1,
-	 entry_out2,
-	 entry_out3
-	);
+// Quartus Prime Verilog Template
+// Single port RAM with single read/write address 
 
-input                        wr_en;
-input  [31:0]                index0, index1, index2, index3;
-input [ENTRY_WIDTH - 1:0]    entry0, entry1, entry2, entry3;
-output reg [ENTRY_WIDTH-1:0] entry_out0, entry_out1, entry_out2, entry_out3;
+module RAM 
+#(parameter DATA_WIDTH=32, parameter SIZE = 6, FILE_NAME="")
+(
+	input [(DATA_WIDTH-1):0] entry,
+	input [31:0] index,
+	input wr_en,
+	output [(DATA_WIDTH-1):0] entry_out
+);
 
-reg signed [ENTRY_WIDTH - 1:0] mem [SIZE-1:0];
+	// Declare the RAM variable
+	reg [DATA_WIDTH-1:0] mem[SIZE-1:0];
 
-initial begin
-	if (FILE_NAME != "") begin
-		$readmemb(FILE_NAME, mem);
+	// Variable to hold the registered read address
+	reg [31:0] addr_reg;
+
+	always @ (*)
+	begin
+		// Write
+		if (wr_en)
+			mem[index] <= entry;
+
+		addr_reg <= index;
 	end
-end
 
-always @(index0 or index1 or index2 or index3 or wr_en) begin
-	if (wr_en) begin
-		mem[index0] = entry0;
-		mem[index1] = entry1;
-		mem[index2] = entry2;
-		mem[index3] = entry3;
-	end else begin
-		entry_out0 = mem[index0];
-		entry_out1 = mem[index1];
-		entry_out2 = mem[index2];
-		entry_out3 = mem[index3];
+	// Continuous assignment implies read returns NEW data.
+	// This is the natural behavior of the TriMatrix memory
+	// blocks in Single Port mode.  
+	assign entry_out = mem[addr_reg];
+	
+	initial begin
+		if (FILE_NAME != "") $readmemb(FILE_NAME, mem);
 	end
-end
 
 endmodule
