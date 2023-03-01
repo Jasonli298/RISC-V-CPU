@@ -160,7 +160,6 @@ module RISCVCPU
                             3'b010: ALUOut <= rs1 + ImmGen; // compute effective address
                         endcase
 						state <= MEM;
-						wr_en <= 1'b1;
                     end
 
                     U_I: begin
@@ -258,6 +257,7 @@ module RISCVCPU
                         case(IR[14:12])  // Check funct3
                             //***sw***
                             3'b010: begin
+								wr_en <= 1'b1;
 										D_entry <= rs2;
                               state <= IF; // return to state 1
                             end
