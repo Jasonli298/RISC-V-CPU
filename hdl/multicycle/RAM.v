@@ -7,6 +7,7 @@ module RAM
 	input [(DATA_WIDTH-1):0] entry,
 	input [31:0] index,
 	input wr_en,
+	input clk,
 	output [(DATA_WIDTH-1):0] entry_out
 );
 
@@ -16,7 +17,7 @@ module RAM
 	// Variable to hold the registered read address
 	reg [31:0] addr_reg;
 
-	always @ (*)
+	always @ (posedge clk)
 	begin
 		// Write
 		if (wr_en)
