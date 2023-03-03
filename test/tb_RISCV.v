@@ -10,30 +10,36 @@ localparam  N  = 50;   // number of columns in matrix1 and rows in matrix2
 localparam  N2 = 2; // number of columns in matrix2
 
 reg     clk;
+reg     rst;
 integer i,j,k;
 real    ClockCount; // used to convert wire to floating number for division to get CPI
 real    InstrCount; // used to convert wire to floating number for division to get CPI
 
 wire        done;        // signals the end of a program
+wire        clk_out;
 wire [31:0] clock_count; // total number of clock cycles to run a program
 wire [31:0] instr_cnt;   // total number of instructions executed
 reg         comparison;  // flag to indicate whether the result from CPU is correct
 
 reg signed [31:0] word; // temporary placeholder to store the word from data memory to display as signed number
 
-reg signed [31:0]  data    [0:M*N+N*N2-1]; // array to store the content from the initialization file of data memory
+reg signed [31:0] data    [0:M*N+N*N2-1]; // array to store the content from the initialization file of data memory
 reg signed [31:0] matrix1 [0:M*N-1];
 reg signed [31:0] matrix2 [0:N*N2-1];
 reg signed [31:0] res     [0:M*N2-1]; // array to store the result matrix calulated in TB for comparison
 
 /*******/ // Rename to whichever version of build
 RISCVCPU #(M, N, N2, 32) UUT(.CLOCK_50(clk),             // 1st parameter is number of rows in matrix1
-							.done(done),                // 2nd parameter is number of columns in matrix1 and rows in matrix2
-							.clock_count(clock_count),  // 3rd parameter is number of columns in matrix2
-							.instr_cnt(instr_cnt));     // 4th parameter is size of the registers in register file of CPU
+							 .rst(rst),
+							 .done(done),                // 2nd parameter is number of columns in matrix1 and rows in matrix2
+							 .clock_count(clock_count),  // 3rd parameter is number of columns in matrix2
+							 .instr_cnt(instr_cnt),    // 4th parameter is size of the registers in register file of CPU
+							 .clk_out(clk_out));
 
 initial begin
 	clk = 1'b0;
+	rst = 1'b1;
+	#50 rst = 1'b0;
 
 	$readmemb("DMemory.txt", data);
 	for (i = 0; i < M*N; i = i + 1) begin
@@ -43,10 +49,9 @@ initial begin
 		matrix2[i] = data[i+M*N];
 	end
 
-
 	fork : wait_or_timeout
 	begin
-		repeat (100000000) @(posedge clk);
+		repeat (1000000000) @(posedge clk);
 		disable wait_or_timeout;
 	end
 	begin
@@ -127,6 +132,7 @@ initial begin
 	end else begin
 		$display("total clock cycles: %d", clock_count);
 		$display("total # of instructions executed: %d", instr_cnt);
+		$display("CPI=%f", ClockCount/InstrCount);
 		$display("CPI=%f", ClockCount/InstrCount);
 	end
 
