@@ -2,7 +2,7 @@
 // Single port RAM with single read/write address 
 
 module RAM 
-#(parameter DATA_WIDTH=32, parameter SIZE = 6, FILE_NAME="")
+#(parameter DATA_WIDTH=32, parameter SIZE = 256, FILE_NAME="")
 (
 	input [(DATA_WIDTH-1):0] entry,
 	input [31:0] index,
