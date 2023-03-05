@@ -126,6 +126,11 @@ initial begin
 		$display("\nSuccess AYYYYYYYY\n");
 	end
 
+	for (i = 0; i < 32; i = i + 1) begin
+		$display("Reg%d: D:%d H:%h B:%b", i, UUT.Regs[i], UUT.Regs[i], UUT.Regs[i]);
+	end
+	$display("done:%b", done);
+
 	ClockCount = clock_count;
 	InstrCount = instr_cnt;
 	if (InstrCount == 0) begin

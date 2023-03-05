@@ -50,7 +50,7 @@ module RISCVCPU
 	reg                        wr_en;
 	reg        [31:0]          PC, ALUOut, MDR, rs1, rs2;
 	reg        [REG_WIDTH-1:0] Regs [0:31];
-	wire        [31:0]          IR;
+	reg        [31:0]          IR;
 	// wire [31:0] IR_w;
 	// assign IR_w = IR;
 	reg        [2:0]           state; // processor state
@@ -73,7 +73,7 @@ module RISCVCPU
 										  .index(PC_addr),
 										  .entry(32'b0),
 										  .rst(rst),
-										  .entry_out(IR),
+										  .entry_out(I_Mem_Out),
 										  .clk(CLOCK_50)
 										  );
 
@@ -96,14 +96,14 @@ module RISCVCPU
 	// end
 
 	// The state machine--triggered on a rising clock
-	always @(posedge CLOCK_50) begin
+	always @(posedge clk or posedge rst) begin
 		clock_count <= clock_count + 1;
 		wr_en <= 1'b0;
 		case (state) //action depends on the state
 			INIT: state <= IF;
 			IF: begin // first step: fetch the instruction, increment PC, go to next state
-				// IR <= I_Mem_Out;
-				$display("IFIR:%b", IR);
+				IR <= I_Mem_Out;
+				// $display("IFIR:%b", IR);
 				PC <= PC + 4;
 				state <= ID; // next state
 			end
@@ -173,7 +173,7 @@ module RISCVCPU
 							3'b010: ALUOut <= rs1 + ImmGen; // compute effective address
 						endcase
 						state <= MEM;
-						//wr_en <= 1'b1;
+						// wr_en <= 1'b1;
 					end
 
 					U_I: begin
@@ -312,7 +312,7 @@ module RISCVCPU
 		if (rst) begin
 			for (i = 0; i <= 31; i = i + 1) Regs[i] <= 0;
 			PC <= 0; 
-			state <= INIT;
+			state <= IF;
 			clock_count <= 0;
 			instr_cnt <= 0;
 			wr_en <= 1'b0;
