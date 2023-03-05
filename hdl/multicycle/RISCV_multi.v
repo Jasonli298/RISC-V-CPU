@@ -26,7 +26,8 @@ module RISCVCPU
 			   LW    = 7'b000_0011; // also I type
 
 	// Parameters for processor stages
-	localparam IF  = 1,
+	localparam INIT = 0,
+			   IF  = 1,
 			   ID  = 2,
 			   EX  = 3,
 			   MEM = 4,
@@ -99,6 +100,7 @@ module RISCVCPU
 		clock_count <= clock_count + 1;
 		wr_en <= 1'b0;
 		case (state) //action depends on the state
+			INIT: state <= IF;
 			IF: begin // first step: fetch the instruction, increment PC, go to next state
 				// IR <= I_Mem_Out;
 				$display("IFIR:%b", IR);
@@ -310,7 +312,7 @@ module RISCVCPU
 		if (rst) begin
 			for (i = 0; i <= 31; i = i + 1) Regs[i] <= 0;
 			PC <= 0; 
-			state <= IF;
+			state <= INIT;
 			clock_count <= 0;
 			instr_cnt <= 0;
 			wr_en <= 1'b0;
