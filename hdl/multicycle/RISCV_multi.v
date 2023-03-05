@@ -108,7 +108,6 @@ module RISCVCPU
 
 			ID: begin // second step: Instruction decode, register fetch, also compute branch address
 				if (IR != EOF) begin
-					$display("IDIR:%b", IR);
 					rs1 <= Regs[IR[19:15]];
 					rs2 <= Regs[IR[24:20]];
 					ALUOut <= PC + PCOffset; // compute PC-relative branch target

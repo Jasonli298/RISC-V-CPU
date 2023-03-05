@@ -18,7 +18,7 @@ module RAM
 	// Variable to hold the registered read address
 	reg [31:0] addr_reg;
 
-	always @ (posedge clk or posedge rst)
+	always @ (posedge clk)
 	begin
 		// Write
 		if (wr_en)
