@@ -42,14 +42,14 @@ module RISCVCPU
 	output reg [31:0] clock_count; // total number of clock cycles to run a program
 	output reg [31:0] instr_cnt;
 	output [9:0] LEDR;
-	assign LEDR[0] = clk;
+	assign LEDR[0] = done;
 	////////////////////////////////// END I/O ////////////////////////////////////////////////
 
 	// The architecturally visible registers and scratch registers for implementation
 	reg                        wr_en;
 	reg        [31:0]          PC, ALUOut, MDR, rs1, rs2;
 	reg        [REG_WIDTH-1:0] Regs [0:31];
-	reg        [31:0]          IR;
+	wire        [31:0]          IR;
 	reg        [2:0]           state; // processor state
 	reg signed [31:0]          D_entry;
 
@@ -69,7 +69,7 @@ module RISCVCPU
 	RAM #(32, 35, "IMemory.txt") I_Memory(.wr_en(1'b0),
 										  .index(PC_addr),
 										  .entry(32'b0),
-										  .entry_out(I_Mem_Out),
+										  .entry_out(IR),
 										  .clk(CLOCK_50)
 										  );
 
@@ -82,21 +82,22 @@ module RISCVCPU
 
 	// set the PC to 0 and start the control in state 1
 	integer i;
-	initial begin
-		for (i = 0; i <= 31; i = i + 1) Regs[i] = 32'b0;
-		PC = 0; 
-		state = IF;
-		clock_count = 0;
-		instr_cnt = 0;
-	end
+	// initial begin
+	// 	for (i = 0; i <= 31; i = i + 1) Regs[i] = 32'b0;
+	// 	PC = 0; 
+	// 	state = IF;
+	// 	clock_count = 0;
+	// 	instr_cnt = 0;
+	// end
 
 	// The state machine--triggered on a rising clock
-	always @(posedge clk) begin
+	always @(posedge CLOCK_50 or posedge rst) begin
 		clock_count <= clock_count + 1;
 		wr_en <= 1'b0;
 		case (state) //action depends on the state
 			IF: begin // first step: fetch the instruction, increment PC, go to next state
-				IR <= I_Mem_Out;
+				// IR <= I_Mem_Out;
+				$display("IR:%b", IR);
 				PC <= PC + 4;
 				state <= ID; // next state
 			end
@@ -301,6 +302,16 @@ module RISCVCPU
 				state <= IF;
 			end // complete an LW instruction
 		endcase // case(state)
+		
+		if (rst) begin
+			for (i = 0; i <= 31; i = i + 1) Regs[i] <= 0;
+			PC <= 0; 
+			state <= IF;
+			clock_count <= 0;
+			instr_cnt <= 0;
+			wr_en <= 1'b0;
+			done <= 1'b0;
+		end
 	end
 endmodule
 

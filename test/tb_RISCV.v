@@ -5,9 +5,9 @@ module tb_RISCV;
 
 // The following localparams should be changed in sync with the parameters passed to the CPU
 // Change to relfect the sizes of the input matrices
-localparam  M  = 3; // number of rows in matrix1
-localparam  N  = 4; // number of columns in matrix1 and rows in matrix2
-localparam  N2 = 1; // number of columns in matrix2
+localparam  M  = 100; // number of rows in matrix1
+localparam  N  = 50; // number of columns in matrix1 and rows in matrix2
+localparam  N2 = 2; // number of columns in matrix2
 
 reg     clk;
 reg     rst;
@@ -16,12 +16,11 @@ real    ClockCount; // used to convert wire to floating number for division to g
 real    InstrCount; // used to convert wire to floating number for division to get CPI
 
 wire        done;        // signals the end of a program
-wire        clk_out;
 wire [31:0] clock_count; // total number of clock cycles to run a program
 wire [31:0] instr_cnt;   // total number of instructions executed
 reg         comparison;  // flag to indicate whether the result from CPU is correct
+wire [9:0]  LEDR;
 
-reg signed [31:0] word; // temporary placeholder to store the word from data memory to display as signed number
 reg signed [31:0] word; // temporary placeholder to store the word from data memory to display as signed number
 
 reg signed [31:0] data    [0:M*N+N*N2-1]; // array to store the content from the initialization file of data memory
@@ -34,13 +33,14 @@ RISCVCPU #(M, N, N2, 32) UUT(.CLOCK_50(clk),             // 1st parameter is num
 							 .rst(rst),
 							 .done(done),                // 2nd parameter is number of columns in matrix1 and rows in matrix2
 							 .clock_count(clock_count),  // 3rd parameter is number of columns in matrix2
-							 .instr_cnt(instr_cnt),    // 4th parameter is size of the registers in register file of CPU
-							 .clk_out(clk_out));
+							 .instr_cnt(instr_cnt),
+							 .LEDR(LEDR));    // 4th parameter is size of the registers in register file of CPU
 
 initial begin
 	clk = 1'b0;
 	rst = 1'b1;
-	#50 rst = 1'b0;
+	#100 
+	rst = 1'b0;
 
 	$readmemb("DMemory.txt", data);
 	for (i = 0; i < M*N; i = i + 1) begin
@@ -54,7 +54,7 @@ initial begin
 
 	fork : wait_or_timeout
 	begin
-		repeat (1000000000) @(posedge clk);
+		repeat (1000000) @(posedge clk);
 		disable wait_or_timeout;
 	end
 	begin
@@ -104,9 +104,7 @@ initial begin
 	// end
 	$display("Generated Reseult");
 	for (i = M*N+N*N2; i < M*N+N*N2+M*N2; i = i + N2) begin
-	for (i = M*N+N*N2; i < M*N+N*N2+M*N2; i = i + N2) begin
 		for (j = 0; j < N2; j = j + 1) begin
-			word = UUT.D_Memory.mem[i + j];
 			word = UUT.D_Memory.mem[i + j];
 			$write("%d ", word);
 		end
@@ -115,17 +113,14 @@ initial begin
 
 	comparison = 1'b0;
 	for (i = 0; i < M; i = i + 1) begin
-		for (j = 0; j < N2; j = j + 1) begin
-			// // word = {UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j],
-			// // 		UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+1],
-			// // 		UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+2],
-			// // 		UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+3]};
-			
-			if (res[N2*i+j] != UUT.D_Memory.mem[i*N2+M*N+N*N2+j]) begin
-			if (res[N2*i+j] != UUT.D_Memory.mem[i*N2+M*N+N*N2+j]) begin
-				$display("Mismatch at indices [%1.1d,%1.1d]", i, j);
-				comparison = 1'b1;
-			end
+		// // word = {UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j],
+		// // 		UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+1],
+		// // 		UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+2],
+		// // 		UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+3]};
+		
+		if (res[N2*i+j] != UUT.D_Memory.mem[i*N2+M*N+N*N2+j]) begin
+			$display("Mismatch at indices [%1.1d,%1.1d]", i, j);
+			comparison = 1'b1;
 		end
 	end
 	
@@ -141,7 +136,6 @@ initial begin
 	end else begin
 		$display("total clock cycles: %d", clock_count);
 		$display("total # of instructions executed: %d", instr_cnt);
-		$display("CPI=%f", ClockCount/InstrCount);
 		$display("CPI=%f", ClockCount/InstrCount);
 	end
 

@@ -16,11 +16,6 @@ module RAM
 
 	// Variable to hold the registered read address
 	reg [31:0] addr_reg;
-	// Declare the RAM variable
-	reg [DATA_WIDTH-1:0] mem[SIZE-1:0];
-
-	// Variable to hold the registered read address
-	reg [31:0] addr_reg;
 
 	always @ (posedge clk)
 	begin
