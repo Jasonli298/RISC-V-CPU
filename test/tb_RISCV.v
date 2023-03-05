@@ -39,7 +39,7 @@ RISCVCPU #(M, N, N2, 32) UUT(.CLOCK_50(clk),             // 1st parameter is num
 initial begin
 	clk = 1'b0;
 	rst = 1'b1;
-	#100 
+	#50 
 	rst = 1'b0;
 
 	$readmemb("DMemory.txt", data);

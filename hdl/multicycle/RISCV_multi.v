@@ -95,19 +95,20 @@ module RISCVCPU
 	// end
 
 	// The state machine--triggered on a rising clock
-	always @(posedge CLOCK_50 or posedge rst) begin
+	always @(posedge CLOCK_50) begin
 		clock_count <= clock_count + 1;
 		wr_en <= 1'b0;
 		case (state) //action depends on the state
 			IF: begin // first step: fetch the instruction, increment PC, go to next state
 				// IR <= I_Mem_Out;
-				$display("IR:%b", IR);
+				$display("IFIR:%b", IR);
 				PC <= PC + 4;
 				state <= ID; // next state
 			end
 
 			ID: begin // second step: Instruction decode, register fetch, also compute branch address
 				if (IR != EOF) begin
+					$display("IDIR:%b", IR);
 					rs1 <= Regs[IR[19:15]];
 					rs2 <= Regs[IR[24:20]];
 					ALUOut <= PC + PCOffset; // compute PC-relative branch target
