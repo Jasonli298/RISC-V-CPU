@@ -49,7 +49,7 @@ module RISCVCPU
 	reg signed [31:0]           D_entry;
 
 	wire        [6:0]  opcode; // use to get opcode easily
-   wire        [31:0] ImmGen; // used to generate immediate
+    wire        [31:0] ImmGen; // used to generate immediate
 	wire        [31:0] PC_addr = PC >> 2;
 	wire        [31:0] I_Mem_Out;
 	wire        [31:0] DMem_addr_w = ALUOut>>2;
