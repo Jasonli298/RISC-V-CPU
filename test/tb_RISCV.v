@@ -123,10 +123,10 @@ initial begin
 	InstrCount = instr_cnt;
 	if (InstrCount == 0) begin
 		$display("Error, No instructions executed.");
-		$display("total clock cycles:%d", clock_count);
+		$display("Total clock cycles:%d", clock_count);
 	end else begin
-		$display("total clock cycles: %d", clock_count);
-		$display("total # of instructions executed: %d", instr_cnt);
+		$display("Total clock cycles: %d", clock_count);
+		$display("Total # of instructions executed: %d", instr_cnt);
 		$display("CPI=%f", ClockCount/InstrCount);
 	end
 
