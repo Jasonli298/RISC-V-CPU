@@ -2,11 +2,12 @@
 // Single port RAM with single read/write address 
 
 module RAM 
-#(parameter DATA_WIDTH=32, parameter SIZE = 256, FILE_NAME="")
+#(parameter DATA_WIDTH=32, parameter SIZE = 6, FILE_NAME="")
 (
 	input [(DATA_WIDTH-1):0] entry,
 	input [31:0] index,
 	input wr_en,
+	input clk,
 	output [(DATA_WIDTH-1):0] entry_out
 );
 
@@ -15,8 +16,13 @@ module RAM
 
 	// Variable to hold the registered read address
 	reg [31:0] addr_reg;
+	// Declare the RAM variable
+	reg [DATA_WIDTH-1:0] mem[SIZE-1:0];
 
-	always @ (*)
+	// Variable to hold the registered read address
+	reg [31:0] addr_reg;
+
+	always @ (posedge clk)
 	begin
 		// Write
 		if (wr_en)
