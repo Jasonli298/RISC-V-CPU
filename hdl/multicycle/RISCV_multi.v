@@ -292,8 +292,8 @@ module RISCVCPU
 						case(IR[14:12]) // check funct3
 							// ***lw***
 							3'b010: begin
-								Regs[IR[11:7]] <= D_out;
-								state <= IF; // next state
+								MDR <= D_out;
+								state <= WB; // next state
 							end
 						endcase
 					end // I_I
