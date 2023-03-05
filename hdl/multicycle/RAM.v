@@ -8,6 +8,7 @@ module RAM
 	input [31:0] index,
 	input wr_en,
 	input clk,
+	input rst,
 	output [(DATA_WIDTH-1):0] entry_out
 );
 
@@ -17,7 +18,7 @@ module RAM
 	// Variable to hold the registered read address
 	reg [31:0] addr_reg;
 
-	always @ (posedge clk)
+	always @ (posedge clk or posedge rst)
 	begin
 		// Write
 		if (wr_en)
@@ -29,7 +30,7 @@ module RAM
 	// Continuous assignment implies read returns NEW data.
 	// This is the natural behavior of the TriMatrix memory
 	// blocks in Single Port mode.  
-	assign entry_out = mem[addr_reg];
+	assign entry_out = rst ? 32'b0 : mem[addr_reg];
 	
 	initial begin
 		if (FILE_NAME != "") $readmemb(FILE_NAME, mem);

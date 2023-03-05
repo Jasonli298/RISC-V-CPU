@@ -50,6 +50,8 @@ module RISCVCPU
 	reg        [31:0]          PC, ALUOut, MDR, rs1, rs2;
 	reg        [REG_WIDTH-1:0] Regs [0:31];
 	wire        [31:0]          IR;
+	// wire [31:0] IR_w;
+	// assign IR_w = IR;
 	reg        [2:0]           state; // processor state
 	reg signed [31:0]          D_entry;
 
@@ -69,6 +71,7 @@ module RISCVCPU
 	RAM #(32, 35, "IMemory.txt") I_Memory(.wr_en(1'b0),
 										  .index(PC_addr),
 										  .entry(32'b0),
+										  .rst(rst),
 										  .entry_out(IR),
 										  .clk(CLOCK_50)
 										  );
@@ -76,6 +79,7 @@ module RISCVCPU
 	RAM #(32, M*N+N*N2+M*N2, "DMemory.txt") D_Memory(.wr_en(wr_en),
 													 .index(DMem_addr_w),
 													 .entry(D_entry),
+													 .rst(rst),
 													 .entry_out(D_out),
 													 .clk(CLOCK_50)
 													 );
@@ -288,8 +292,8 @@ module RISCVCPU
 						case(IR[14:12]) // check funct3
 							// ***lw***
 							3'b010: begin
-								MDR <= D_out;
-								state <= WB; // next state
+								Regs[IR[11:7]] <= D_out;
+								state <= IF; // next state
 							end
 						endcase
 					end // I_I
@@ -311,6 +315,7 @@ module RISCVCPU
 			instr_cnt <= 0;
 			wr_en <= 1'b0;
 			done <= 1'b0;
+			D_entry <= 32'b0;
 		end
 	end
 endmodule

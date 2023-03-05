@@ -45,10 +45,8 @@ initial begin
 	$readmemb("DMemory.txt", data);
 	for (i = 0; i < M*N; i = i + 1) begin
 		matrix1[i] = data[i];
-		matrix1[i] = data[i];
 	end
 	for (i = 0; i < N*N2; i = i + 1) begin
-		matrix2[i] = data[i+M*N];
 		matrix2[i] = data[i+M*N];
 	end
 
@@ -102,7 +100,7 @@ initial begin
 	// for (i = 0; i < 20; i = i + 1) begin
 	// 	$display("%d:%b", i, UUT.D_Memory.mem[i]);
 	// end
-	$display("Generated Reseult");
+	$display("Generated Reseult:");
 	for (i = M*N+N*N2; i < M*N+N*N2+M*N2; i = i + N2) begin
 		for (j = 0; j < N2; j = j + 1) begin
 			word = UUT.D_Memory.mem[i + j];
