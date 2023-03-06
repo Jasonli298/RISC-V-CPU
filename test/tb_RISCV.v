@@ -5,12 +5,12 @@ module tb_RISCV;
 
 // The following localparams should be changed in sync with the parameters passed to the CPU
 // Change to relfect the sizes of the input matrices
-localparam  M  = 100; // number of rows in matrix1
-localparam  N  = 50; // number of columns in matrix1 and rows in matrix2
+localparam  M  = 2; // number of rows in matrix1
+localparam  N  = 2; // number of columns in matrix1 and rows in matrix2
 localparam  N2 = 2; // number of columns in matrix2
 
 reg     clk;
-reg     rst;
+reg     rstn;
 integer i,j,k;
 real    ClockCount; // used to convert wire to floating number for division to get CPI
 real    InstrCount; // used to convert wire to floating number for division to get CPI
@@ -18,6 +18,7 @@ real    InstrCount; // used to convert wire to floating number for division to g
 wire        done;        // signals the end of a program
 wire [31:0] clock_count; // total number of clock cycles to run a program
 wire [31:0] instr_cnt;   // total number of instructions executed
+wire [31:0] ID_count;
 reg         comparison;  // flag to indicate whether the result from CPU is correct
 wire [9:0]  LEDR;
 
@@ -30,17 +31,18 @@ reg signed [31:0] res     [0:M*N2-1]; // array to store the result matrix calula
 
 /*******/ // Rename to whichever version of build
 RISCVCPU #(M, N, N2, 32) UUT(.CLOCK_50(clk),             // 1st parameter is number of rows in matrix1
-							 .rst(rst),
+							 .rstn(rstn),
 							 .done(done),                // 2nd parameter is number of columns in matrix1 and rows in matrix2
 							 .clock_count(clock_count),  // 3rd parameter is number of columns in matrix2
 							 .instr_cnt(instr_cnt),
+							 .ID_count(ID_count),
 							 .LEDR(LEDR));    // 4th parameter is size of the registers in register file of CPU
 
 initial begin
 	clk = 1'b0;
-	rst = 1'b1;
-	#50 
-	rst = 1'b0;
+	rstn = 1'b0;
+	#100 
+	rstn = 1'b1;
 
 	$readmemb("DMemory.txt", data);
 	for (i = 0; i < M*N; i = i + 1) begin
@@ -52,7 +54,7 @@ initial begin
 
 	fork : wait_or_timeout
 	begin
-		repeat (1000000) @(posedge clk);
+		repeat (200) @(posedge clk);
 		disable wait_or_timeout;
 	end
 	begin
@@ -129,6 +131,10 @@ initial begin
 	for (i = 0; i < 32; i = i + 1) begin
 		$display("Reg%d: D:%d H:%h B:%b", i, UUT.Regs[i], UUT.Regs[i], UUT.Regs[i]);
 	end
+	$display("enter IF %d times", UUT.IF_count);
+	$display("enter ID %d times", ID_count);
+	$display("enter MEM %d times", UUT.MEM_count);
+	$display("enter WB %d times", UUT.WB_count);
 	$display("done:%b", done);
 
 	ClockCount = clock_count;

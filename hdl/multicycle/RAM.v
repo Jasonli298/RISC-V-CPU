@@ -2,13 +2,12 @@
 // Single port RAM with single read/write address 
 
 module RAM 
-#(parameter DATA_WIDTH=32, parameter SIZE = 6, FILE_NAME="")
+#(parameter DATA_WIDTH=32, parameter SIZE = 256, FILE_NAME="")
 (
 	input [(DATA_WIDTH-1):0] entry,
 	input [31:0] index,
 	input wr_en,
 	input clk,
-	input rst,
 	output [(DATA_WIDTH-1):0] entry_out
 );
 
@@ -21,8 +20,9 @@ module RAM
 	always @ (posedge clk)
 	begin
 		// Write
-		if (wr_en)
+		if (wr_en) begin
 			mem[index] <= entry;
+		end
 
 		addr_reg <= index;
 	end
@@ -30,7 +30,7 @@ module RAM
 	// Continuous assignment implies read returns NEW data.
 	// This is the natural behavior of the TriMatrix memory
 	// blocks in Single Port mode.  
-	assign entry_out = rst ? 32'b0 : mem[addr_reg];
+	assign entry_out = mem[addr_reg];
 	
 	initial begin
 		if (FILE_NAME != "") $readmemb(FILE_NAME, mem);

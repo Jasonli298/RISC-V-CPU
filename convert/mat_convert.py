@@ -36,4 +36,4 @@ def convert(A, B, C):
             res.write(out[i] + '\n')
         res.write(out[-1])
     
-convert("convert/A_100x50.txt", "convert/B_50x2.txt", "convert/../simulation/DMemory.txt")
+convert("convert/A_2x2.txt", "convert/B_2x2.txt", "convert/../simulation/DMemory.txt")

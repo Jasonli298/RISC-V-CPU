@@ -7,11 +7,12 @@ module RISCVCPU
 	  parameter REG_WIDTH = 32
 	  )
 	(CLOCK_50,
-	 rst,
+	 rstn,
 	 done,
 	 clock_count,
 	 instr_cnt,
-	 LEDR
+	 LEDR,
+	 ID_count
 	);
 	
 	// Parameters for opcodes
@@ -37,12 +38,13 @@ module RISCVCPU
 
 	/////////////////////////////////////////// I/O ///////////////////////////////////////////
 	input             CLOCK_50;
-	input             rst;
+	input             rstn;
 	wire              clk; // system clock
 	output reg        done; // signals the end of a program
 	output reg [31:0] clock_count; // total number of clock cycles to run a program
 	output reg [31:0] instr_cnt;
 	output [9:0] LEDR;
+	output reg [31:0] ID_count;
 	assign LEDR[0] = done;
 	////////////////////////////////// END I/O ////////////////////////////////////////////////
 
@@ -50,7 +52,7 @@ module RISCVCPU
 	reg                        wr_en;
 	reg        [31:0]          PC, ALUOut, MDR, rs1, rs2;
 	reg        [REG_WIDTH-1:0] Regs [0:31];
-	reg        [31:0]          IR;
+	wire        [31:0]          IR;
 	// wire [31:0] IR_w;
 	// assign IR_w = IR;
 	reg        [2:0]           state; // processor state
@@ -66,21 +68,22 @@ module RISCVCPU
 
 	assign             opcode   = IR[6:0]; // opcode is lower 7 bits
 	assign             ImmGen   = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
+	reg [31:0] IF_count;
+	reg [31:0] MEM_count;
+	reg [31:0] WB_count;
 
-	clk_divid ckd(.clk(CLOCK_50), .rst(rst), .out_clk(clk));
+	// clk_divid ckd(.clk(CLOCK_50), .rst(rst), .out_clk(clk));
 	
 	RAM #(32, 35, "IMemory.txt") I_Memory(.wr_en(1'b0),
 										  .index(PC_addr),
 										  .entry(32'b0),
-										  .rst(rst),
-										  .entry_out(I_Mem_Out),
+										  .entry_out(IR),
 										  .clk(CLOCK_50)
 										  );
 
 	RAM #(32, M*N+N*N2+M*N2, "DMemory.txt") D_Memory(.wr_en(wr_en),
 													 .index(DMem_addr_w),
 													 .entry(D_entry),
-													 .rst(rst),
 													 .entry_out(D_out),
 													 .clk(CLOCK_50)
 													 );
@@ -96,19 +99,30 @@ module RISCVCPU
 	// end
 
 	// The state machine--triggered on a rising clock
-	always @(posedge clk or posedge rst) begin
+	always @(posedge CLOCK_50) begin
 		clock_count <= clock_count + 1;
 		wr_en <= 1'b0;
 		case (state) //action depends on the state
-			INIT: state <= IF;
+			INIT: begin
+				for (i = 0; i <= 31; i = i + 1) Regs[i] <= 0;
+				PC <= 0; 
+				clock_count <= 0;
+				instr_cnt <= 0;
+				wr_en <= 1'b0;
+				done <= 1'b0;
+				ID_count <= 0;
+				state <= INIT;
+			end
 			IF: begin // first step: fetch the instruction, increment PC, go to next state
-				IR <= I_Mem_Out;
+				// IR <= I_Mem_Out;
 				// $display("IFIR:%b", IR);
+				IF_count <= IF_count + 1;
 				PC <= PC + 4;
 				state <= ID; // next state
 			end
 
 			ID: begin // second step: Instruction decode, register fetch, also compute branch address
+				ID_count <= ID_count + 1;
 				if (IR != EOF) begin
 					rs1 <= Regs[IR[19:15]];
 					rs2 <= Regs[IR[24:20]];
@@ -123,6 +137,7 @@ module RISCVCPU
 			/////////////////////////////////////////////// EX Stage ////////////////////////////////////////////
 			EX: begin // third step: Load-store execution, ALU execution, Branch completion
 				instr_cnt <= instr_cnt + 1;
+				$display("IR:%b", IR);
 				case(opcode)
 					R_I: begin // R-type
 						case (IR[31:25]) // Check funct7
@@ -173,7 +188,7 @@ module RISCVCPU
 							3'b010: ALUOut <= rs1 + ImmGen; // compute effective address
 						endcase
 						state <= MEM;
-						// wr_en <= 1'b1;
+						wr_en <= 1'b1;
 					end
 
 					U_I: begin
@@ -217,6 +232,7 @@ module RISCVCPU
 
 			////////////////////////////////////////////// MEM Stage ///////////////////////////////////////////////////
 			MEM: begin
+				MEM_count <= MEM_count + 1;
 				case(opcode)
 					R_I: begin // R-type
 						case (IR[31:25]) // Check funct7
@@ -271,9 +287,9 @@ module RISCVCPU
 						case(IR[14:12])  // Check funct3
 							//***sw***
 							3'b010: begin
-								wr_en <= 1'b1;
+								// wr_en <= 1'b1;
 								D_entry <= rs2;
-								state <= IF; // return to state 1
+								state <= IF; // return to state IF
 							end
 						endcase
 					end // S_I
@@ -304,21 +320,25 @@ module RISCVCPU
 			/////////////////////////////////////////////// END MEM //////////////////////////////////////////////////////////
 
 			WB: begin // LW is the only instruction still in execution
+				WB_count <= WB_count + 1;
 				Regs[IR[11:7]] <= MDR; // write the MDR to the register
 				state <= IF;
 			end // complete an LW instruction
 		endcase // case(state)
-		
-		if (rst) begin
+		if (!rstn) begin
 			for (i = 0; i <= 31; i = i + 1) Regs[i] <= 0;
 			PC <= 0; 
-			state <= IF;
 			clock_count <= 0;
 			instr_cnt <= 0;
 			wr_en <= 1'b0;
 			done <= 1'b0;
-			D_entry <= 32'b0;
+			ID_count <= 0;
+			IF_count <= 0;
+			MEM_count <= 0;
+			WB_count <= 0;
+			state <= IF;
 		end
+
 	end
 endmodule
 
