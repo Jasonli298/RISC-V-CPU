@@ -64,9 +64,9 @@ initial begin
 	join	
 	
 	// Uncomment the following 3 lines to display the contents in the register file in the CPU
-	// for (i = 0; i < 32; i = i + 1) begin
-	// 	$display("Reg%d: D:%d H:%h B:%b", i, UUT.Regs[i], UUT.Regs[i], UUT.Regs[i]);
-	// end
+	for (i = 0; i < 32; i = i + 1) begin
+		$display("Reg%d: D:%d H:%h B:%b", i, UUT.Regs[i], UUT.Regs[i], UUT.Regs[i]);
+	end
 
 	$display("Matrix1:");
 	for (i = 0; i < M; i = i + 1) begin
@@ -96,12 +96,6 @@ initial begin
 		$display();
 	end
 
-	// for (i = 0; i < 20; i = i + 1) begin
-	// 	$display("%d:%b", i, UUT.D_Memory.mem[i]);
-	// end
-	// for (i = 0; i < 20; i = i + 1) begin
-	// 	$display("%d:%b", i, UUT.D_Memory.mem[i]);
-	// end
 	$display("Generated Reseult:");
 	for (i = M*N+N*N2; i < M*N+N*N2+M*N2; i = i + N2) begin
 		for (j = 0; j < N2; j = j + 1) begin
@@ -113,11 +107,6 @@ initial begin
 
 	comparison = 1'b0;
 	for (i = 0; i < M; i = i + 1) begin
-		// // word = {UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j],
-		// // 		UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+1],
-		// // 		UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+2],
-		// // 		UUT.D_Memory.mem[i*4+M*N*4 + N*N2*4 + j+3]};
-		
 		if (res[N2*i+j] != UUT.D_Memory.mem[i*N2+M*N+N*N2+j]) begin
 			$display("Mismatch at indices [%1.1d,%1.1d]", i, j);
 			comparison = 1'b1;
@@ -128,9 +117,6 @@ initial begin
 		$display("\nSuccess AYYYYYYYY\n");
 	end
 
-	for (i = 0; i < 32; i = i + 1) begin
-		$display("Reg%d: D:%d H:%h B:%b", i, UUT.Regs[i], UUT.Regs[i], UUT.Regs[i]);
-	end
 	$display("enter IF %d times", UUT.IF_count);
 	$display("enter ID %d times", ID_count);
 	$display("enter MEM %d times", UUT.MEM_count);
