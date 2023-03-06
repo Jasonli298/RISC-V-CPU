@@ -90,29 +90,22 @@ module RISCVCPU
 
 	// set the PC to 0 and start the control in state 1
 	integer i;
-	// initial begin
-	// 	for (i = 0; i <= 31; i = i + 1) Regs[i] = 32'b0;
-	// 	PC = 0; 
-	// 	state = IF;
-	// 	clock_count = 0;
-	// 	instr_cnt = 0;
-	// end
 
 	// The state machine--triggered on a rising clock
 	always @(posedge CLOCK_50) begin
 		clock_count <= clock_count + 1;
 		wr_en <= 1'b0;
 		case (state) //action depends on the state
-			INIT: begin
-				for (i = 0; i <= 31; i = i + 1) Regs[i] <= 0;
-				PC <= 0; 
-				clock_count <= 0;
-				instr_cnt <= 0;
-				wr_en <= 1'b0;
-				done <= 1'b0;
-				ID_count <= 0;
-				state <= INIT;
-			end
+			// INIT: begin
+			// 	for (i = 0; i <= 31; i = i + 1) Regs[i] <= 0;
+			// 	PC <= 0; 
+			// 	clock_count <= 0;
+			// 	instr_cnt <= 0;
+			// 	wr_en <= 1'b0;
+			// 	done <= 1'b0;
+			// 	ID_count <= 0;
+			// 	state <= INIT;
+			// end
 			IF: begin // first step: fetch the instruction, increment PC, go to next state
 				// IR <= I_Mem_Out;
 				// $display("IFIR:%b", IR);
@@ -325,6 +318,7 @@ module RISCVCPU
 				state <= IF;
 			end // complete an LW instruction
 		endcase // case(state)
+
 		if (!rstn) begin
 			for (i = 0; i <= 31; i = i + 1) Regs[i] <= 0;
 			PC <= 0; 
@@ -338,7 +332,6 @@ module RISCVCPU
 			WB_count <= 0;
 			state <= IF;
 		end
-
 	end
 endmodule
 
