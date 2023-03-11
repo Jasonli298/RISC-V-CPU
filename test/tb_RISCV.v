@@ -33,8 +33,7 @@ RISCVCPU #(M, N, N2, 32) UUT(.CLOCK_50(clk),             // 1st parameter is num
 							 .rst(rst),
 							 .done(done),                // 2nd parameter is number of columns in matrix1 and rows in matrix2
 							 .clock_count(clock_count),  // 3rd parameter is number of columns in matrix2
-							 .instr_cnt(instr_cnt),    // 4th parameter is size of the registers in register file of CPU
-							 .clk_out(clk_out));
+							 .instr_cnt(instr_cnt));    // 4th parameter is size of the registers in register file of CPU
 
 initial begin
 	clk = 1'b0;
