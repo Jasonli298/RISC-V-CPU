@@ -29,39 +29,39 @@ vector:
 .globl main
 main:
   # Initialize variables
-  addi x1, zero, M
-  addi x2, zero, N
-  addi x13, zero, N2 //----------------------new
+  addi x1, zero, M    0
+  addi x2, zero, N    4
+  addi x13, zero, N2 //----------------------new   8
  
   
-  addi x14, zero, 4 // x14 = 4
-  mul x16, x13, x14   // 2*4=8           -------------------new
-  mul x17, x16, x2  // N*N2*4 = x17
+  addi x14, zero, 4 // x14 = 4         12
+  mul x16, x13, x14   // 2*4=8           -------------------new    16 
+  mul x17, x16, x2  // N*N2*4 = x17          20 
   
-  mul x12, x2, x14 // x12 = 4 * N
-  mul x14, x12, x13 // x14 = 4 *N *N2 -------------new
-  mul x3, x1, x12 // starting address of matrix2 = M*N*4
-  addi x4, x4, 0x0 // starting address of matrix1 = 0
-  add x5, x3, x14 // starting address of result= M*N*4+N*N2*4
+  mul x12, x2, x14 // x12 = 4 * N       24
+  mul x14, x12, x13 // x14 = 4 *N *N2 -------------new      28
+  mul x3, x1, x12 // starting address of matrix2 = M*N*4    32 
+  addi x4, x4, 0x0 // starting address of matrix1 = 0      36 
+  add x5, x3, x14 // starting address of result= M*N*4+N*N2*4   40 
 
   # Outer loop: iterate over rows of matrix
   # li x6, 0   # x6 = row index
-  addi x6, x6, 0
+  addi x6, x6, 0                                  44 
 outer_loop:
   # Inner loop: iterate over columns of matrix and vector
-  addi x15, zero, 0   -----------------------new
+  addi x15, zero, 0   -----------------------new         48    
 
-inner_loop2:          ------------------------new 
+inner_loop2:          ------------------------new         52 
   addi x7, zero, 0
 
   
 inner_loop:
   # Load matrix element into t8
-  lw x8, 0(x4)
-  lw x10, 0(x3) // load vector element
+  lw x8, 0(x4)                             56 
+  lw x10, 0(x3) // load vector element      60   
 
   # Multiply matrix element by vector element
-  mul x9, x8, x10
+  mul x9, x8, x10                     64 
 
   # Add result to accumulator register
   add x11, x11, x9          68
