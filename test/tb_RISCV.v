@@ -10,7 +10,7 @@ localparam  N  = 50;   // number of columns in matrix1 and rows in matrix2
 localparam  N2 = 2; // number of columns in matrix2
 
 reg     clk;
-reg     rst;
+reg     rstn;
 integer i,j,k;
 real    ClockCount; // used to convert wire to floating number for division to get CPI
 real    InstrCount; // used to convert wire to floating number for division to get CPI
@@ -30,15 +30,15 @@ reg signed [31:0] res     [0:M*N2-1]; // array to store the result matrix calula
 
 /*******/ // Rename to whichever version of build
 RISCVCPU #(M, N, N2, 32) UUT(.CLOCK_50(clk),             // 1st parameter is number of rows in matrix1
-							 .rst(rst),
+							 .rstn(rstn),
 							 .done(done),                // 2nd parameter is number of columns in matrix1 and rows in matrix2
 							 .clock_count(clock_count),  // 3rd parameter is number of columns in matrix2
 							 .instr_cnt(instr_cnt));    // 4th parameter is size of the registers in register file of CPU
 
 initial begin
 	clk = 1'b0;
-	rst = 1'b1;
-	#50 rst = 1'b0;
+	rstn = 1'b0;
+	#50 rstn = 1'b1;
 
 	$readmemb("DMemory.txt", data);
 	for (i = 0; i < M*N; i = i + 1) begin

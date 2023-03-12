@@ -7,7 +7,7 @@ module RISCVCPU
 	  parameter REG_WIDTH = 32
 	  )
 	(CLOCK_50,
-	 rst,
+	 rstn,
 	 done,
 	 clock_count,
 	 instr_cnt,
@@ -36,7 +36,7 @@ module RISCVCPU
 
 	/////////////////////////////////////////// I/O ///////////////////////////////////////////
 	input             CLOCK_50;
-	input             rst;
+	input             rstn;
 	wire              clk; // system clock
 	output reg        done; // signals the end of a program
 	output reg [31:0] clock_count; // total number of clock cycles to run a program
@@ -63,8 +63,6 @@ module RISCVCPU
 
 	assign             opcode   = IR[6:0]; // opcode is lower 7 bits
 	assign             ImmGen   = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
-
-	clk_divid ckd(.clk(CLOCK_50), .rst(rst), .out_clk(clk));
 	
 	RAM #(32, 35, "IMemory.txt") I_Memory(.wr_en(1'b0),
 										  .index(PC_addr),
@@ -82,16 +80,16 @@ module RISCVCPU
 
 	// set the PC to 0 and start the control in state 1
 	integer i;
-	initial begin
-		for (i = 0; i <= 31; i = i + 1) Regs[i] = 32'b0;
-		PC = 0; 
-		state = IF;
-		clock_count = 0;
-		instr_cnt = 0;
-	end
+	// initial begin
+	// 	for (i = 0; i <= 31; i = i + 1) Regs[i] = 32'b0;
+	// 	PC = 0; 
+	// 	state = IF;
+	// 	clock_count = 0;
+	// 	instr_cnt = 0;
+	// end
 
 	// The state machine--triggered on a rising clock
-	always @(posedge clk) begin
+	always @(posedge CLOCK_50 or negedge rstn) begin
 		clock_count <= clock_count + 1;
 		wr_en <= 1'b0;
 		case (state) //action depends on the state
@@ -301,5 +299,16 @@ module RISCVCPU
 				state <= IF;
 			end // complete an LW instruction
 		endcase // case(state)
+
+        if (~rstn) begin
+		    for (i = 0; i <= 31; i = i + 1) Regs[i] <= 32'b0;
+		    PC <= 0; 
+		    state <= IF;
+		    clock_count <= 0;
+		    instr_cnt <= 0;
+            MDR <= 0;
+            ALUOut <= 0;
+        end
 	end
+
 endmodule

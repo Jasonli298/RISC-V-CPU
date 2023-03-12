@@ -9,13 +9,13 @@ module RISCVALU(ALUctl, A, B, ALUOut, Zero);
 
     always @(ALUctl, A, B) begin
         case (ALUctl)
-            0  : ALUOut <= A & B;
-            1  : ALUOut <= A | B;
-            2  : ALUOut <= A + B;
-            6  : ALUOut <= A - B;
-            7  : ALUOut <= A < B ? 1 : 0;
-            12 : ALUOut <= ~(A | B); //  NOR
-            default: ALUOut <= 0; // should not happen
+            4'b0000 : ALUOut <= A & B;
+            4'b0001 : ALUOut <= A | B;
+            4'b0010 : ALUOut <= A + B;
+            4'b0110 : ALUOut <= A - B;
+            4'b0111 : ALUOut <= A < B ? 1 : 0;
+            4'b1100 : ALUOut <= ~(A | B); //  NOR
+            default : ALUOut <= 0; // should not happen
         endcase
     end
 
