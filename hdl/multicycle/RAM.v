@@ -2,7 +2,7 @@ module RAM
 #(parameter DATA_WIDTH=32, parameter SIZE = 256, FILE_NAME="")
 (
 	input [(DATA_WIDTH-1):0] entry,
-	input [31:0] index,
+	input [31:0] index_r, index_w,
 	input wr_en,
 	input clk,
 	output reg [(DATA_WIDTH-1):0] entry_out
@@ -14,14 +14,14 @@ module RAM
 	// Variable to hold the registered read address
 	reg [31:0] addr_reg;
 
-	always @ (negedge clk)
+	always @ (posedge clk)
 	begin
 		// Write
 		if (wr_en) begin
-			mem[index] <= entry;
+			mem[index_w] <= entry;
 		end
 
-		entry_out <= mem[index];
+		entry_out <= mem[index_r];
 	end
 
 	// Continuous assignment implies read returns NEW data.

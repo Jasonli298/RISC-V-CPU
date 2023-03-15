@@ -38,11 +38,12 @@ reg [REG_WIDTH-1:0] IDEXA, IDEXB, IDEXAn, IDEXBn;
 reg [REG_WIDTH-1:0] EXMEMB, EXMEMBn, EXMEMALUout;
 reg [REG_WIDTH-1:0] MEMWBValue;
 
-reg [31:0] IFIDIR, IFIDIRn, IDEXIR, IDEXIRn, EXMEMIR, EXMEMIRn, MEMWBIR, MEMWBIRn;
-wire [4:0] IFIDrs1, IFIDrs2, MEMWBrd;
-wire [6:0] IDEXop, EXMEMop, MEMWBop;
-wire [6:0] ALUop_funct7 = IDEXIR[31:25];
-wire [2:0] Branch_funct3 = IDEXIR[14:12];
+reg  [31:0] IDEXIR, IDEXIRn, EXMEMIR, EXMEMIRn, MEMWBIR, MEMWBIRn;
+wire [31:0] IFIDIR;
+wire [4:0]  IFIDrs1, IFIDrs2, MEMWBrd;
+wire [6:0]  IDEXop, EXMEMop, MEMWBop;
+wire [6:0]  ALUop_funct7 = IDEXIR[31:25];
+wire [2:0]  Branch_funct3 = IDEXIR[14:12];
 
 reg WB_done, wr_en;
 
@@ -68,26 +69,26 @@ wire bypassAfromMEM, bypassAfromALUinWB,
 	 bypassAfromLDinWB, bypassBfromLDinWB;
 wire stall;
 
-// Bypass to iunput A from the MEM stage for an ALU operation
-assign bypassAfromMEM = (IDEXrs1 == EXMEMrd) && (IDEXrs1 != 0) && ((EXMEMop == ALUop) || (EXMEMop == Imm_I));
-// Bypass to input  B from the MEM stage for an ALU op
-assign bypassBfromMEM = (IDEXrs2 == EXMEMrd) && (IDEXrs2 != 0) && ((EXMEMop == ALUop) || (EXMEMop == Imm_I));
-assign bypassAfromALUinWB = (IDEXrs1 == MEMWBrd) && (IDEXrs1 != 0) && ((MEMWBop == ALUop) || (MEMWBop == Imm_I));
-assign bypassBfromALUinWB = (IDEXrs2 == MEMWBrd) && (IDEXrs2 != 0) && ((MEMWBop == ALUop) || (MEMWBop == Imm_I));
-assign bypassAfromLDinWB = (IDEXrs1 == MEMWBrd) && (IDEXrs1 != 0) && (EXMEMop == LW);
-assign bypassBfromLDinWB = (IDEXrs2 == MEMWBrd) && (IDEXrs2 != 0) && (EXMEMop == LW);
+// // Bypass to iunput A from the MEM stage for an ALU operation
+// assign bypassAfromMEM = (IDEXrs1 == EXMEMrd) && (IDEXrs1 != 0) && ((EXMEMop == ALUop) || (EXMEMop == Imm_I));
+// // Bypass to input  B from the MEM stage for an ALU op
+// assign bypassBfromMEM = (IDEXrs2 == EXMEMrd) && (IDEXrs2 != 0) && ((EXMEMop == ALUop) || (EXMEMop == Imm_I));
+// assign bypassAfromALUinWB = (IDEXrs1 == MEMWBrd) && (IDEXrs1 != 0) && ((MEMWBop == ALUop) || (MEMWBop == Imm_I));
+// assign bypassBfromALUinWB = (IDEXrs2 == MEMWBrd) && (IDEXrs2 != 0) && ((MEMWBop == ALUop) || (MEMWBop == Imm_I));
+// assign bypassAfromLDinWB = (IDEXrs1 == MEMWBrd) && (IDEXrs1 != 0) && (EXMEMop == LW);
+// assign bypassBfromLDinWB = (IDEXrs2 == MEMWBrd) && (IDEXrs2 != 0) && (EXMEMop == LW);
 
-assign Ain = bypassAfromMEM ? EXMEMALUout : (bypassAfromALUinWB || bypassAfromLDinWB) ? MEMWBValue : IDEXA;
-assign Bin = bypassBfromMEM ? EXMEMALUout : (bypassBfromALUinWB || bypassBfromLDinWB) ? MEMWBValue : IDEXB;
+// assign Ain = bypassAfromMEM ? EXMEMALUout : (bypassAfromALUinWB || bypassAfromLDinWB) ? MEMWBValue : IDEXA;
+// assign Bin = bypassBfromMEM ? EXMEMALUout : (bypassBfromALUinWB || bypassBfromLDinWB) ? MEMWBValue : IDEXB;
 
-assign stall = (MEMWBop == LW) && ( // source instruction is a load
+assign stall = (MEMWBop == LW) || ( // source instruction is a load
 			   (((IDEXop == LW) || (IDEXop == SW)) && (IDEXrs1 == MEMWBrd)) || // stall for address calc
 			   ((IDEXop == ALUop) && ((IDEXrs1 == MEMWBrd) ||(IDEXrs2 == MEMWBrd)))); // ALU use
 
 RAM #(32, 56, "IMemory.txt") I_Memory(.wr_en(wr_en),
 									  .index(PC_addr),
 									  .entry(32'b0),
-									  .entry_out(I_Mem_Out),
+									  .entry_out(IFIDIR),
 									  .clk(CLOCK_50));
 
 RAM #(REG_WIDTH, M*N+N*N2+M*N2, "DMemory.txt") D_Memory(.wr_en(wr_en),
@@ -96,8 +97,33 @@ RAM #(REG_WIDTH, M*N+N*N2+M*N2, "DMemory.txt") D_Memory(.wr_en(wr_en),
 												 .entry_out(D_out),
 												 .clk(CLOCK_50));
 
+wire [3:0]           ALUCtl;
+wire [REG_WIDTH-1:0] Ain, Bin;
+wire                 ZERO;
+wire [1:0]           ALUop;
+wire [3:0]           FuncCode = {IDEXIR[30], IDEXIR[14:12]};
+wire ALUSrc, Branch, MemRead, MemWrite, RegWrite, MemtoReg;
+
+ALUControl ALUControl(.ALUOp(ALUop), .FuncCode(FuncCode), .ALUCtl(ALUCtl));
+
+RISCVALU ALU(.ALUCtl(ALUCtl),
+			 .ALUOut(ALUResult),
+			 .A(Ain),
+			 .B(Bin),
+			 .Zero(ZERO));
+
+Control MainControl(.opcode(IFIDIR[6:0]),
+					.ALUSrc(ALUSrc),
+					.MemtoReg(MemtoReg),
+					.RegWrite(RegWrite),
+					.MemRead(MemRead),
+					.MemWrite(MemWrite),
+					.Branch(Branch),
+					.ALUOp(ALUop));
+
+
 integer i;
-always @(posedge clk) begin
+always @(posedge CLOCK_50) begin
 	PC <= PCn;
 	IFIRIR <= IFIDIRn;
 	IDEXIR <= IDEXIRn;
@@ -129,8 +155,8 @@ always @(*) begin
 	EXMEMBn = 0;
 
 	if (~stall) begin
-	    IFIDIRn = I_Mem_Out;
-	    PCn = PC + 4;
+	    // IFIDIRn = I_Mem_Out;
+	    PCn = Branch ? (PC + PCOffset) : (PC + 4);
 		if (IFIDIR == EOF) begin
 			done_c = 1'b1;
 		end

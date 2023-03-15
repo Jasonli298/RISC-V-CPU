@@ -46,7 +46,7 @@ module RISCVCPU
 	reg                        wr_en, wr_en_c;
 	reg        [31:0]          PC, PC_c, ALUOut, ALUOut_c, MDR, MDR_c, rs1, rs2;
 	reg        [REG_WIDTH-1:0] Regs [0:31];
-	wire        [31:0]         IR, IR_c;
+	wire       [31:0]          IR;
 	reg        [2:0]           state, state_c; // processor state
 	reg signed [31:0]          D_entry, D_entry_c;
 
@@ -66,7 +66,7 @@ module RISCVCPU
 	RAM #(32, 35, "IMemory.txt") I_Memory(.wr_en(1'b0),
 										  .index(PC_addr),
 										  .entry(32'b0),
-										  .entry_out(I_Mem_OutPC_addr),
+										  .entry_out(IR),
 										  .clk(CLOCK_50)
 										  );
 
@@ -81,16 +81,24 @@ module RISCVCPU
 	always @(posedge CLOCK_50) begin
 		state <= state_c;
 		PC <= PC_c;
-		IR <= IR_c;
-		ALUOut <= ALUOut_c;
+		// IR <= IR_c;
+		// ALUOut <= ALUOut_c;
+		clock_count <= clock_count_c;
+		instr_cnt <= instr_cnt_c;
 	end
 
 	always @(*) begin
 		clock_count_c = clock_count + 1;
 		wr_en = 1'b0;
+		PC_c = PC;
+		ALUOut = 0;
+		rs1 = 0; rs2 = 0;
+		done = 1'b0;
+		MDR = 32'b0;
+		D_entry = 0;
 		case(state)
 			IF: begin
-				IR = I_Mem_Out;
+				// IR = I_Mem_Out;
 				PC_c = PC + 4;
 				state_c = ID;
 			end
@@ -99,8 +107,7 @@ module RISCVCPU
 				if (IR != EOF) begin
 					rs1 = Regs[IR[19:15]];
 					rs2 = Regs[IR[24:20]];
-					ALUOut_c = PC + PCOffset;
-					done = 1'b0;
+					ALUOut = PC + PCOffset;
 					state_c = EX;
 				end
 				else begin
