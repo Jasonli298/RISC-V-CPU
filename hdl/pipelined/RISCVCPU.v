@@ -34,7 +34,7 @@ reg [31:0] clock_count_n, instr_count_n;
 
 reg [REG_WIDTH-1:0] Regs[0:31];
 reg [31:0] PC, PCn; // PCn in the next cycle PC
-reg [REG_WIDTH-1:0] IDEXA, IDEXB, IDEXAn, IDEXBn;
+reg [REG_WIDTH-1:0] IDEXA, IDEXB;
 reg [REG_WIDTH-1:0] EXMEMB, EXMEMBn, EXMEMALUout;
 reg [REG_WIDTH-1:0] MEMWBValue;
 
@@ -69,6 +69,15 @@ wire bypassAfromMEM, bypassAfromALUinWB,
 	 bypassAfromLDinWB, bypassBfromLDinWB;
 wire stall;
 
+reg [3:0] IDEXFuncCode;
+reg [19:0] ImmGen;
+reg [4:0] IDEXrd, EXMEMrd, MEMWBrd;
+reg [31:0] PC_branch, IDEXPC;
+reg ZERO;
+reg [REG_WIDTH-1:0] ALUOut, WBALUOut;
+reg [REG_WIDTH-1:0] EXMEMB;
+reg [REG_WIDTH-1:0] WBValue;
+
 // // Bypass to iunput A from the MEM stage for an ALU operation
 // assign bypassAfromMEM = (IDEXrs1 == EXMEMrd) && (IDEXrs1 != 0) && ((EXMEMop == ALUop) || (EXMEMop == Imm_I));
 // // Bypass to input  B from the MEM stage for an ALU op
@@ -102,7 +111,7 @@ wire [REG_WIDTH-1:0] Ain, Bin;
 wire                 ZERO;
 wire [1:0]           ALUop;
 wire [3:0]           FuncCode = {IDEXIR[30], IDEXIR[14:12]};
-wire ALUSrc, Branch, MemRead, MemWrite, RegWrite, MemtoReg;
+wire ALUSrc, PCSrc, MemRead, MemWrite, RegWrite, MemtoReg;
 
 ALUControl ALUControl(.ALUOp(ALUop), .FuncCode(FuncCode), .ALUCtl(ALUCtl));
 
@@ -118,7 +127,7 @@ Control MainControl(.opcode(IFIDIR[6:0]),
 					.RegWrite(RegWrite),
 					.MemRead(MemRead),
 					.MemWrite(MemWrite),
-					.Branch(Branch),
+					.Branch(PCSrc),
 					.ALUOp(ALUop));
 
 
