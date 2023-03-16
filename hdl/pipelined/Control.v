@@ -5,6 +5,7 @@ module Control (
     MemRead,
     MemWrite,
     Branch,
+	RegWrite,
     ALUOp
 );
 
@@ -16,7 +17,7 @@ module Control (
               NOP  = 7'b0;
 
     input [6:0] opcode;
-    output reg ALUSrc, Branch, MemRead, MemWrite, MemtoReg;
+    output reg ALUSrc, Branch, MemRead, MemWrite, MemtoReg, RegWrite;
     output reg [1:0] ALUOp;
 
     always @(opcode) begin

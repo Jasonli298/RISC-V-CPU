@@ -42,7 +42,7 @@ reg  [31:0] IDEXIR, IDEXIRn, EXMEMIR, EXMEMIRn, MEMWBIR, MEMWBIRn;
 wire [31:0] IFIDIR;
 // wire [31:0] RealIR = stall ? NOP : IFIDIR;
 wire [4:0] IFIDrs1, IFIDrs2;
-reg [4:0] IDEXrs1, IDEXrs2;
+reg [4:0] IDEXrs1, IDEXrs2, EXMEMrs1, EXMEMrs2;
 wire [6:0] IFIDop;
 assign IFIDrs1 = IFIDIR[19:15];
 assign IFIDrs2 = IFIDIR[24:20];
@@ -91,19 +91,22 @@ reg [REG_WIDTH-1:0] WBValue;
 // assign Ain = bypassAfromMEM ? EXMEMALUout : (bypassAfromALUinWB || bypassAfromLDinWB) ? MEMWBValue : IDEXA;
 // assign Bin = bypassBfromMEM ? EXMEMALUout : (bypassBfromALUinWB || bypassBfromLDinWB) ? MEMWBValue : IDEXB;
 
+// assign stall = (MEMWBop == LW) || ( // source instruction is a load
+// 			   (((IDEXop == LW) || (IDEXop == SW)) && (IDEXrs1 == MEMWBrd)) || // stall for address calc
+// 			   (((IDEXop == ALUop) || (IDEXop == ADDI)) && (((IFIDrs1 == IDEXrd)||(IFIDrs2 == IDEXrd)) || ((IDEXrs1 == EXMEMrd)||(IDEXrs2 == EXMEMrd)) || ((EXMEMrs1 == MEMWBrd)||(EXMEMrs2 == MEMWBrd))) && (IFIDrs1 != 0))); // ALU use
+
 assign stall = (MEMWBop == LW) || ( // source instruction is a load
 			   (((IDEXop == LW) || (IDEXop == SW)) && (IDEXrs1 == MEMWBrd)) || // stall for address calc
-			   (((IDEXop == ALUop) || (IDEXop == ADDI)) && ((IFIDrs1 == IDEXrd) ||(IFIDrs2 == IDEXrd)) && (IFIDrs1 != 0))); // ALU use
+			   (((IDEXop == ALUop) || (IDEXop == ADDI)) && (((IDEXrs1 == EXMEMrd)||(IDEXrs2 == EXMEMrd)) || ((EXMEMrs1 == MEMWBrd)||(EXMEMrs2 == MEMWBrd))) && (IFIDrs1 != 0))); // ALU use
 
 // assign stall = 1'b0;
 
-wire IMemRdEn = stall ? 1'b0 : 1'b1;
 wire [31:0] DMem_addr_w = ALUOut >> 2;
 
 reg IDEXMemtoReg, EXMEMMemtoReg, MEMWBMemtoReg, IDEXMemWrite, EXMEMMemWrite;
 
 RAM #(32, 56, "IMemory.txt") I_Memory(.wr_en(1'b0),
-                                      .read_en(IMemRdEn),
+                                      .read_en(~stall),
 									  .index(PC_addr),
 									  .entry(32'b0),
 									  .entry_out(IFIDIR),
@@ -126,7 +129,7 @@ reg [1:0] IDEXALUop;
 reg ISLESSTHAN;
 reg [31:0] IFIDPC, EXMEMPC, PCSum;
 reg [REG_WIDTH-1:0] IDEXA_c, IDEXB_c, write_back_val;
-wire ALUSrc, ALUSrc_w, PCSrc, MemRead, MemWrite, RegWrite, MemtoReg, Branch, islessthan;
+wire ALUSrc, ALUSrc_w, PCSrc, MemRead, MemWrite, RegWrite, MemtoReg, Branch, islessthan, RegWrite_w;
 assign PCSrc = EXMEMBranch && ISLESSTHAN;
 
 assign Ain = IDEXA;
@@ -164,7 +167,8 @@ Control MainControl(.opcode(ControlInOp),
 					.ALUOp(ALUop_w),
 					.Branch(Branch_w),
                     .MemRead(MemRead_w),
-                    .MemWrite(MemWrite_w));				
+                    .MemWrite(MemWrite_w),
+					.RegWrite(RegWrite_w));				
 
 integer i;
 always @(posedge CLOCK_50) begin
@@ -177,8 +181,8 @@ always @(posedge CLOCK_50) begin
 		done <= 1;
 	end
 	IDEXPC <= IFIDPC;
-	IDEXA <= IDEXA_c;
-	IDEXB <= IDEXB_c;
+	// IDEXA <= Regs[IDEXrs1];
+	// IDEXB <= Regs[IDEXrs2];
 	IDEXrs1 <= IFIDrs1;
 	IDEXrs2 <= IFIDrs2;
 	ImmGen <= ImmGen_c;
@@ -196,6 +200,8 @@ always @(posedge CLOCK_50) begin
 
 	////////////////////// EX/MEM Stage ///////////////
 	EXMEMPC <= PCSum;
+	EXMEMrs1 <= IDEXrs1;
+	EXMEMrs2 <= IDEXrs2;
 	ISLESSTHAN <= islessthan;
 	ALUOut <= ALUResult;
 	EXMEMB <= IDEXB;
@@ -219,6 +225,10 @@ always @(posedge CLOCK_50) begin
 		IFIDPC <= 0;
 		IDEXPC <= 0;
 		IDEXA <= 0;
+		IDEXrs1 <= 0;
+		IDEXrs2 <= 0;
+		EXMEMrs1 <= 0;
+		EXMEMrs2 <= 0;
 		IDEXB <= 0;
 		ImmGen <= 0;
 		IDEXFuncCode <= 0;
@@ -252,16 +262,13 @@ end
 always @(*) begin
 	instr_count_n = instr_count;
 	PCn = 0;
-	IDEXA_c = 0;
-	IDEXB_c = 0;
-	ImmGen_c = 0;
+	ImmGen_c = ImmGen;
 	PCSum = 0;
 
 	PCn = stall ? PC : (PCSrc ? PCSum : PC + 4);
 
-	///////////////// ID/EX Stage //////////////////
-	IDEXA_c = Regs[IFIDrs1];
-	IDEXB_c = Regs[IFIDrs2];
+	IDEXA = Regs[IFIDrs1];
+	IDEXB = Regs[IFIDrs2];
 
 	if ((IFIDop == LW) || (IFIDop == ADDI)) begin
 		ImmGen_c = IFIDIR[31:20];
