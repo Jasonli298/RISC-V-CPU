@@ -3,9 +3,9 @@ module RISCVALU(ALUctl, A, B, ALUOut, Zero);
     input [3:0] ALUctl;
     input [31:0] A, B;
     output reg [31:0] ALUOut;
-    output Zero;
+    output IsLessThan;
 
-    assign Zero = (ALUOut == 0); // Zero is 1 if ALUOut is 0; goes everywhere
+    assign IsLessThan = (ALUOut == 1); // Zero is 1 if ALUOut is 0; goes everywhere
 
     always @(ALUctl, A, B) begin
         case (ALUctl)
