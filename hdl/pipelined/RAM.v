@@ -7,6 +7,7 @@ module RAM
 	input [(DATA_WIDTH-1):0] entry,
 	input [31:0] index,
 	input wr_en,
+    input read_en,
 	input clk,
 	output [(DATA_WIDTH-1):0] entry_out
 );
@@ -20,7 +21,7 @@ module RAM
 	always @ (negedge clk) begin
 		if (wr_en)
 			mem[index] <= entry;
-		addr_reg <= index;
+		if (read_en) addr_reg <= index;
 	end
 
 	// Continuous assignment implies read returns NEW data.
