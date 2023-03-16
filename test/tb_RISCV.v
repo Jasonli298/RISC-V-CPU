@@ -30,18 +30,18 @@ reg signed [31:0] matrix2 [0:N*N2-1];
 reg signed [31:0] res     [0:M*N2-1]; // array to store the result matrix calulated in TB for comparison
 
 /*******/ // Rename to whichever version of build
-RISCV #(M, N, N2, 32) UUT(.CLOCK_50(clk),             // 1st parameter is number of rows in matrix1
+RISCV_top #(M, N, N2, 32) UUT(.CLOCK_50(clk),             // 1st parameter is number of rows in matrix1
 							 .rstn(rstn),
 							 .done(done),                // 2nd parameter is number of columns in matrix1 and rows in matrix2
 							 .clock_count(clock_count),  // 3rd parameter is number of columns in matrix2
-							 .instr_cnt(instr_cnt)
+							 .instr_count(instr_cnt)
 							//  .ID_count(ID_count),
 							);    // 4th parameter is size of the registers in register file of CPU
 
 initial begin
 	clk = 1'b0;
 	rstn = 1'b0;
-	#20 
+	#50 
 	rstn = 1'b1;
 
 	$readmemb("DMemory.txt", data);

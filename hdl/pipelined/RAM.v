@@ -1,9 +1,13 @@
+// Quartus Prime Verilog Template
+// Single port RAM with single read/write address 
+
 module RAM 
-#(parameter DATA_WIDTH=32, parameter SIZE = 256, FILE_NAME="")
+#(parameter DATA_WIDTH=32, parameter SIZE = 6, FILE_NAME="")
 (
 	input [(DATA_WIDTH-1):0] entry,
 	input [31:0] index,
 	input wr_en,
+    input read_en,
 	input clk,
 	output [(DATA_WIDTH-1):0] entry_out
 );
@@ -14,14 +18,10 @@ module RAM
 	// Variable to hold the registered read address
 	reg [31:0] addr_reg;
 
-	always @ (posedge clk)
-	begin
-		// Write
-		if (wr_en) begin
+	always @ (posedge clk) begin
+		if (wr_en)
 			mem[index] <= entry;
-		end
-
-		addr_reg <= index;
+		if (read_en) addr_reg <= index;
 	end
 
 	// Continuous assignment implies read returns NEW data.

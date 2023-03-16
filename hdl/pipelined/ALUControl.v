@@ -1,7 +1,7 @@
 module ALUControl (ALUOp, FuncCode, ALUCtl);
     
     input [1:0] ALUOp;
-    input [3:0] FuncCode // FuncCode = {IR[30], IR[14:12]} or {IR[30], funct3}
+    input [3:0] FuncCode; // FuncCode = {IR[30], IR[14:12]} or {IR[30], funct3}
     output reg [3:0] ALUCtl;
 
     always @( ALUOp or FuncCode ) begin
@@ -15,10 +15,10 @@ module ALUControl (ALUOp, FuncCode, ALUCtl);
                     4'b0111: ALUCtl = 4'b0000; // and
                     4'b0110: ALUCtl = 4'b0001; // or
                     4'b1100: ALUCtl = 4'b0111; // blt
-                    default: ALUCtl = 4'bZZZZ;
+                    default: ALUCtl = 4'b0000;
                 endcase
             end
-            default: ALUCtl = 4'bZZZZ;
+            default: ALUCtl = 4'b0000;
         endcase 
     end
 

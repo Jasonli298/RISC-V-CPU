@@ -5,7 +5,7 @@ module RISCV_top
   parameter N = 10,
   parameter N2 = 10,
   parameter REG_WIDTH = 32)
-(CLOCK_50, rstn, done, instr_cnt, clock_count);
+(CLOCK_50, rstn, done, instr_count, clock_count);
 
 
 localparam LW    = 7'b000_0011;
@@ -35,14 +35,19 @@ reg [31:0] clock_count_n, instr_count_n;
 reg [REG_WIDTH-1:0] Regs[0:31];
 reg [31:0] PC, PCn; // PCn in the next cycle PC
 reg [REG_WIDTH-1:0] IDEXA, IDEXB;
-reg [REG_WIDTH-1:0] EXMEMB, EXMEMBn, EXMEMALUout;
+reg [REG_WIDTH-1:0] EXMEMB, EXMEMALUout;
 reg [REG_WIDTH-1:0] MEMWBValue;
 
 reg  [31:0] IDEXIR, IDEXIRn, EXMEMIR, EXMEMIRn, MEMWBIR, MEMWBIRn;
 wire [31:0] IFIDIR;
-wire [31:0] RealIR = stall ? NOP : IFIDIR;
-wire [4:0]  IFIDrs1, IFIDrs2, MEMWBrd;
-wire [6:0]  IDEXop, EXMEMop, MEMWBop;
+// wire [31:0] RealIR = stall ? NOP : IFIDIR;
+wire [4:0] IFIDrs1, IFIDrs2;
+reg [4:0] IDEXrs1, IDEXrs2;
+wire [6:0] IFIDop;
+assign IFIDrs1 = IFIDIR[19:15];
+assign IFIDrs2 = IFIDIR[24:20];
+assign IFIDop = IFIDIR[6:0];
+
 wire [6:0]  ALUop_funct7 = IDEXIR[31:25];
 wire [2:0]  Branch_funct3 = IDEXIR[14:12];
 
@@ -50,12 +55,12 @@ reg WB_done;
 
 reg  [6:0] IDEXop, EXMEMop, MEMWBop;
 
-wire [4:0] Regrd = RealIR[11:7];
+wire [4:0] Regrd = IFIDIR[11:7];
 reg  [4:0] IDEXrd, EXMEMrd, MEMWBrd;
 
-
 wire [31:0] I_Mem_Out;
-wire [REG_WIDTH-1:0] D_entry, D_out;
+wire [REG_WIDTH-1:0] D_out;
+reg  [REG_WIDTH-1:0] D_entry;
 wire [31:0] PC_addr = PC >> 2;
 
 wire PCOffset = {{22{IDEXIR[31]}}, IDEXIR[7], IDEXIR[30:25], IDEXIR[11:8], 1'b0};
@@ -65,14 +70,13 @@ wire bypassAfromMEM, bypassAfromALUinWB,
 	 bypassAfromLDinWB, bypassBfromLDinWB;
 wire stall;
 
-wire FuncCode = {RealIR[30], RealIR[14:12]};
+wire FuncCode = {IFIDIR[30], IFIDIR[14:12]};
 reg [3:0]  IDEXFuncCode;
-reg [19:0] ImmGen;
-reg [4:0]  IDEXrd, EXMEMrd, MEMWBrd;
+reg [31:0] ImmGen, ImmGen_c;
+
 reg [31:0] PC_branch, IDEXPC;
 reg ZERO;
 reg [REG_WIDTH-1:0] ALUOut, WBALUOut;
-reg [REG_WIDTH-1:0] EXMEMB;
 reg [REG_WIDTH-1:0] WBValue;
 
 // // Bypass to iunput A from the MEM stage for an ALU operation
@@ -89,25 +93,39 @@ reg [REG_WIDTH-1:0] WBValue;
 
 assign stall = (MEMWBop == LW) || ( // source instruction is a load
 			   (((IDEXop == LW) || (IDEXop == SW)) && (IDEXrs1 == MEMWBrd)) || // stall for address calc
-			   ((IDEXop == ALUop) && ((IDEXrs1 == MEMWBrd) ||(IDEXrs2 == MEMWBrd)))); // ALU use
+			   (((IDEXop == ALUop) || (IDEXop == ADDI)) && ((IFIDrs1 == IDEXrd) ||(IFIDrs2 == IDEXrd)) && (IFIDrs1 != 0))); // ALU use
+
+// assign stall = 1'b0;
+
+wire IMemRdEn = stall ? 1'b0 : 1'b1;
+wire [31:0] DMem_addr_w = ALUOut >> 2;
+
+reg IDEXMemtoReg, EXMEMMemtoReg, MEMWBMemtoReg, IDEXMemWrite, EXMEMMemWrite;
 
 RAM #(32, 56, "IMemory.txt") I_Memory(.wr_en(1'b0),
+                                      .read_en(IMemRdEn),
 									  .index(PC_addr),
 									  .entry(32'b0),
 									  .entry_out(IFIDIR),
 									  .clk(CLOCK_50));
 
-RAM #(REG_WIDTH, M*N+N*N2+M*N2, "DMemory.txt") D_Memory(.wr_en(MemWrite),
-												 .index(DMem_addr_w),
-												 .entry(D_entry),
-												 .entry_out(D_out),
-												 .clk(CLOCK_50));
+RAM #(REG_WIDTH, M*N+N*N2+M*N2, "DMemory.txt") D_Memory(.wr_en(EXMEMMemWrite),
+                                                        .read_en(1'b1),
+												        .index(DMem_addr_w),
+												        .entry(D_entry),
+												        .entry_out(D_out),
+												        .clk(CLOCK_50));
 
 wire [3:0]           ALUCtl;
 wire [REG_WIDTH-1:0] Ain, Bin;
-wire                 ZERO;
 
-wire [3:0]           FuncCode = {IDEXIR[30], IDEXIR[14:12]};
+
+reg IDEXBranch, EXMEMBranch;
+reg IDEXALUSrc;
+reg [1:0] IDEXALUop;
+reg ISLESSTHAN;
+reg [31:0] IFIDPC, EXMEMPC, PCSum;
+reg [REG_WIDTH-1:0] IDEXA_c, IDEXB_c, write_back_val;
 wire ALUSrc, ALUSrc_w, PCSrc, MemRead, MemWrite, RegWrite, MemtoReg, Branch, islessthan;
 assign PCSrc = EXMEMBranch && ISLESSTHAN;
 
@@ -118,9 +136,8 @@ assign Bin = ALUSrc ? ImmGen : IDEXB;
 wire MemtoReg_w;
 wire Branch_w;
 wire [1:0] ALUop_w;
-reg IDEXMemtoReg, EXMEMMemtoReg, MEMWBMemtoReg;
-reg IDEXBranch, EXMEMBranch;
-reg IDEXALUSrc, IDEXALUop;
+wire [REG_WIDTH-1:0] ALUResult;
+
 
 ALUControl ALUControl(.ALUOp(IDEXALUop), .FuncCode(IDEXFuncCode), .ALUCtl(ALUCtl));
 
@@ -130,22 +147,24 @@ RISCVALU ALU(.ALUCtl(ALUCtl),
 			 .B(Bin),
 			 .IsLessThan(islessthan));
 
-Control MainControl(.opcode(RealIR[6:0]),
-					.ALUSrc(ALUSrc),
-					.MemtoReg(MemtoReg),
-					.RegWrite(RegWrite),
-					.MemRead(MemRead),
-					.MemWrite(MemWrite),
-					.Branch(Branch),
-					.ALUOp(ALUop));
+// Control MainControl(.opcode(RealIR[6:0]),
+// 					.ALUSrc(ALUSrc),
+// 					.MemtoReg(MemtoReg),
+// 					.RegWrite(RegWrite),
+// 					.MemRead(MemRead),
+// 					.MemWrite(MemWrite),
+// 					.Branch(Branch),
+// 					.ALUOp(ALUop));
 
-Control MainControl(.opcode(RealIR[6:0]),
+wire [6:0] ControlInOp = stall ? NOP[6:0] : IFIDIR[6:0];
+
+Control MainControl(.opcode(ControlInOp),
 					.MemtoReg(MemtoReg_w),
 					.ALUSrc(ALUSrc_w),
-					.ALUop(ALUop_w),
-					.Branch(Branch_w));				
-
-
+					.ALUOp(ALUop_w),
+					.Branch(Branch_w),
+                    .MemRead(MemRead_w),
+                    .MemWrite(MemWrite_w));				
 
 integer i;
 always @(posedge CLOCK_50) begin
@@ -160,14 +179,19 @@ always @(posedge CLOCK_50) begin
 	IDEXPC <= IFIDPC;
 	IDEXA <= IDEXA_c;
 	IDEXB <= IDEXB_c;
-	ImmGen <= IMMGen_c;
+	IDEXrs1 <= IFIDrs1;
+	IDEXrs2 <= IFIDrs2;
+	ImmGen <= ImmGen_c;
 	IDEXFuncCode <= FuncCode;
 	IDEXrd <= Regrd;
-	IDEXop <= RealIR[6:0];
-	IDEXMemtoReg <= IDEXMemtoReg_w;
-	IDEXBranch <= IDEXBranch_w;
+	IDEXop <= IFIDIR[6:0];
+	IDEXMemtoReg <= MemtoReg_w;
+	IDEXBranch <= Branch_w;
 	IDEXALUSrc <= ALUSrc_w;
 	IDEXALUop <= ALUop_w;
+    Regs[MEMWBrd] <= write_back_val;
+    IDEXMemWrite <= MemWrite_w;
+	instr_count <= instr_count_n;
 	///////////// END ID/EX Stage ///////////////////////
 
 	////////////////////// EX/MEM Stage ///////////////
@@ -179,6 +203,7 @@ always @(posedge CLOCK_50) begin
 	EXMEMop <= IDEXop;
 	EXMEMMemtoReg <= IDEXMemtoReg;
 	EXMEMBranch <= IDEXBranch;
+    EXMEMMemWrite <= IDEXMemWrite;
 	/////////////////////// END EX/MEM Stage ///////////
 
 	/////////////////////// MEM/WB Stage ///////////////
@@ -199,7 +224,7 @@ always @(posedge CLOCK_50) begin
 		IDEXFuncCode <= 0;
 		IDEXrd <= 0;
 		PCSum <= 0;
-		Zero <= 0;
+        ISLESSTHAN <= 0;
 		ALUOut <= 0;
 		EXMEMB <= 0;
 		EXMEMrd <= 0;
@@ -207,49 +232,56 @@ always @(posedge CLOCK_50) begin
 		MEMWBrd <= 0;
 		clock_count <= 0;
 		instr_count <= 0;
-		for(i = 0; i <= 31; i = i + 1) Regs[i] = 32'b0;
+		MEMWBop <= 0;
+		IDEXop <= 0;
+		IDEXMemtoReg <= 0;
+		IDEXBranch <= 0;
+		IDEXALUSrc <= 0;
+		IDEXALUop <= 0;
+		IDEXMemWrite <= 0;
+		EXMEMPC <= 0;
+		EXMEMop <= 0;
+		EXMEMMemtoReg <= 0;
+		EXMEMBranch <= 0;
+		EXMEMMemWrite <= 0;
+		MEMWBMemtoReg <= 0;
+		for(i = 0; i <= 31; i = i + 1) Regs[i] <= 32'b0;
 	end
 end
 
 always @(*) begin
 	instr_count_n = instr_count;
-	wr_en = 0;
-	PCn = PC;
+	PCn = 0;
 	IDEXA_c = 0;
 	IDEXB_c = 0;
 	ImmGen_c = 0;
-	FuncCode = 0;
-	Regrd = 0;
+	PCSum = 0;
 
+	PCn = stall ? PC : (PCSrc ? PCSum : PC + 4);
 
-	if (~stall) begin
-		PCn = stall ? PC : (PCSrc ? PCSum : PC + 4);
+	///////////////// ID/EX Stage //////////////////
+	IDEXA_c = Regs[IFIDrs1];
+	IDEXB_c = Regs[IFIDrs2];
 
-		///////////////// ID/EX Stage //////////////////
-		IDEXA_c = Regs[IFIDrs1];
-		IDEXB_c = Regs[IFIDrs2];
-
-		if ((IFIDop == LW) || (IFIDop == ADDI)) begin
-			ImmGen_c = IFIDIR[31:20];
-		end else if (IFIDop == SW) begin
-			IMMGen_c = {IFIDIR[31:25], IFIDIR[11:7]};
-		end else if (IFIDop == B_I) begin
-			IMMGen_c = PCOffset;
-		end
-		
-		Regrd = RealIR[11:7];
-		instr_count_n = instr_count + 1;
-		/////////////////// END ID/EX Stage //////////////
-	end else ;
+	if ((IFIDop == LW) || (IFIDop == ADDI)) begin
+		ImmGen_c = IFIDIR[31:20];
+	end else if (IFIDop == SW) begin
+		ImmGen_c = {IFIDIR[31:25], IFIDIR[11:7]};
+	end else if (IFIDop == B_I) begin
+		ImmGen_c = PCOffset;
+	end
+	
+	instr_count_n = instr_count + 1;
+	/////////////////// END ID/EX Stage //////////////
 
 	//////////////////// EX/MEM Stage ////////////////
 	PCSum = IDEXPC + ImmGen;
-	DMem_addr_w = ALUOut >> 2;
 	D_entry = EXMEMB;
 	///////////////////// END EX/MEM Stage /////////////
 
 	///////////////////////// MEM/WB Stage ////////////////
-	Regs[MEMWBrd] = MEMWBMemtoReg ? D_out : WBALUOut;
+    write_back_val = MEMWBMemtoReg ? D_out : WBALUOut;
+	// Regs[MEMWBrd] = ;
 	//////////////////////// END MEM/WB Stage /////////////
 
 end
