@@ -18,7 +18,7 @@ module RAM
 	// Variable to hold the registered read address
 	reg [31:0] addr_reg;
 
-	always @ (negedge clk) begin
+	always @ (posedge clk) begin
 		if (wr_en) mem[index] <= entry;
 		if (read_en) addr_reg <= index;
 	end

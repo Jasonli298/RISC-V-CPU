@@ -2,7 +2,7 @@
 
 # Define the dimensions of the matrix and vector
 #define M 2
-#define N 4
+#define N 2
 #define N2 2
 
 .data
