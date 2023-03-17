@@ -62,7 +62,7 @@ module RISCVCPU
 	wire        [31:0] ImmGen; // used to generate immediate
 	
     reg         [31:0] DMem_addr;
-    wire        [31:0] DMem_addr_w = DMem_addr;
+//  wire        [31:0] DMem_addr_w = DMem_addr;
 	wire signed [31:0] D_out;
 	wire signed [31:0] PCOffset = {{22{IR[31]}}, IR[7], IR[30:25], IR[11:8], 1'b0};
 
