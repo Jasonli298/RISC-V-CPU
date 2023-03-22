@@ -69,21 +69,21 @@ module RISCVCPU
 	assign             opcode   = IR[6:0]; // opcode is lower 7 bits
 	assign             ImmGen   = (opcode == LW) ? IR[31:20] : {IR[31:25], IR[11:7]};
 	
-	RAM #(32, 35, "IMemory.txt") I_Memory(.wr_en(1'b0),
-                                          //.read_en(1'b1),
-										  .index(PC_addr),
-										  .entry(32'b0),
-										  .entry_out(IR),
-										  .clk(CLOCK_50)
-										  );
+	RAM #(32, 35, "IMemory.txt") I_Memory(.clk(CLOCK_50),
+                                           .wr_en(1'b0),
+                                           .data_in(32'b0),
+                                           .data_out(IR),
+                                           .addr_wr(32'b0),
+                                           .addr_rd(PC_addr)
+                                           );
 
-	RAM #(32, M*N+N*N2+M*N2, "DMemory.txt") D_Memory(.wr_en(wr_en),
-                                                     //.read_en(read_en),
-													 .index(DMem_addr),
-													 .entry(D_entry),
-													 .entry_out(D_out),
-													 .clk(CLOCK_50)
-													 );
+	RAM #(32, 256, "DMemory.txt") D_Memory(.clk(CLOCK_50),
+                                           .wr_en(wr_en),
+                                           .data_in(D_entry),
+                                           .data_out(D_out),
+                                           .addr_wr(DMem_addr),
+                                           .addr_rd(DMem_addr)
+											);
 
 	// set the PC to 0 and start the control in state 1
 	integer i;

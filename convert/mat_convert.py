@@ -34,6 +34,8 @@ def convert(A, B, C):
     with open(C, "w") as res:
         for i in range(len(out) - 1):
             res.write(out[i] + '\n')
-        res.write(out[-1])
+        res.write(out[-1] + '\n')
+        for j in range(200):
+            res.write("00000000000000000000000000000000" + '\n')
     
 convert("convert/A_100x50.txt", "convert/B_50x2.txt", "convert/../simulation/DMemory.txt")
